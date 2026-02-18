@@ -312,7 +312,7 @@
         </div>
 
         <div id="tankNumberDiv" class="hidden">
-          <label>Number of tanks (max 2) @ £1.50 each:
+          <label>Number of tanks (max 2) @ £5.00 each:
             <input type="number" id="tankNumber" name="tankNumber" min="1" max="2" value="1" />
           </label>
           <p>Tank Cost: £<span id="tankCost">1.50</span></p>
@@ -377,7 +377,7 @@
     /***************  EMAILJS SETUP  ***************/
     emailjs.init('kGDNowkNSzNlhztoC'); // public key
     const EMAILJS_SERVICE_ID = 'service_wlaqz5n';
-    const EMAILJS_TEMPLATE_ID = 'template_tjhgl4j';
+    const EMAILJS_TEMPLATE_ID = 'template_ksgglxk';
 
     const MAX_EXHIBITS = 10;
     const MAX_PETS = 10;
@@ -443,7 +443,7 @@
       }
       num = Math.min(Math.max(num, 1), 2);
       tankNumber.value = num;
-      tankCostSpan.innerText = (num * 1.5).toFixed(2);
+      tankCostSpan.innerText = (num * 5).toFixed(2);
     }
 
     /*************** Varieties logic ***************/
@@ -655,72 +655,77 @@
       }
     }
 
-    /*************** DOS-format builders ***************/
-    function getAgeSexCode(age, sex) {
-      const a = (age === 'Kitten') ? 'K' : 'A'; // default Adult if unset
-      const s = (sex === 'Doe') ? 'D' : 'B';    // default Buck if unset
-      return `${a}${s}`; // AB / AD / KB / KD
-    }
+    /*************** NFRS format ***************/
+    function pluralize(n, singular, plural = singular + "s") {
+  return n === 1 ? singular : plural;
+}
 
-    // Builds lines like:
-    // 2AB SILVER FAWN  (no novice -> space)
-    // 2KDNSILVER FAWN  (novice -> N replaces space)
-    function buildVarietySummary() {
-      const counts = new Map();
+/**
+ * VARIETIES SUMMARY (grouped + readable)
+ * Example:
+ * 1 Adult Buck Silver Fawn Novice Pets
+ * 2 Adult Doe Agouti
+ */
+function buildVarietySummaryReadableGrouped() {
+  const counts = new Map();
 
-      for (let i = 0; i < varietiesContainer.children.length; i++) {
-        const age = document.querySelector(`input[name="age${i}"]:checked`)?.value || '';
-        const sex = document.querySelector(`input[name="sex${i}"]:checked`)?.value || '';
-        const cls = document.querySelector(`select[name="class${i}"]`)?.value || '';
+  for (let i = 0; i < varietiesContainer.children.length; i++) {
+    const age = document.querySelector(`input[name="age${i}"]:checked`)?.value || "";
+    const sex = document.querySelector(`input[name="sex${i}"]:checked`)?.value || "";
+    const cls = document.querySelector(`select[name="class${i}"]`)?.value || "";
+    const novice = document.querySelector(`input[name="novice${i}"]`)?.checked || false;
+    const pets = document.querySelector(`input[name="dualEntry${i}"]`)?.checked || false;
 
-        // Only count if class chosen (prevents blank lines)
-        if (!cls) continue;
+    if (!age || !sex || !cls) continue;
 
-        const ageSex = getAgeSexCode(age, sex);
-        const novice = document.querySelector(`input[name="novice${i}"]`)?.checked ? 'N' : '';
-        const classUpper = String(cls).toUpperCase();
+    const key = JSON.stringify({ age, sex, cls, novice, pets });
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
 
-        const key = `${ageSex}|${novice}|${classUpper}`;
-        counts.set(key, (counts.get(key) || 0) + 1);
-      }
+  const lines = Array.from(counts.entries())
+    .map(([key, count]) => {
+      const { age, sex, cls, novice, pets } = JSON.parse(key);
+      const parts = [String(count), age, sex, cls];
+      if (novice) parts.push("Novice");
+      if (pets) parts.push("Pets");
+      return parts.join(" ");
+    })
+    .sort((a, b) => a.localeCompare(b));
 
-      const lines = Array.from(counts.entries())
-        .sort((a, b) => a[0].localeCompare(b[0]))
-        .map(([key, count]) => {
-          const [ageSex, noviceFlag, classUpper] = key.split('|');
-          const separator = noviceFlag === 'N' ? '' : ' ';
-          return `${count}${ageSex}${noviceFlag}${separator}${classUpper}`;
-        });
+  return lines.join("\n");
+}
 
-      return lines.join('\n');
-    }
+/**
+ * PETS SUMMARY
+ * If stud name filled → Breeder Owned
+ * If blank → Adult Owned
+ *
+ * Example:
+ * 2 Breeder Owned Bucks
+ * 1 Breeder Owned Doe
+ */
+function buildPetsSummaryOwnedByStud() {
+  if (petsContainer.children.length === 0) return "";
 
-    // Pets:
-    // If stud name is filled -> BREEDER OWNED
-    // If blank -> ADULT OWNED
-    // Consolidate by sex:
-    // 1   BREEDER OWNED B
-    // 2   ADULT OWNED D
-    function buildPetsSummary() {
-      if (petsContainer.children.length === 0) return '';
+  const studFilled = (studNameField.value || "").trim().length > 0;
+  const ownedLabel = studFilled ? "Breeder Owned" : "Adult Owned";
 
-      const studFilled = (studNameField.value || '').trim().length > 0;
-      const ownedLabel = studFilled ? 'BREEDER OWNED' : 'ADULT OWNED';
+  let buckCount = 0;
+  let doeCount = 0;
 
-      let buckCount = 0;
-      let doeCount = 0;
+  for (let i = 0; i < petsContainer.children.length; i++) {
+    const sex = document.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
+    if (sex === "Buck") buckCount += 1;
+    if (sex === "Doe") doeCount += 1;
+  }
 
-      for (let i = 0; i < petsContainer.children.length; i++) {
-        const sex = document.querySelector(`input[name="petSex${i}"]:checked`)?.value || '';
-        if (sex === 'Doe') doeCount += 1;
-        else if (sex === 'Buck') buckCount += 1;
-      }
+  const lines = [];
+  if (buckCount > 0) lines.push(`${buckCount} ${ownedLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
+  if (doeCount > 0) lines.push(`${doeCount} ${ownedLabel} ${pluralize(doeCount, "Doe", "Does")}`);
 
-      const lines = [];
-      if (buckCount > 0) lines.push(`${buckCount}   ${ownedLabel} B`);
-      if (doeCount > 0) lines.push(`${doeCount}   ${ownedLabel} D`);
-      return lines.join('\n');
-    }
+  return lines.join("\n");
+}
+
 
     /*************** Total cost ***************/
     function updateTotalCost() {
@@ -728,15 +733,15 @@
 
       // Tanks: £1.50 each, max 2
       if (hireTanksCheckbox.checked) {
-        total += Math.min(parseInt(tankNumber.value) || 0, 2) * 1.5;
+       total += Math.min(parseInt(tankNumber.value) || 0, 2) * 5
       }
 
-      // £1 per variety and £1 per pet (using explicit counters)
-      total += varietyCount + petCount;
+      // £2 per variety and £2 per pet 
+      total += (varietyCount * 2) + (petCount * 2)
 
       // +£1 for each Dual Entry (Pets) ticked
       const dualChecks = document.querySelectorAll('input[name^="dualEntry"]');
-      dualChecks.forEach(cb => { if (cb.checked) total += 1; });
+      dualChecks.forEach(cb => { if (cb.checked) total += 2; });
 
       totalCostDisplay.innerText = total.toFixed(2);
     }
@@ -753,9 +758,9 @@
       tankCostField.value = (tankCostSpan.innerText || '0.00').trim();
       totalCostField.value = (totalCostDisplay.innerText || '0.00').trim();
 
-      // Consolidated DOS-format summaries
-      varietySummaryField.value = buildVarietySummary();
-      petsSummaryField.value = buildPetsSummary();
+      // NFRS format summaries
+      varietySummaryField.value = buildVarietySummaryReadableGrouped();
+      petsSummaryField.value = buildPetsSummaryOwnedByStud();
 
       emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
         .then(() => { alert('Entry submitted successfully!'); },
