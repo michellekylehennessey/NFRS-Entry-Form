@@ -444,20 +444,7 @@
         if (!dualAllowed && cb) cb.checked = false;
       });
 
-      // If self show is enabled, enforce "Self" removed from varieties by clearing any existing Self selections
-      if (ACTIVE_SHOW?.allowSelfShow) {
-        for (let i = 0; i < varietiesContainer.children.length; i++) {
-          const sectionSelect = document.querySelector(`select[name="section${i}"]`);
-          const classSelect = document.querySelector(`select[name="class${i}"]`);
-          if (sectionSelect && sectionSelect.value === "Self") {
-            sectionSelect.value = "";
-            if (classSelect) {
-              classSelect.innerHTML = '<option value="">Select Section first</option>';
-            }
-          }
-        }
-      }
-
+      
       updateTotalCost();
     }
 
@@ -474,15 +461,23 @@
 
       // Self show: show/hide "Add Self?" toggle + reset if disabled
       const selfEnabled = !!ACTIVE_SHOW?.allowSelfShow;
-      addSelfRow.classList.toggle('hidden', !selfEnabled);
 
-      if (!selfEnabled) {
-        addSelfCheckbox.checked = false;
-        selfContainer.classList.add('hidden');
-        addSelfBtn.classList.add('hidden');
-        selfContainer.innerHTML = '';
-        selfCount = 0;
-        selfLimitMsg.style.display = 'none';
+
+      document.querySelectorAll(".selfRow").forEach(row => {
+      row.style.display = selfEnabled ? "" : "none";
+     const cb = row.querySelector('input[type="checkbox"]');
+  if (!selfEnabled && cb) cb.checked = false;
+     });
+
+   addSelfRow.classList.toggle('hidden', !selfEnabled);
+
+    if (!selfEnabled) {
+    addSelfCheckbox.checked = false;
+    selfContainer.classList.add('hidden');
+    addSelfBtn.classList.add('hidden');
+    selfContainer.innerHTML = '';
+    selfCount = 0;
+    selfLimitMsg.style.display = 'none';
       }
 
       showMetaText.textContent =
@@ -579,7 +574,7 @@
       const index = varietiesContainer.children.length;
 
       // Hide "Self" section option if self show enabled
-      const selfOptionHtml = (ACTIVE_SHOW?.allowSelfShow) ? '' : '<option value="Self">Self</option>';
+      const selfOptionHtml = '<option value="Self">Self</option>';
 
       // Hide dual entry row if dual not allowed
       const dualAllowed = (ACTIVE_SHOW?.allowDualEntry !== false);
@@ -621,12 +616,19 @@
             </select>
           </label>
           <label><input type="checkbox" name="novice${index}"> Novice</label>
-          <label class="dualEntryRow" ${dualRowStyle}><input type="checkbox" name="dualEntry${index}"> Dual Entry (Pets)</label>
+          <label class="selfRow"><input type="checkbox" name="selfEntry${index}"> Self</label>
+          <label class="dualEntryRow"><input type="checkbox" name="dualEntry${index}"> Pets</label>
         </div>
       `;
 
       varietiesContainer.appendChild(div);
       varietyCount += 1;
+
+      const selfRow = div.querySelector(".selfRow");
+      if (selfRow) selfRow.style.display = (ACTIVE_SHOW?.allowSelfShow ? "" : "none");
+
+      const selfCheckbox = div.querySelector(`input[name="selfEntry${index}"]`);
+      if (selfCheckbox) selfCheckbox.addEventListener("change", () => updateTotalCost());
 
       // Toggle open/close
       const header = div.querySelector('.subsection-header');
@@ -687,7 +689,7 @@
       };
 
       // If Self Show is enabled, disable Self inside Varieties
-      if (ACTIVE_SHOW?.allowSelfShow && section === "Self") return [];
+      ///if (ACTIVE_SHOW?.allowSelfShow && section === "Self") return [];
 
       return data[section] || [];
     }
