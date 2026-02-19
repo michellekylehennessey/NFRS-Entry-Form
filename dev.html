@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title> NFRS Show Entry Form</title>
+  <meta charset="UTF-8" />
+  <title>NFRS Entry Form (DEV)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <style>
-   
     body {
       margin: 0;
       padding: 40px 10px;
@@ -12,109 +13,49 @@
       background: #f5f5f5;
     }
 
-    .form-shell {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    .form-shell { max-width: 900px; margin: 0 auto; }
 
-    
     .form-card {
       background: #ffffff;
       border-radius: 12px;
       padding: 32px 32px 28px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      box-sizing: border-box; 
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      box-sizing: border-box;
     }
 
-    
-    .form-header {
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .member-flags {
-  margin-top: 16px;   
-}
-
-.member-flags span {
-  display: block;
-  margin-bottom: 6px; 
-}
+    .form-header { text-align: center; margin-bottom: 24px; }
 
     .form-header img {
-      max-width: 450px; 
-      width: 100%;      
+      max-width: 450px;
+      width: 100%;
       height: auto;
       display: block;
       margin: 0 auto 12px;
     }
 
-    /* Mobile tweaks */
     @media (max-width: 600px) {
       body { padding: 20px 8px; }
-
-      .form-card {
-        padding: 24px 16px 20px;
-        border-radius: 10px;
-      }
-
+      .form-card { padding: 24px 16px 20px; border-radius: 10px; }
       .form-header img { max-width: 260px; }
-
-      .two-col { grid-template-columns: 1fr; } 
+      .two-col { grid-template-columns: 1fr; }
     }
 
-    .form-title {
-      margin: 0;
-      font-size: 1.6rem;
-      letter-spacing: 0.06em;
-      font-weight: bold;
-    }
+    .form-title { margin: 0; font-size: 1.6rem; letter-spacing: 0.06em; font-weight: bold; }
+    .form-subtitle { margin: 8px auto 0; max-width: 640px; font-size: 0.9rem; color: #555; line-height: 1.4; }
 
-    .form-subtitle {
-      margin: 8px auto 0;
-      max-width: 640px;
-      font-size: 0.9rem;
-      color: #555;
-      line-height: 1.4;
-    }
+    .helper-text { font-size: 0.8rem; color: #666; margin-top: 4px; font-style: italic; }
 
-    /* Helper text */
-    .helper-text {
-      font-size: 0.8rem;
-      color: #666;
-      margin-top: 4px;
-      font-style: italic;
-    }
-
-    
     .section {
       margin-top: 24px;
       padding-top: 8px;
       border-top: 1px solid #e0e0e0;
     }
+    .section:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+    .section h2 { margin: 0 0 10px; font-size: 1.1rem; }
 
-    .section:first-of-type {
-      border-top: none;
-      padding-top: 0;
-      margin-top: 0;
-    }
+    label { display: block; margin-top: 10px; font-size: 0.9rem; }
 
-    .section h2 {
-      margin: 0 0 10px;
-      font-size: 1.1rem;
-    }
-
-    label {
-      display: block;
-      margin-top: 10px;
-      font-size: 0.9rem;
-    }
-
-    input[type=text],
-    input[type=email],
-    input[type=number],
-    select,
-    textarea {
+    input[type=text], input[type=email], input[type=number], select, textarea {
       width: 100%;
       padding: 8px;
       margin-top: 4px;
@@ -124,19 +65,14 @@
       font-size: 0.95rem;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
+    textarea { resize: vertical; min-height: 80px; }
 
-    
     .two-col {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px 24px;
     }
 
-    
     .inline-options {
       margin-top: 10px;
       display: flex;
@@ -179,27 +115,13 @@
       gap: 12px;
       align-items: center;
     }
-
-    .flex-row label {
-      flex: 1;
-      margin-top: 6px;
-    }
+    .flex-row label { flex: 1; margin-top: 6px; }
 
     p { margin: 5px 0; }
+    #totalCost { font-weight: bold; font-size: 18px; }
 
-    #totalCost {
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    /* Submit button */
-    .submit-row {
-      text-align: left;
-      margin-top: 20px;
-    }
-
-    button[type=submit],
-    button[type=button] {
+    .submit-row { text-align: left; margin-top: 20px; }
+    button[type=submit], button[type=button] {
       margin-top: 10px;
       padding: 10px 18px;
       font-size: 15px;
@@ -209,20 +131,9 @@
       background-color: #000;
       color: white;
     }
-
-    button[type=button] {
-      background-color: #444;
-      font-size: 14px;
-    }
-
+    button[type=button] { background-color: #444; font-size: 14px; }
     .hidden { display: none; }
 
-    
-    .exhibitor-bold label span { font-weight: bold; }
-    
-    .exhibitor-bold .member-flags span { font-weight: bold; }
-    
-    
     .sr-only {
       position: absolute !important;
       width: 1px !important;
@@ -241,92 +152,90 @@
   <div class="form-shell">
     <form id="entryForm" class="form-card">
       <div class="form-header">
-        <img src="assets/nfrs-logo.png" alt="NFRS logo" />
-                <p class="form-subtitle">
-          The Show Secretary will send you confirmation of your entries via email when the
-          entries have been entered on to the show program. Entries close at midnight on the Wednesday
-          prior to the show.
+        <!-- Update logo path if needed -->
+        <!-- <img src="nfrs_logo.png" alt="NFRS logo" /> -->
+        <h1 class="form-title">NFRS ENTRIES (DEV)</h1>
+        <p class="form-subtitle">
+          Test build. Entries are emailed via the configured service/template.
         </p>
       </div>
 
-      
-      <!-- Use {{studName}}, {{varietySummary}}, {{petsSummary}}, {{hireTanksText}}, {{tankNumber}}, {{tankCost}}, {{totalCost}} -->
+      <!-- Hidden fields for EmailJS / submission payload -->
       <textarea class="sr-only" name="varietySummary" id="varietySummary" aria-hidden="true"></textarea>
+      <textarea class="sr-only" name="selfSummary" id="selfSummary" aria-hidden="true"></textarea>
       <textarea class="sr-only" name="petsSummary" id="petsSummary" aria-hidden="true"></textarea>
+
       <input class="sr-only" type="text" name="hireTanksText" id="hireTanksText" aria-hidden="true" />
       <input class="sr-only" type="text" name="tankCost" id="tankCostField" aria-hidden="true" />
       <input class="sr-only" type="text" name="totalCost" id="totalCostField" aria-hidden="true" />
 
+      <!-- Show selection (Show ID + Recipient dropdown) -->
       <div class="section">
-  <h2>Show selection</h2>
+        <h2>Show selection</h2>
 
-  <label>Show ID*:
-    <select id="showSelect" required>
-      <option value="">Loading shows...</option>
-    </select>
-  </label>
+        <label>Show ID*:
+          <select id="showSelect" required>
+            <option value="">Loading shows...</option>
+          </select>
+        </label>
 
-  <label>Send entries to*:
-    <select id="showEmailSelect" required>
-      <option value="">Select a show first</option>
-    </select>
-  </label>
+        <label>Send entries to*:
+          <select id="showEmailSelect" required>
+            <option value="">Select a show first</option>
+          </select>
+        </label>
 
-  <p class="helper-text" id="showMetaText"></p>
+        <p class="helper-text" id="showMetaText"></p>
 
-  <!-- Hidden fields sent with submission -->
-  <input class="sr-only" type="text" name="showId" id="showId" aria-hidden="true" />
-  <input class="sr-only" type="text" name="showName" id="showName" aria-hidden="true" />
-  <input class="sr-only" type="text" name="selectedShowEmail" id="selectedShowEmail" aria-hidden="true" />
-  <input class="sr-only" type="text" name="entryPrice" id="entryPriceHidden" aria-hidden="true" />
-  <input class="sr-only" type="text" name="tankPrice" id="tankPriceHidden" aria-hidden="true" />
-</div>
+        <input class="sr-only" type="text" name="showId" id="showId" aria-hidden="true" />
+        <input class="sr-only" type="text" name="showName" id="showName" aria-hidden="true" />
+        <input class="sr-only" type="text" name="selectedShowEmail" id="selectedShowEmail" aria-hidden="true" />
+        <input class="sr-only" type="text" name="entryPrice" id="entryPriceHidden" aria-hidden="true" />
+        <input class="sr-only" type="text" name="tankPrice" id="tankPriceHidden" aria-hidden="true" />
+      </div>
 
-      
-      <div class="section exhibitor-bold">
+      <!-- Exhibitor details -->
+      <div class="section">
         <h2>Exhibitor details</h2>
 
-        
         <div class="two-col">
-          <label><span>Name*:</span>
+          <label>Name*:
             <input type="text" name="memberName" required />
           </label>
 
-          <label><span>Stud Name:</span>
-            <!-- NOT required, because pets logic depends on whether this is blank or not -->
+          <label>Stud Name:
             <input type="text" name="studName" id="studName" />
           </label>
         </div>
 
-        
         <div class="two-col">
-          <label><span>Email*:</span>
+          <label>Email*:
             <input type="email" name="memberEmail" required />
           </label>
 
-          <label><span>Phone:</span>
+          <label>Phone:
             <input type="text" name="phone" />
           </label>
         </div>
 
-        
-        <div class="two-col member-flags">
-  <div>
-    <span>NFRS Member</span>
-    <div class="inline-options">
-      <label><input type="checkbox" name="NFRSMember" value="Yes"> Yes</label>
-    </div>
-  </div>
+        <div class="two-col" style="margin-top: 10px;">
+          <div>
+            <span style="display:block;margin-bottom:6px;font-weight:bold;">NFRS Member</span>
+            <div class="inline-options">
+              <label><input type="checkbox" name="NFRSMember" value="Yes" /> Yes</label>
+            </div>
+          </div>
 
-  <div>
-    <span>Junior (under 16)</span>
-    <div class="inline-options">
-      <label><input type="checkbox" name="junior" /> Yes</label>
+          <div>
+            <span style="display:block;margin-bottom:6px;font-weight:bold;">Junior (under 16)</span>
+            <div class="inline-options">
+              <label><input type="checkbox" name="junior" value="Yes" /> Yes</label>
+            </div>
+          </div>
+        </div>
       </div>
-     </div>
-    </div>
 
-      
+      <!-- Hire Tanks -->
       <div class="section">
         <h2>Hire Tanks</h2>
         <div class="inline-options">
@@ -340,25 +249,38 @@
           <label>Number of tanks (max 2) @ £5.00 each:
             <input type="number" id="tankNumber" name="tankNumber" min="1" max="2" value="1" />
           </label>
-          <p>Tank Cost: £<span id="tankCost">1.50</span></p>
+          <p>Tank Cost: £<span id="tankCost">0.00</span></p>
         </div>
       </div>
 
-      
+      <!-- Show Entries -->
       <div class="section">
         <h2>Show Entries</h2>
+
         <div class="inline-options">
           <label>
             <input type="checkbox" id="addVarietiesCheckbox" />
             Add Varieties?
           </label>
+
+          <!-- This shows/hides based on show config -->
+          <label id="addSelfRow" class="hidden">
+            <input type="checkbox" id="addSelfCheckbox" />
+            Add Self?
+          </label>
         </div>
+
         <div id="varietiesContainer" class="hidden"></div>
         <button type="button" id="addVarietyBtn" class="hidden">Add Another Exhibit</button>
         <p class="helper-text" id="varietyLimitMsg" style="display:none;">Maximum 10 exhibits reached.</p>
+
+        <!-- Self Show block (only used when enabled by show config + checkbox) -->
+        <div id="selfContainer" class="hidden"></div>
+        <button type="button" id="addSelfBtn" class="hidden">Add Another Self Exhibit</button>
+        <p class="helper-text" id="selfLimitMsg" style="display:none;">Maximum 10 self exhibits reached.</p>
       </div>
 
-      
+      <!-- Pets -->
       <div class="section">
         <h2>Pets</h2>
         <div class="inline-options">
@@ -372,19 +294,15 @@
         <p class="helper-text" id="petLimitMsg" style="display:none;">Maximum 10 pets reached.</p>
       </div>
 
-      
+      <!-- Additional info -->
       <div class="section">
         <h2>Additional information</h2>
         <label>Any other information:
           <textarea name="otherInfo" rows="4"></textarea>
         </label>
-        <p class="helper-text">
-          Use this space to inform the show secretary of anything else relevant, e.g. bringing
-          kittens to the show for collection etc.
-        </p>
       </div>
 
-      <!-- Total Cost -->
+      <!-- Total -->
       <div class="section">
         <h2>Total Cost</h2>
         <p>Total Cost: £<span id="totalCost">0.00</span></p>
@@ -396,44 +314,55 @@
     </form>
   </div>
 
-  <!-- EmailJS + logic -->
+  <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
     /***************  EMAILJS SETUP  ***************/
+    // Update these to your DEV values
     emailjs.init('kGDNowkNSzNlhztoC'); // public key
-    const EMAILJS_SERVICE_ID = 'service_wlaqz5n';
+    const EMAILJS_SERVICE_ID  = 'service_wlaqz5n';
     const EMAILJS_TEMPLATE_ID = 'template_ksgglxk';
 
     const MAX_EXHIBITS = 10;
     const MAX_PETS = 10;
+    const MAX_SELF = 10;
 
-    // DOM elements
-    const studNameField      = document.getElementById('studName');
+    /*************** DOM elements ***************/
+    const studNameField = document.getElementById('studName');
 
-    const hireTanksCheckbox  = document.getElementById('hireTanksCheckbox');
-    const tankNumberDiv      = document.getElementById('tankNumberDiv');
-    const tankNumber         = document.getElementById('tankNumber');
-    const tankCostSpan       = document.getElementById('tankCost');
+    const hireTanksCheckbox = document.getElementById('hireTanksCheckbox');
+    const tankNumberDiv = document.getElementById('tankNumberDiv');
+    const tankNumber = document.getElementById('tankNumber');
+    const tankCostSpan = document.getElementById('tankCost');
 
-    const totalCostDisplay   = document.getElementById('totalCost');
+    const totalCostDisplay = document.getElementById('totalCost');
 
     const addVarietiesCheckbox = document.getElementById('addVarietiesCheckbox');
-    const varietiesContainer   = document.getElementById('varietiesContainer');
-    const addVarietyBtn        = document.getElementById('addVarietyBtn');
-    const varietyLimitMsg      = document.getElementById('varietyLimitMsg');
+    const varietiesContainer = document.getElementById('varietiesContainer');
+    const addVarietyBtn = document.getElementById('addVarietyBtn');
+    const varietyLimitMsg = document.getElementById('varietyLimitMsg');
 
-    const addPetsCheckbox    = document.getElementById('addPetsCheckbox');
-    const petsContainer      = document.getElementById('petsContainer');
-    const addPetBtn          = document.getElementById('addPetBtn');
-    const petLimitMsg        = document.getElementById('petLimitMsg');
+    const addPetsCheckbox = document.getElementById('addPetsCheckbox');
+    const petsContainer = document.getElementById('petsContainer');
+    const addPetBtn = document.getElementById('addPetBtn');
+    const petLimitMsg = document.getElementById('petLimitMsg');
 
-    // Hidden fields for EmailJS
+    // Self show UI elements (top toggle + container)
+    const addSelfRow = document.getElementById('addSelfRow');
+    const addSelfCheckbox = document.getElementById('addSelfCheckbox');
+    const selfContainer = document.getElementById('selfContainer');
+    const addSelfBtn = document.getElementById('addSelfBtn');
+    const selfLimitMsg = document.getElementById('selfLimitMsg');
+
+    // Hidden fields
     const varietySummaryField = document.getElementById('varietySummary');
-    const petsSummaryField    = document.getElementById('petsSummary');
-    const hireTanksTextField  = document.getElementById('hireTanksText');
-    const tankCostField       = document.getElementById('tankCostField');
-    const totalCostField      = document.getElementById('totalCostField');
+    const selfSummaryField = document.getElementById('selfSummary');
+    const petsSummaryField = document.getElementById('petsSummary');
+    const hireTanksTextField = document.getElementById('hireTanksText');
+    const tankCostField = document.getElementById('tankCostField');
+    const totalCostField = document.getElementById('totalCostField');
 
+    // Show config DOM elements
     const showSelect = document.getElementById("showSelect");
     const showEmailSelect = document.getElementById("showEmailSelect");
     const showMetaText = document.getElementById("showMetaText");
@@ -444,112 +373,143 @@
     const entryPriceHidden = document.getElementById("entryPriceHidden");
     const tankPriceHidden = document.getElementById("tankPriceHidden");
 
+    // Counts
+    let varietyCount = 0;
+    let petCount = 0;
+    let selfCount = 0;
+
+    // Show config state
     let SHOWS = [];
     let ACTIVE_SHOW = null;
 
-    async function loadShows() {
-    const res = await fetch("./shows.json", { cache: "no-store" });
-    if (!res.ok) throw new Error(`shows.json HTTP ${res.status}`);
-    const data = await res.json();
-    if (!Array.isArray(data)) throw new Error("shows.json must be an array");
-    SHOWS = data;
+    /*************** Self Show classes (single source of truth) ***************/
+    const SELF_SHOW_CLASSES = [
+      "Pink Eyed White","Champagne","Buff","Platinum","Quicksilver",
+      "British Blue","Black","Chocolate","Mink","Ivory","Lilac"
+    ];
 
-  showSelect.innerHTML = '<option value="">Select a show</option>';
-  SHOWS.forEach((s, idx) => {
-    const opt = document.createElement("option");
-    opt.value = String(idx);
-    opt.textContent = s.name;
-    showSelect.appendChild(opt);
-       });
+    /*************** show.json loading ***************/
+    async function loadShows() {
+      const res = await fetch("./shows.json", { cache: "no-store" });
+      if (!res.ok) throw new Error(`shows.json HTTP ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error("shows.json must be an array");
+      SHOWS = data;
+
+      showSelect.innerHTML = '<option value="">Select a show</option>';
+      SHOWS.forEach((s, idx) => {
+        const opt = document.createElement("option");
+        opt.value = String(idx);
+        opt.textContent = s.name;
+        showSelect.appendChild(opt);
+      });
+    }
+
+    function getEntryPrice() { return ACTIVE_SHOW?.entryPrice ?? 2; }
+    function getTankPrice()  { return ACTIVE_SHOW?.tankPrice ?? 5; }
+    function getMaxTanks()   { return ACTIVE_SHOW?.maxTanks ?? 2; }
+
+    function populateEmailDropdown() {
+      showEmailSelect.innerHTML = "";
+
+      if (!ACTIVE_SHOW) {
+        showEmailSelect.innerHTML = '<option value="">Select a show first</option>';
+        selectedShowEmailField.value = "";
+        return;
       }
 
-   function getEntryPrice() { return ACTIVE_SHOW?.entryPrice ?? 2; }
-   function getTankPrice()  { return ACTIVE_SHOW?.tankPrice ?? 5; }
-   function getMaxTanks()   { return ACTIVE_SHOW?.maxTanks ?? 2; }
+      const emails = Array.isArray(ACTIVE_SHOW.emails) ? ACTIVE_SHOW.emails : [];
+      const defaultEmail = ACTIVE_SHOW.defaultEmail || emails[0] || "";
 
-   function populateEmailDropdown() {
-  showEmailSelect.innerHTML = "";
+      if (emails.length === 0) {
+        showEmailSelect.innerHTML = '<option value="">No emails configured</option>';
+        selectedShowEmailField.value = "";
+        return;
+      }
 
-   if (!ACTIVE_SHOW) {
-    showEmailSelect.innerHTML = '<option value="">Select a show first</option>';
-    selectedShowEmailField.value = "";
-    return;
-  }
+      showEmailSelect.appendChild(new Option("Select recipient", ""));
+      emails.forEach(e => showEmailSelect.appendChild(new Option(e, e)));
 
-   const emails = Array.isArray(ACTIVE_SHOW.emails) ? ACTIVE_SHOW.emails : [];
-   const defaultEmail = ACTIVE_SHOW.defaultEmail || emails[0] || "";
+      showEmailSelect.value = defaultEmail;
+      selectedShowEmailField.value = defaultEmail;
+    }
 
-   if (emails.length === 0) {
-    showEmailSelect.innerHTML = '<option value="">No emails configured</option>';
-    selectedShowEmailField.value = "";
-    return;
-  }
+    function applyShowRulesToExistingExhibits() {
+      const dualAllowed = ACTIVE_SHOW?.allowDualEntry !== false;
 
-  showEmailSelect.appendChild(new Option("Select recipient", ""));
-  emails.forEach(e => showEmailSelect.appendChild(new Option(e, e)));
+      // Toggle dual rows in existing variety exhibits
+      document.querySelectorAll(".dualEntryRow").forEach(row => {
+        row.style.display = dualAllowed ? "" : "none";
+        const cb = row.querySelector('input[type="checkbox"]');
+        if (!dualAllowed && cb) cb.checked = false;
+      });
 
-  showEmailSelect.value = defaultEmail;
-  selectedShowEmailField.value = defaultEmail;
-}
+      // If self show is enabled, enforce "Self" removed from varieties by clearing any existing Self selections
+      if (ACTIVE_SHOW?.allowSelfShow) {
+        for (let i = 0; i < varietiesContainer.children.length; i++) {
+          const sectionSelect = document.querySelector(`select[name="section${i}"]`);
+          const classSelect = document.querySelector(`select[name="class${i}"]`);
+          if (sectionSelect && sectionSelect.value === "Self") {
+            sectionSelect.value = "";
+            if (classSelect) {
+              classSelect.innerHTML = '<option value="">Select Section first</option>';
+            }
+          }
+        }
+      }
 
- function applyShowRulesToExistingExhibits() {
-  const dualAllowed = ACTIVE_SHOW?.allowDualEntry !== false;
-  const selfAllowed = !!ACTIVE_SHOW?.allowSelfShow;
+      updateTotalCost();
+    }
 
-  document.querySelectorAll(".dualEntryRow").forEach(row => {
-    row.style.display = dualAllowed ? "" : "none";
-    const cb = row.querySelector('input[type="checkbox"]');
-    if (!dualAllowed && cb) cb.checked = false;
-  });
+    function applyShowConfig() {
+      if (!ACTIVE_SHOW) return;
 
-  document.querySelectorAll(".selfEntryRow").forEach(row => {
-    row.style.display = selfAllowed ? "" : "none";
-    const cb = row.querySelector('input[type="checkbox"]');
-    if (!selfAllowed && cb) cb.checked = false;
-  });
-}
+      showIdField.value = ACTIVE_SHOW.id || "";
+      showNameField.value = ACTIVE_SHOW.name || "";
+      entryPriceHidden.value = String(getEntryPrice());
+      tankPriceHidden.value = String(getTankPrice());
 
-function applyShowConfig() {
-  if (!ACTIVE_SHOW) return;
+      populateEmailDropdown();
+      applyShowRulesToExistingExhibits();
 
-  showIdField.value = ACTIVE_SHOW.id || "";
-  showNameField.value = ACTIVE_SHOW.name || "";
-  entryPriceHidden.value = String(getEntryPrice());
-  tankPriceHidden.value = String(getTankPrice());
+      // Self show: show/hide "Add Self?" toggle + reset if disabled
+      const selfEnabled = !!ACTIVE_SHOW?.allowSelfShow;
+      addSelfRow.classList.toggle('hidden', !selfEnabled);
 
-  populateEmailDropdown();
-  applyShowRulesToExistingExhibits();
+      if (!selfEnabled) {
+        addSelfCheckbox.checked = false;
+        selfContainer.classList.add('hidden');
+        addSelfBtn.classList.add('hidden');
+        selfContainer.innerHTML = '';
+        selfCount = 0;
+        selfLimitMsg.style.display = 'none';
+      }
 
-  showMetaText.textContent =
-    `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}). ` +
-    `Dual entry: ${(ACTIVE_SHOW.allowDualEntry === false) ? "No" : "Yes"}. ` +
-    `Self Show: ${ACTIVE_SHOW.allowSelfShow ? "Yes" : "No"}.`;
+      showMetaText.textContent =
+        `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}). ` +
+        `Dual entry: ${(ACTIVE_SHOW.allowDualEntry === false) ? "No" : "Yes"}. ` +
+        `Self Show: ${ACTIVE_SHOW.allowSelfShow ? "Yes" : "No"}.`;
 
-  updateTankCost();
-  updateTotalCost();
-}
+      updateTankCost();
+      updateTotalCost();
+    }
 
-showSelect.addEventListener("change", () => {
-  const idx = parseInt(showSelect.value, 10);
-  ACTIVE_SHOW = Number.isNaN(idx) ? null : SHOWS[idx];
-  applyShowConfig();
-});
+    showSelect.addEventListener("change", () => {
+      const idx = parseInt(showSelect.value, 10);
+      ACTIVE_SHOW = Number.isNaN(idx) ? null : SHOWS[idx];
+      applyShowConfig();
+    });
 
-showEmailSelect.addEventListener("change", () => {
-  selectedShowEmailField.value = (showEmailSelect.value || "");
-});
+    showEmailSelect.addEventListener("change", () => {
+      selectedShowEmailField.value = (showEmailSelect.value || "");
+    });
 
-loadShows().catch(err => {
-  console.error(err);
-  showSelect.innerHTML = '<option value="">Shows unavailable</option>';
-  showEmailSelect.innerHTML = '<option value="">Shows unavailable</option>';
-  showMetaText.textContent = "Could not load shows.json.";
-});
-
-
-    // Cost counters
-    let varietyCount = 0;
-    let petCount = 0;
+    loadShows().catch(err => {
+      console.error(err);
+      showSelect.innerHTML = '<option value="">Shows unavailable</option>';
+      showEmailSelect.innerHTML = '<option value="">Shows unavailable</option>';
+      showMetaText.textContent = "Could not load shows.json.";
+    });
 
     /*************** Tank cost logic ***************/
     hireTanksCheckbox.addEventListener('change', () => {
@@ -557,7 +517,6 @@ loadShows().catch(err => {
       tankNumberDiv.classList.toggle('hidden', !checked);
 
       if (!checked) {
-        
         tankNumber.value = '';
         tankCostSpan.innerText = '0.00';
       } else {
@@ -576,7 +535,7 @@ loadShows().catch(err => {
     function updateTankCost() {
       let num = parseInt(tankNumber.value);
       if (isNaN(num)) {
-        tankCostSpan.innerText = '0.00';
+        tankCostSpan.innerText = "0.00";
         return;
       }
       num = Math.min(Math.max(num, 1), getMaxTanks());
@@ -619,6 +578,13 @@ loadShows().catch(err => {
       div.className = 'subsection';
       const index = varietiesContainer.children.length;
 
+      // Hide "Self" section option if self show enabled
+      const selfOptionHtml = (ACTIVE_SHOW?.allowSelfShow) ? '' : '<option value="Self">Self</option>';
+
+      // Hide dual entry row if dual not allowed
+      const dualAllowed = (ACTIVE_SHOW?.allowDualEntry !== false);
+      const dualRowStyle = dualAllowed ? '' : 'style="display:none;"';
+
       div.innerHTML = `
         <div class="subsection-header">Exhibit ${index + 1} (click to toggle)</div>
         <div class="subsection-content">
@@ -639,7 +605,7 @@ loadShows().catch(err => {
             <select name="section${index}" class="sectionSelect">
               <option value="">Select Section</option>
               <option value="Provisional Standard">Provisional Standard</option>
-              <option value="Self">Self</option>
+              ${selfOptionHtml}
               <option value="Marked">Marked</option>
               <option value="Russian">Russian</option>
               <option value="Shaded">Shaded</option>
@@ -655,19 +621,12 @@ loadShows().catch(err => {
             </select>
           </label>
           <label><input type="checkbox" name="novice${index}"> Novice</label>
-          <label class="dualEntryRow"><input type="checkbox" name="dualEntry${index}"> Dual Entry (Pets)</label>
-          <label class="selfEntryRow"><input type="checkbox" name="selfEntry${index}"> Self Show</label>
+          <label class="dualEntryRow" ${dualRowStyle}><input type="checkbox" name="dualEntry${index}"> Dual Entry (Pets)</label>
         </div>
       `;
 
       varietiesContainer.appendChild(div);
       varietyCount += 1;
-
-      const selfCheckbox = div.querySelector(`input[name="selfEntry${index}"]`);
-      if (selfCheckbox) {
-        selfCheckbox.addEventListener("change", () => updateTotalCost());
-      }
-
 
       // Toggle open/close
       const header = div.querySelector('.subsection-header');
@@ -679,7 +638,7 @@ loadShows().catch(err => {
 
       // Populate class options by section
       const sectionSelect = div.querySelector('.sectionSelect');
-      const classSelect   = div.querySelector('.classSelect');
+      const classSelect = div.querySelector('.classSelect');
       sectionSelect.addEventListener('change', () => {
         const options = getClassOptions(sectionSelect.value);
         classSelect.innerHTML = '';
@@ -694,16 +653,17 @@ loadShows().catch(err => {
           o.innerText = opt;
           classSelect.appendChild(o);
         });
+
+        updateTotalCost();
       });
 
-      // Recalc when novice/dual toggled or when class changes
+      // Recalc when toggled
       const noviceCheckbox = div.querySelector(`input[name="novice${index}"]`);
-      const dualCheckbox   = div.querySelector(`input[name="dualEntry${index}"]`);
-      if (noviceCheckbox) noviceCheckbox.addEventListener('change', () => { updateTotalCost(); });
-      if (dualCheckbox) dualCheckbox.addEventListener('change', () => { updateTotalCost(); });
-      if (classSelect) classSelect.addEventListener('change', () => { updateTotalCost(); });
+      const dualCheckbox = div.querySelector(`input[name="dualEntry${index}"]`);
+      if (noviceCheckbox) noviceCheckbox.addEventListener('change', () => updateTotalCost());
+      if (dualCheckbox) dualCheckbox.addEventListener('change', () => updateTotalCost());
+      if (classSelect) classSelect.addEventListener('change', () => updateTotalCost());
 
-      // Limit button state
       if (varietiesContainer.children.length >= MAX_EXHIBITS) {
         addVarietyBtn.disabled = true;
         varietyLimitMsg.style.display = 'block';
@@ -716,7 +676,7 @@ loadShows().catch(err => {
     function getClassOptions(section) {
       const data = {
         "Provisional Standard": ["Bareback","Chestnut","Cinnamon Chinchilla","Copper","Dwarf","Merle","Pink Eyed Ivory","Powder Blue","Tonkinese (Self type)","Tonkinese (Agouti type)","Variegated Downunder"],
-        "Self": ["Pink Eyed White","Champagne","Buff","Platinum","Quicksilver","British Blue","Black","Chocolate","Mink","Ivory","Lilac"],
+        "Self": SELF_SHOW_CLASSES,
         "Marked": ["Berkshire/Badger","Irish","Hooded","Variegated","Capped","Essex","Chinchilla","Squirrel","Roan/Striped Roan"],
         "Russian": ["Russian Blue","Russian Dove","Russian Buff","Russian Blue Agouti","Russian Dove Agouti","Russian Silver","Russian Topaz"],
         "Shaded": ["Argente Crème","Himalayan","Siamese","Blue Point Siamese","Burmese","Wheaten Burmese","Golden Himalayan","Golden Siamese","Marten","Silver Agouti","Cream Agouti"],
@@ -725,7 +685,99 @@ loadShows().catch(err => {
         "Dumbo": ["Self","Marked","Russian","Shaded","AOV","Rex"],
         "Guide Standard": ["Blue Point Himalayan","Russian Burmese","Russian Silver Agouti","Sable Burmese","Spotted Down Under","Silken"]
       };
+
+      // If Self Show is enabled, disable Self inside Varieties
+      if (ACTIVE_SHOW?.allowSelfShow && section === "Self") return [];
+
       return data[section] || [];
+    }
+
+    /*************** Self Show logic (separate section) ***************/
+    addSelfCheckbox.addEventListener('change', () => {
+      const checked = addSelfCheckbox.checked;
+
+      selfContainer.classList.toggle('hidden', !checked);
+      addSelfBtn.classList.toggle('hidden', !checked);
+
+      if (checked) {
+        if (selfContainer.children.length === 0) addSelfExhibit();
+      } else {
+        selfContainer.innerHTML = '';
+        selfCount = 0;
+        addSelfBtn.disabled = false;
+        selfLimitMsg.style.display = 'none';
+      }
+
+      updateTotalCost();
+    });
+
+    addSelfBtn.addEventListener('click', () => {
+      addSelfExhibit();
+      updateTotalCost();
+    });
+
+    function addSelfExhibit() {
+      if (selfContainer.children.length >= MAX_SELF) {
+        addSelfBtn.disabled = true;
+        selfLimitMsg.style.display = 'block';
+        return;
+      }
+
+      const div = document.createElement('div');
+      div.className = 'subsection';
+      const index = selfContainer.children.length;
+
+      div.innerHTML = `
+        <div class="subsection-header">Self Exhibit ${index + 1} (click to toggle)</div>
+        <div class="subsection-content">
+          <label>Rat Name:
+            <input type="text" name="selfRatName${index}">
+          </label>
+
+          <div class="flex-row">
+            <label>Age:
+              <input type="radio" name="selfAge${index}" value="Adult"> Adult
+              <input type="radio" name="selfAge${index}" value="Kitten"> Kitten
+            </label>
+            <label>Sex:
+              <input type="radio" name="selfSex${index}" value="Doe"> Doe
+              <input type="radio" name="selfSex${index}" value="Buck"> Buck
+            </label>
+          </div>
+
+          <label>Class:
+            <select name="selfClass${index}" class="selfClassSelect">
+              <option value="">Select Class</option>
+              ${SELF_SHOW_CLASSES.map(c => `<option value="${c}">${c}</option>`).join('')}
+            </select>
+          </label>
+
+          <label><input type="checkbox" name="selfNovice${index}"> Novice</label>
+        </div>
+      `;
+
+      selfContainer.appendChild(div);
+      selfCount += 1;
+
+      const header = div.querySelector('.subsection-header');
+      const content = div.querySelector('.subsection-content');
+      content.style.display = 'block';
+      header.addEventListener('click', () => {
+        content.style.display = content.style.display === 'none' ? 'block' : 'none';
+      });
+
+      // Recalc when changed
+      div.querySelectorAll('input, select').forEach(el => {
+        el.addEventListener('change', () => updateTotalCost());
+      });
+
+      if (selfContainer.children.length >= MAX_SELF) {
+        addSelfBtn.disabled = true;
+        selfLimitMsg.style.display = 'block';
+      } else {
+        addSelfBtn.disabled = false;
+        selfLimitMsg.style.display = 'none';
+      }
     }
 
     /*************** Pets logic ***************/
@@ -787,9 +839,7 @@ loadShows().catch(err => {
         content.style.display = content.style.display === 'none' ? 'block' : 'none';
       });
 
-      // Recalc when pet sex changes
-      const sexRadios = div.querySelectorAll(`input[name="petSex${index}"]`);
-      sexRadios.forEach(r => r.addEventListener('change', () => updateTotalCost()));
+      div.querySelectorAll('input').forEach(el => el.addEventListener('change', () => updateTotalCost()));
 
       if (petsContainer.children.length >= MAX_PETS) {
         addPetBtn.disabled = true;
@@ -800,124 +850,138 @@ loadShows().catch(err => {
       }
     }
 
-    /*************** NFRS format ***************/
+    /*************** Readable summaries ***************/
     function pluralize(n, singular, plural = singular + "s") {
-  return n === 1 ? singular : plural;
-}
+      return n === 1 ? singular : plural;
+    }
 
-/**
- * VARIETIES SUMMARY (grouped + readable)
- * Example:
- * 1 Adult Buck Silver Fawn Novice Pets
- * 2 Adult Doe Agouti
- */
-function buildVarietySummaryReadableGrouped() {
-  const counts = new Map();
+    function buildVarietySummaryReadableGrouped() {
+      const counts = new Map();
 
-  for (let i = 0; i < varietiesContainer.children.length; i++) {
-    const age = document.querySelector(`input[name="age${i}"]:checked`)?.value || "";
-    const sex = document.querySelector(`input[name="sex${i}"]:checked`)?.value || "";
-    const cls = document.querySelector(`select[name="class${i}"]`)?.value || "";
-    const novice = document.querySelector(`input[name="novice${i}"]`)?.checked || false;
-    const pets = document.querySelector(`input[name="dualEntry${i}"]`)?.checked || false;
+      for (let i = 0; i < varietiesContainer.children.length; i++) {
+        const age = document.querySelector(`input[name="age${i}"]:checked`)?.value || "";
+        const sex = document.querySelector(`input[name="sex${i}"]:checked`)?.value || "";
+        const cls = document.querySelector(`select[name="class${i}"]`)?.value || "";
+        const novice = document.querySelector(`input[name="novice${i}"]`)?.checked || false;
+        const pets = document.querySelector(`input[name="dualEntry${i}"]`)?.checked || false;
 
-    if (!age || !sex || !cls) continue;
+        if (!age || !sex || !cls) continue;
 
-    const key = JSON.stringify({ age, sex, cls, novice, pets });
-    counts.set(key, (counts.get(key) || 0) + 1);
-  }
+        const key = JSON.stringify({ age, sex, cls, novice, pets });
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
 
-  const lines = Array.from(counts.entries())
-    .map(([key, count]) => {
-      const { age, sex, cls, novice, pets } = JSON.parse(key);
-      const parts = [String(count), age, sex, cls];
-      if (novice) parts.push("Novice");
-      if (pets) parts.push("Pets");
-      return parts.join(" ");
-    })
-    .sort((a, b) => a.localeCompare(b));
+      return Array.from(counts.entries())
+        .map(([key, count]) => {
+          const { age, sex, cls, novice, pets } = JSON.parse(key);
+          const parts = [String(count), age, sex, cls];
+          if (novice) parts.push("Novice");
+          if (pets) parts.push("Pets");
+          return parts.join(" ");
+        })
+        .sort((a, b) => a.localeCompare(b))
+        .join("\n");
+    }
 
-  return lines.join("\n");
-}
+    function buildSelfSummaryReadableGrouped() {
+      const counts = new Map();
 
-/**
- * PETS SUMMARY
- * If stud name filled → Breeder Owned
- * If blank → Adult Owned
- *
- * Example:
- * 2 Breeder Owned Bucks
- * 1 Breeder Owned Doe
- */
-function buildPetsSummaryOwnedByStud() {
-  if (petsContainer.children.length === 0) return "";
+      for (let i = 0; i < selfContainer.children.length; i++) {
+        const age = document.querySelector(`input[name="selfAge${i}"]:checked`)?.value || "";
+        const sex = document.querySelector(`input[name="selfSex${i}"]:checked`)?.value || "";
+        const cls = document.querySelector(`select[name="selfClass${i}"]`)?.value || "";
+        const novice = document.querySelector(`input[name="selfNovice${i}"]`)?.checked || false;
 
-  const studFilled = (studNameField.value || "").trim().length > 0;
-  const ownedLabel = studFilled ? "Breeder Owned" : "Adult Owned";
+        if (!age || !sex || !cls) continue;
 
-  let buckCount = 0;
-  let doeCount = 0;
+        const key = JSON.stringify({ age, sex, cls, novice });
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
 
-  for (let i = 0; i < petsContainer.children.length; i++) {
-    const sex = document.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
-    if (sex === "Buck") buckCount += 1;
-    if (sex === "Doe") doeCount += 1;
-  }
+      return Array.from(counts.entries())
+        .map(([key, count]) => {
+          const { age, sex, cls, novice } = JSON.parse(key);
+          const parts = [String(count), "Self", age, sex, cls];
+          if (novice) parts.push("Novice");
+          return parts.join(" ");
+        })
+        .sort((a, b) => a.localeCompare(b))
+        .join("\n");
+    }
 
-  const lines = [];
-  if (buckCount > 0) lines.push(`${buckCount} ${ownedLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
-  if (doeCount > 0) lines.push(`${doeCount} ${ownedLabel} ${pluralize(doeCount, "Doe", "Does")}`);
+    function buildPetsSummaryOwnedByStud() {
+      if (petsContainer.children.length === 0) return "";
 
-  return lines.join("\n");
-}
+      const studFilled = (studNameField.value || "").trim().length > 0;
+      const ownedLabel = studFilled ? "Breeder Owned" : "Adult Owned";
 
+      let buckCount = 0;
+      let doeCount = 0;
+
+      for (let i = 0; i < petsContainer.children.length; i++) {
+        const sex = document.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
+        if (sex === "Buck") buckCount += 1;
+        if (sex === "Doe") doeCount += 1;
+      }
+
+      const lines = [];
+      if (buckCount > 0) lines.push(`${buckCount} ${ownedLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
+      if (doeCount > 0) lines.push(`${doeCount} ${ownedLabel} ${pluralize(doeCount, "Doe", "Does")}`);
+      return lines.join("\n");
+    }
 
     /*************** Total cost ***************/
     function updateTotalCost() {
       let total = 0;
 
-      // Tanks: £1.50 each, max 2
+      // Tanks
       if (hireTanksCheckbox.checked) {
         total += Math.min(parseInt(tankNumber.value) || 0, getMaxTanks()) * getTankPrice();
-       }
-       const entryPrice = getEntryPrice();
+      }
 
-      total += (varietyCount * entryPrice) + (petCount * entryPrice);
+      const entryPrice = getEntryPrice();
 
-    if (ACTIVE_SHOW?.allowDualEntry !== false) {
-    document.querySelectorAll('input[name^="dualEntry"]').forEach(cb => {
-       if (cb.checked) total += entryPrice;
-    });
-   }
+      // Base entries (Varieties + Self + Pets)
+      total += (varietyCount * entryPrice) + (selfCount * entryPrice) + (petCount * entryPrice);
 
-  if (ACTIVE_SHOW?.allowSelfShow) {
-    document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => {
-      if (cb.checked) total += entryPrice;
-    });
-  }
+      // Dual Entry (only if allowed)
+      if (ACTIVE_SHOW?.allowDualEntry !== false) {
+        const dualChecks = document.querySelectorAll('input[name^="dualEntry"]');
+        dualChecks.forEach(cb => { if (cb.checked) total += entryPrice; });
+      }
 
-  totalCostDisplay.innerText = total.toFixed(2);
-}
+      totalCostDisplay.innerText = total.toFixed(2);
+    }
 
-    /*************** Form submission via EmailJS ***************/
+    /*************** Form submission ***************/
     document.getElementById('entryForm').addEventListener('submit', function (event) {
       event.preventDefault();
 
-      // Fill hidden fields that EmailJS will send
-      const tanksText = hireTanksCheckbox.checked ? 'Yes' : 'No';
-      hireTanksTextField.value = tanksText;
+      if (!ACTIVE_SHOW) {
+        alert("Please select a show before submitting.");
+        return;
+      }
 
-      // keep tankCost + totalCost as actual fields (EmailJS sends form fields, not spans)
+      if (!selectedShowEmailField.value) {
+        alert("Please select a recipient email before submitting.");
+        return;
+      }
+
+      // Hidden fields
+      hireTanksTextField.value = hireTanksCheckbox.checked ? 'Yes' : 'No';
       tankCostField.value = (tankCostSpan.innerText || '0.00').trim();
       totalCostField.value = (totalCostDisplay.innerText || '0.00').trim();
 
-      // NFRS format summaries
       varietySummaryField.value = buildVarietySummaryReadableGrouped();
+      selfSummaryField.value = buildSelfSummaryReadableGrouped();
       petsSummaryField.value = buildPetsSummaryOwnedByStud();
 
       emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
-        .then(() => { alert('Entry submitted successfully!'); },
-              (error) => { alert('Submission failed: ' + JSON.stringify(error)); });
+        .then(() => { alert('Entry submitted successfully!'); })
+        .catch((error) => {
+          alert('Submission failed: ' + (error?.text || JSON.stringify(error)));
+          console.error(error);
+        });
     });
   </script>
 </body>
