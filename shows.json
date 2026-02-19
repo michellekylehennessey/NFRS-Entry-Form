@@ -1,0 +1,44 @@
+[
+  {
+    "id": "standard-1",
+    "name": "Standard 1* Show",
+    "emails": [
+      "michellekylehennessey@gmail.com",
+      "michellekylehennessey+standard@gmail.com"
+    ],
+    "defaultEmail": "michellekylehennessey@gmail.com",
+    "entryPrice": 2,
+    "tankPrice": 5,
+    "maxTanks": 2,
+    "allowDualEntry": true,
+    "allowSelfShow": false
+  },
+  {
+    "id": "cup-3",
+    "name": "Cup (3*) Show",
+    "emails": [
+      "michellekylehennessey@gmail.com",
+      "michellekylehennessey+cup@gmail.com"
+    ],
+    "defaultEmail": "michellekylehennessey@gmail.com",
+    "entryPrice": 3,
+    "tankPrice": 5,
+    "maxTanks": 2,
+    "allowDualEntry": true,
+    "allowSelfShow": true
+  },
+  {
+    "id": "random-other",
+    "name": "Random Other Show",
+    "emails": [
+      "michellekylehennessey@gmail.com",
+      "michellekylehennessey+other@gmail.com"
+    ],
+    "defaultEmail": "michellekylehennessey@gmail.com",
+    "entryPrice": 2,
+    "tankPrice": 5,
+    "maxTanks": 2,
+    "allowDualEntry": false,
+    "allowSelfShow": true
+  }
+]
