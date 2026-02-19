@@ -434,6 +434,119 @@
     const tankCostField       = document.getElementById('tankCostField');
     const totalCostField      = document.getElementById('totalCostField');
 
+    const showSelect = document.getElementById("showSelect");
+    const showEmailSelect = document.getElementById("showEmailSelect");
+    const showMetaText = document.getElementById("showMetaText");
+
+    const showIdField = document.getElementById("showId");
+    const showNameField = document.getElementById("showName");
+    const selectedShowEmailField = document.getElementById("selectedShowEmail");
+    const entryPriceHidden = document.getElementById("entryPriceHidden");
+    const tankPriceHidden = document.getElementById("tankPriceHidden");
+
+    let SHOWS = [];
+    let ACTIVE_SHOW = null;
+
+    async function loadShows() {
+    const res = await fetch("./shows.json", { cache: "no-store" });
+    if (!res.ok) throw new Error(`shows.json HTTP ${res.status}`);
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error("shows.json must be an array");
+    SHOWS = data;
+
+  showSelect.innerHTML = '<option value="">Select a show</option>';
+  SHOWS.forEach((s, idx) => {
+    const opt = document.createElement("option");
+    opt.value = String(idx);
+    opt.textContent = s.name;
+    showSelect.appendChild(opt);
+       });
+      }
+
+   function getEntryPrice() { return ACTIVE_SHOW?.entryPrice ?? 2; }
+   function getTankPrice()  { return ACTIVE_SHOW?.tankPrice ?? 5; }
+   function getMaxTanks()   { return ACTIVE_SHOW?.maxTanks ?? 2; }
+
+   function populateEmailDropdown() {
+  showEmailSelect.innerHTML = "";
+
+   if (!ACTIVE_SHOW) {
+    showEmailSelect.innerHTML = '<option value="">Select a show first</option>';
+    selectedShowEmailField.value = "";
+    return;
+  }
+
+   const emails = Array.isArray(ACTIVE_SHOW.emails) ? ACTIVE_SHOW.emails : [];
+   const defaultEmail = ACTIVE_SHOW.defaultEmail || emails[0] || "";
+
+   if (emails.length === 0) {
+    showEmailSelect.innerHTML = '<option value="">No emails configured</option>';
+    selectedShowEmailField.value = "";
+    return;
+  }
+
+  showEmailSelect.appendChild(new Option("Select recipient", ""));
+  emails.forEach(e => showEmailSelect.appendChild(new Option(e, e)));
+
+  showEmailSelect.value = defaultEmail;
+  selectedShowEmailField.value = defaultEmail;
+}
+
+ function applyShowRulesToExistingExhibits() {
+  const dualAllowed = ACTIVE_SHOW?.allowDualEntry !== false;
+  const selfAllowed = !!ACTIVE_SHOW?.allowSelfShow;
+
+  document.querySelectorAll(".dualEntryRow").forEach(row => {
+    row.style.display = dualAllowed ? "" : "none";
+    const cb = row.querySelector('input[type="checkbox"]');
+    if (!dualAllowed && cb) cb.checked = false;
+  });
+
+  document.querySelectorAll(".selfEntryRow").forEach(row => {
+    row.style.display = selfAllowed ? "" : "none";
+    const cb = row.querySelector('input[type="checkbox"]');
+    if (!selfAllowed && cb) cb.checked = false;
+  });
+}
+
+function applyShowConfig() {
+  if (!ACTIVE_SHOW) return;
+
+  showIdField.value = ACTIVE_SHOW.id || "";
+  showNameField.value = ACTIVE_SHOW.name || "";
+  entryPriceHidden.value = String(getEntryPrice());
+  tankPriceHidden.value = String(getTankPrice());
+
+  populateEmailDropdown();
+  applyShowRulesToExistingExhibits();
+
+  showMetaText.textContent =
+    `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}). ` +
+    `Dual entry: ${(ACTIVE_SHOW.allowDualEntry === false) ? "No" : "Yes"}. ` +
+    `Self Show: ${ACTIVE_SHOW.allowSelfShow ? "Yes" : "No"}.`;
+
+  updateTankCost();
+  updateTotalCost();
+}
+
+showSelect.addEventListener("change", () => {
+  const idx = parseInt(showSelect.value, 10);
+  ACTIVE_SHOW = Number.isNaN(idx) ? null : SHOWS[idx];
+  applyShowConfig();
+});
+
+showEmailSelect.addEventListener("change", () => {
+  selectedShowEmailField.value = (showEmailSelect.value || "");
+});
+
+loadShows().catch(err => {
+  console.error(err);
+  showSelect.innerHTML = '<option value="">Shows unavailable</option>';
+  showEmailSelect.innerHTML = '<option value="">Shows unavailable</option>';
+  showMetaText.textContent = "Could not load shows.json.";
+});
+
+
     // Cost counters
     let varietyCount = 0;
     let petCount = 0;
@@ -466,9 +579,9 @@
         tankCostSpan.innerText = '0.00';
         return;
       }
-      num = Math.min(Math.max(num, 1), 2);
+      num = Math.min(Math.max(num, 1), getMaxTanks());
       tankNumber.value = num;
-      tankCostSpan.innerText = (num * 5).toFixed(2);
+      tankCostSpan.innerText = (num * getTankPrice()).toFixed(2);
     }
 
     /*************** Varieties logic ***************/
@@ -542,12 +655,19 @@
             </select>
           </label>
           <label><input type="checkbox" name="novice${index}"> Novice</label>
-          <label><input type="checkbox" name="dualEntry${index}"> Dual Entry (Pets)</label>
+          <label class="dualEntryRow"><input type="checkbox" name="dualEntry${index}"> Dual Entry (Pets)</label>
+          <label class="selfEntryRow"><input type="checkbox" name="selfEntry${index}"> Self Show</label>
         </div>
       `;
 
       varietiesContainer.appendChild(div);
       varietyCount += 1;
+
+      const selfCheckbox = div.querySelector(`input[name="selfEntry${index}"]`);
+      if (selfCheckbox) {
+        selfCheckbox.addEventListener("change", () => updateTotalCost());
+      }
+
 
       // Toggle open/close
       const header = div.querySelector('.subsection-header');
@@ -596,7 +716,7 @@
     function getClassOptions(section) {
       const data = {
         "Provisional Standard": ["Bareback","Chestnut","Cinnamon Chinchilla","Copper","Dwarf","Merle","Pink Eyed Ivory","Powder Blue","Tonkinese (Self type)","Tonkinese (Agouti type)","Variegated Downunder"],
-        "Self": ["Pink Eyed White","Champagne","Buff","Platinum","Quicksilver","British Blue","Black Chocolate","Mink","Ivory","Lilac"],
+        "Self": ["Pink Eyed White","Champagne","Buff","Platinum","Quicksilver","British Blue","Black","Chocolate","Mink","Ivory","Lilac"],
         "Marked": ["Berkshire/Badger","Irish","Hooded","Variegated","Capped","Essex","Chinchilla","Squirrel","Roan/Striped Roan"],
         "Russian": ["Russian Blue","Russian Dove","Russian Buff","Russian Blue Agouti","Russian Dove Agouti","Russian Silver","Russian Topaz"],
         "Shaded": ["Argente Crème","Himalayan","Siamese","Blue Point Siamese","Burmese","Wheaten Burmese","Golden Himalayan","Golden Siamese","Marten","Silver Agouti","Cream Agouti"],
@@ -758,18 +878,26 @@ function buildPetsSummaryOwnedByStud() {
 
       // Tanks: £1.50 each, max 2
       if (hireTanksCheckbox.checked) {
-       total += Math.min(parseInt(tankNumber.value) || 0, 2) * 5
-      }
+        total += Math.min(parseInt(tankNumber.value) || 0, getMaxTanks()) * getTankPrice();
+       }
+       const entryPrice = getEntryPrice();
 
-      // £2 per variety and £2 per pet 
-      total += (varietyCount * 2) + (petCount * 2)
+      total += (varietyCount * entryPrice) + (petCount * entryPrice);
 
-      // +£1 for each Dual Entry (Pets) ticked
-      const dualChecks = document.querySelectorAll('input[name^="dualEntry"]');
-      dualChecks.forEach(cb => { if (cb.checked) total += 2; });
+    if (ACTIVE_SHOW?.allowDualEntry !== false) {
+    document.querySelectorAll('input[name^="dualEntry"]').forEach(cb => {
+       if (cb.checked) total += entryPrice;
+    });
+   }
 
-      totalCostDisplay.innerText = total.toFixed(2);
-    }
+  if (ACTIVE_SHOW?.allowSelfShow) {
+    document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => {
+      if (cb.checked) total += entryPrice;
+    });
+  }
+
+  totalCostDisplay.innerText = total.toFixed(2);
+}
 
     /*************** Form submission via EmailJS ***************/
     document.getElementById('entryForm').addEventListener('submit', function (event) {
