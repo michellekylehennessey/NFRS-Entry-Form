@@ -257,6 +257,31 @@
       <input class="sr-only" type="text" name="tankCost" id="tankCostField" aria-hidden="true" />
       <input class="sr-only" type="text" name="totalCost" id="totalCostField" aria-hidden="true" />
 
+      <div class="section">
+  <h2>Show selection</h2>
+
+  <label>Show ID*:
+    <select id="showSelect" required>
+      <option value="">Loading shows...</option>
+    </select>
+  </label>
+
+  <label>Send entries to*:
+    <select id="showEmailSelect" required>
+      <option value="">Select a show first</option>
+    </select>
+  </label>
+
+  <p class="helper-text" id="showMetaText"></p>
+
+  <!-- Hidden fields sent with submission -->
+  <input class="sr-only" type="text" name="showId" id="showId" aria-hidden="true" />
+  <input class="sr-only" type="text" name="showName" id="showName" aria-hidden="true" />
+  <input class="sr-only" type="text" name="selectedShowEmail" id="selectedShowEmail" aria-hidden="true" />
+  <input class="sr-only" type="text" name="entryPrice" id="entryPriceHidden" aria-hidden="true" />
+  <input class="sr-only" type="text" name="tankPrice" id="tankPriceHidden" aria-hidden="true" />
+</div>
+
       
       <div class="section exhibitor-bold">
         <h2>Exhibitor details</h2>
@@ -297,9 +322,9 @@
     <span>Junior (under 16)</span>
     <div class="inline-options">
       <label><input type="checkbox" name="junior" /> Yes</label>
+      </div>
+     </div>
     </div>
-  </div>
-</div>
 
       
       <div class="section">
