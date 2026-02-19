@@ -6,144 +6,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
-    body {
-      margin: 0;
-      padding: 40px 10px;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-    }
-
+    body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background: #f5f5f5; }
     .form-shell { max-width: 900px; margin: 0 auto; }
-
-    .form-card {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 32px 32px 28px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      box-sizing: border-box;
-    }
-
+    .form-card { background: #ffffff; border-radius: 12px; padding: 32px 32px 28px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); box-sizing: border-box; }
     .form-header { text-align: center; margin-bottom: 24px; }
-
-    .form-header img {
-      max-width: 450px;
-      width: 100%;
-      height: auto;
-      display: block;
-      margin: 0 auto 12px;
-    }
-
+    .form-header img { max-width: 450px; width: 100%; height: auto; display: block; margin: 0 auto 12px; }
     @media (max-width: 600px) {
       body { padding: 20px 8px; }
       .form-card { padding: 24px 16px 20px; border-radius: 10px; }
       .form-header img { max-width: 260px; }
       .two-col { grid-template-columns: 1fr; }
     }
-
     .form-title { margin: 0; font-size: 1.6rem; letter-spacing: 0.06em; font-weight: bold; }
     .form-subtitle { margin: 8px auto 0; max-width: 640px; font-size: 0.9rem; color: #555; line-height: 1.4; }
-
     .helper-text { font-size: 0.8rem; color: #666; margin-top: 4px; font-style: italic; }
-
-    .section {
-      margin-top: 24px;
-      padding-top: 8px;
-      border-top: 1px solid #e0e0e0;
-    }
+    .section { margin-top: 24px; padding-top: 8px; border-top: 1px solid #e0e0e0; }
     .section:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
     .section h2 { margin: 0 0 10px; font-size: 1.1rem; }
-
     label { display: block; margin-top: 10px; font-size: 0.9rem; }
-
     input[type=text], input[type=email], input[type=number], select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      box-sizing: border-box;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 0.95rem;
+      width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box;
+      border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem;
     }
-
     textarea { resize: vertical; min-height: 80px; }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px 24px;
-    }
-
-    .inline-options {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      font-size: 0.9rem;
-      align-items: center;
-    }
-
-    .inline-options label {
-      margin-top: 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: normal;
-    }
-
-    .subsection {
-      margin-top: 10px;
-      padding: 10px;
-      border-left: 2px solid #aaa;
-      background: #f9f9f9;
-      border-radius: 6px;
-    }
-
-    .subsection-header {
-      cursor: pointer;
-      background: #e2e2e2;
-      padding: 8px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 0.95rem;
-    }
-
+    .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; }
+    .inline-options { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.9rem; align-items: center; }
+    .inline-options label { margin-top: 0; display: flex; align-items: center; gap: 6px; font-weight: normal; }
+    .subsection { margin-top: 10px; padding: 10px; border-left: 2px solid #aaa; background: #f9f9f9; border-radius: 6px; }
+    .subsection-header { cursor: pointer; background: #e2e2e2; padding: 8px; border-radius: 4px; font-weight: bold; font-size: 0.95rem; }
     .subsection-content { margin-top: 8px; }
-
-    .flex-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-    }
+    .flex-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
     .flex-row label { flex: 1; margin-top: 6px; }
-
     p { margin: 5px 0; }
     #totalCost { font-weight: bold; font-size: 18px; }
-
     .submit-row { text-align: left; margin-top: 20px; }
     button[type=submit], button[type=button] {
-      margin-top: 10px;
-      padding: 10px 18px;
-      font-size: 15px;
-      cursor: pointer;
-      border-radius: 6px;
-      border: none;
-      background-color: #000;
-      color: white;
+      margin-top: 10px; padding: 10px 18px; font-size: 15px; cursor: pointer;
+      border-radius: 6px; border: none; background-color: #000; color: white;
     }
     button[type=button] { background-color: #444; font-size: 14px; }
     .hidden { display: none; }
-
     .sr-only {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      padding: 0 !important;
-      margin: -1px !important;
-      overflow: hidden !important;
-      clip: rect(0, 0, 0, 0) !important;
-      white-space: nowrap !important;
-      border: 0 !important;
+      position: absolute !important; width: 1px !important; height: 1px !important;
+      padding: 0 !important; margin: -1px !important; overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important;
     }
   </style>
 </head>
@@ -152,15 +58,13 @@
   <div class="form-shell">
     <form id="entryForm" class="form-card">
       <div class="form-header">
-        <!-- Update logo path if needed -->
-        <!-- <img src="nfrs_logo.png" alt="NFRS logo" /> -->
+        <!-- Put your logo back if you want it visible -->
+        <!-- <img src="assets/nfrs_logo.png" alt="NFRS logo" /> -->
         <h1 class="form-title">NFRS ENTRIES (DEV)</h1>
-        <p class="form-subtitle">
-          Test build. Entries are emailed via the configured service/template.
-        </p>
+        <p class="form-subtitle">Test build. Entries are emailed via the configured service/template.</p>
       </div>
 
-      <!-- Hidden fields for EmailJS / submission payload -->
+      <!-- Hidden fields -->
       <textarea class="sr-only" name="varietySummary" id="varietySummary" aria-hidden="true"></textarea>
       <textarea class="sr-only" name="selfSummary" id="selfSummary" aria-hidden="true"></textarea>
       <textarea class="sr-only" name="petsSummary" id="petsSummary" aria-hidden="true"></textarea>
@@ -169,7 +73,7 @@
       <input class="sr-only" type="text" name="tankCost" id="tankCostField" aria-hidden="true" />
       <input class="sr-only" type="text" name="totalCost" id="totalCostField" aria-hidden="true" />
 
-      <!-- Show selection (Show ID + Recipient dropdown) -->
+      <!-- Show selection -->
       <div class="section">
         <h2>Show selection</h2>
 
@@ -263,7 +167,6 @@
             Add Varieties?
           </label>
 
-          <!-- This shows/hides based on show config -->
           <label id="addSelfRow" class="hidden">
             <input type="checkbox" id="addSelfCheckbox" />
             Add Self?
@@ -274,7 +177,6 @@
         <button type="button" id="addVarietyBtn" class="hidden">Add Another Exhibit</button>
         <p class="helper-text" id="varietyLimitMsg" style="display:none;">Maximum 10 exhibits reached.</p>
 
-        <!-- Self Show block (only used when enabled by show config + checkbox) -->
         <div id="selfContainer" class="hidden"></div>
         <button type="button" id="addSelfBtn" class="hidden">Add Another Self Exhibit</button>
         <p class="helper-text" id="selfLimitMsg" style="display:none;">Maximum 10 self exhibits reached.</p>
@@ -314,12 +216,10 @@
     </form>
   </div>
 
-  <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
     /***************  EMAILJS SETUP  ***************/
-    // Update these to your DEV values
-    emailjs.init('kGDNowkNSzNlhztoC'); // public key
+    emailjs.init('kGDNowkNSzNlhztoC');
     const EMAILJS_SERVICE_ID  = 'service_wlaqz5n';
     const EMAILJS_TEMPLATE_ID = 'template_ksgglxk';
 
@@ -347,7 +247,6 @@
     const addPetBtn = document.getElementById('addPetBtn');
     const petLimitMsg = document.getElementById('petLimitMsg');
 
-    // Self show UI elements (top toggle + container)
     const addSelfRow = document.getElementById('addSelfRow');
     const addSelfCheckbox = document.getElementById('addSelfCheckbox');
     const selfContainer = document.getElementById('selfContainer');
@@ -382,13 +281,13 @@
     let SHOWS = [];
     let ACTIVE_SHOW = null;
 
-    /*************** Self Show classes (single source of truth) ***************/
+    /*************** Self Show classes ***************/
     const SELF_SHOW_CLASSES = [
       "Pink Eyed White","Champagne","Buff","Platinum","Quicksilver",
       "British Blue","Black","Chocolate","Mink","Ivory","Lilac"
     ];
 
-    /*************** show.json loading ***************/
+    /*************** shows.json loading ***************/
     async function loadShows() {
       const res = await fetch("./shows.json", { cache: "no-store" });
       if (!res.ok) throw new Error(`shows.json HTTP ${res.status}`);
@@ -408,6 +307,8 @@
     function getEntryPrice() { return ACTIVE_SHOW?.entryPrice ?? 2; }
     function getTankPrice()  { return ACTIVE_SHOW?.tankPrice ?? 5; }
     function getMaxTanks()   { return ACTIVE_SHOW?.maxTanks ?? 2; }
+    function dualAllowed()   { return ACTIVE_SHOW?.allowDualEntry !== false; }
+    function selfAllowed()   { return !!ACTIVE_SHOW?.allowSelfShow; }
 
     function populateEmailDropdown() {
       showEmailSelect.innerHTML = "";
@@ -435,16 +336,23 @@
     }
 
     function applyShowRulesToExistingExhibits() {
-      const dualAllowed = ACTIVE_SHOW?.allowDualEntry !== false;
+      const dOk = dualAllowed();
+      const sOk = selfAllowed();
 
-      // Toggle dual rows in existing variety exhibits
+      // Dual Entry rows (varieties + self-only) show/hide + clear if disabled
       document.querySelectorAll(".dualEntryRow").forEach(row => {
-        row.style.display = dualAllowed ? "" : "none";
+        row.style.display = dOk ? "" : "none";
         const cb = row.querySelector('input[type="checkbox"]');
-        if (!dualAllowed && cb) cb.checked = false;
+        if (!dOk && cb) cb.checked = false;
       });
 
-      
+      // Self tick rows inside varieties show/hide + clear if disabled
+      document.querySelectorAll(".selfRow").forEach(row => {
+        row.style.display = sOk ? "" : "none";
+        const cb = row.querySelector('input[type="checkbox"]');
+        if (!sOk && cb) cb.checked = false;
+      });
+
       updateTotalCost();
     }
 
@@ -457,33 +365,26 @@
       tankPriceHidden.value = String(getTankPrice());
 
       populateEmailDropdown();
-      applyShowRulesToExistingExhibits();
 
       // Self show: show/hide "Add Self?" toggle + reset if disabled
-      const selfEnabled = !!ACTIVE_SHOW?.allowSelfShow;
+      const sOk = selfAllowed();
+      addSelfRow.classList.toggle('hidden', !sOk);
 
-
-      document.querySelectorAll(".selfRow").forEach(row => {
-      row.style.display = selfEnabled ? "" : "none";
-     const cb = row.querySelector('input[type="checkbox"]');
-  if (!selfEnabled && cb) cb.checked = false;
-     });
-
-   addSelfRow.classList.toggle('hidden', !selfEnabled);
-
-    if (!selfEnabled) {
-    addSelfCheckbox.checked = false;
-    selfContainer.classList.add('hidden');
-    addSelfBtn.classList.add('hidden');
-    selfContainer.innerHTML = '';
-    selfCount = 0;
-    selfLimitMsg.style.display = 'none';
+      if (!sOk) {
+        addSelfCheckbox.checked = false;
+        selfContainer.classList.add('hidden');
+        addSelfBtn.classList.add('hidden');
+        selfContainer.innerHTML = '';
+        selfCount = 0;
+        selfLimitMsg.style.display = 'none';
       }
+
+      applyShowRulesToExistingExhibits();
 
       showMetaText.textContent =
         `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}). ` +
-        `Dual entry: ${(ACTIVE_SHOW.allowDualEntry === false) ? "No" : "Yes"}. ` +
-        `Self Show: ${ACTIVE_SHOW.allowSelfShow ? "Yes" : "No"}.`;
+        `Dual entry: ${(dualAllowed() ? "Yes" : "No")}. ` +
+        `Self Show: ${(selfAllowed() ? "Yes" : "No")}.`;
 
       updateTankCost();
       updateTotalCost();
@@ -518,7 +419,6 @@
         if (!tankNumber.value) tankNumber.value = 1;
         updateTankCost();
       }
-
       updateTotalCost();
     });
 
@@ -573,12 +473,8 @@
       div.className = 'subsection';
       const index = varietiesContainer.children.length;
 
-      // Hide "Self" section option if self show enabled
-      const selfOptionHtml = '<option value="Self">Self</option>';
-
-      // Hide dual entry row if dual not allowed
-      const dualAllowed = (ACTIVE_SHOW?.allowDualEntry !== false);
-      const dualRowStyle = dualAllowed ? '' : 'style="display:none;"';
+      const dOk = dualAllowed();
+      const sOk = selfAllowed();
 
       div.innerHTML = `
         <div class="subsection-header">Exhibit ${index + 1} (click to toggle)</div>
@@ -600,7 +496,7 @@
             <select name="section${index}" class="sectionSelect">
               <option value="">Select Section</option>
               <option value="Provisional Standard">Provisional Standard</option>
-              ${selfOptionHtml}
+              <option value="Self">Self</option>
               <option value="Marked">Marked</option>
               <option value="Russian">Russian</option>
               <option value="Shaded">Shaded</option>
@@ -615,20 +511,23 @@
               <option value="">Select Section first</option>
             </select>
           </label>
+
           <label><input type="checkbox" name="novice${index}"> Novice</label>
-          <label class="selfRow"><input type="checkbox" name="selfEntry${index}"> Self</label>
-          <label class="dualEntryRow"><input type="checkbox" name="dualEntry${index}"> Pets</label>
+
+          <label class="selfRow">
+            <input type="checkbox" name="selfEntry${index}">
+            Self
+          </label>
+
+          <label class="dualEntryRow">
+            <input type="checkbox" name="dualEntry${index}">
+            Dual Entry (Pets)
+          </label>
         </div>
       `;
 
       varietiesContainer.appendChild(div);
       varietyCount += 1;
-
-      const selfRow = div.querySelector(".selfRow");
-      if (selfRow) selfRow.style.display = (ACTIVE_SHOW?.allowSelfShow ? "" : "none");
-
-      const selfCheckbox = div.querySelector(`input[name="selfEntry${index}"]`);
-      if (selfCheckbox) selfCheckbox.addEventListener("change", () => updateTotalCost());
 
       // Toggle open/close
       const header = div.querySelector('.subsection-header');
@@ -637,6 +536,22 @@
       header.addEventListener('click', () => {
         content.style.display = content.style.display === 'none' ? 'block' : 'none';
       });
+
+      // Apply show rules to this new exhibit
+      const selfRow = div.querySelector(".selfRow");
+      if (selfRow) selfRow.style.display = sOk ? "" : "none";
+      const selfCb = div.querySelector(`input[name="selfEntry${index}"]`);
+      if (!sOk && selfCb) selfCb.checked = false;
+      if (selfCb) selfCb.addEventListener('change', () => updateTotalCost());
+
+      const dualRow = div.querySelector(".dualEntryRow");
+      if (dualRow) dualRow.style.display = dOk ? "" : "none";
+      const dualCb = div.querySelector(`input[name="dualEntry${index}"]`);
+      if (!dOk && dualCb) dualCb.checked = false;
+      if (dualCb) dualCb.addEventListener('change', () => updateTotalCost());
+
+      const noviceCheckbox = div.querySelector(`input[name="novice${index}"]`);
+      if (noviceCheckbox) noviceCheckbox.addEventListener('change', () => updateTotalCost());
 
       // Populate class options by section
       const sectionSelect = div.querySelector('.sectionSelect');
@@ -659,13 +574,9 @@
         updateTotalCost();
       });
 
-      // Recalc when toggled
-      const noviceCheckbox = div.querySelector(`input[name="novice${index}"]`);
-      const dualCheckbox = div.querySelector(`input[name="dualEntry${index}"]`);
-      if (noviceCheckbox) noviceCheckbox.addEventListener('change', () => updateTotalCost());
-      if (dualCheckbox) dualCheckbox.addEventListener('change', () => updateTotalCost());
       if (classSelect) classSelect.addEventListener('change', () => updateTotalCost());
 
+      // Limit UI
       if (varietiesContainer.children.length >= MAX_EXHIBITS) {
         addVarietyBtn.disabled = true;
         varietyLimitMsg.style.display = 'block';
@@ -687,10 +598,6 @@
         "Dumbo": ["Self","Marked","Russian","Shaded","AOV","Rex"],
         "Guide Standard": ["Blue Point Himalayan","Russian Burmese","Russian Silver Agouti","Sable Burmese","Spotted Down Under","Silken"]
       };
-
-      // If Self Show is enabled, disable Self inside Varieties
-      ///if (ACTIVE_SHOW?.allowSelfShow && section === "Self") return [];
-
       return data[section] || [];
     }
 
@@ -729,6 +636,8 @@
       div.className = 'subsection';
       const index = selfContainer.children.length;
 
+      const dOk = dualAllowed();
+
       div.innerHTML = `
         <div class="subsection-header">Self Exhibit ${index + 1} (click to toggle)</div>
         <div class="subsection-content">
@@ -755,18 +664,30 @@
           </label>
 
           <label><input type="checkbox" name="selfNovice${index}"> Novice</label>
+
+          <label class="dualEntryRow">
+            <input type="checkbox" name="selfDualEntry${index}">
+            Dual Entry (Pets)
+          </label>
         </div>
       `;
 
       selfContainer.appendChild(div);
       selfCount += 1;
 
+      // Toggle open/close
       const header = div.querySelector('.subsection-header');
       const content = div.querySelector('.subsection-content');
       content.style.display = 'block';
       header.addEventListener('click', () => {
         content.style.display = content.style.display === 'none' ? 'block' : 'none';
       });
+
+      // Apply dual rule to this new self exhibit
+      const dualRow = div.querySelector(".dualEntryRow");
+      if (dualRow) dualRow.style.display = dOk ? "" : "none";
+      const dualCb = div.querySelector(`input[name="selfDualEntry${index}"]`);
+      if (!dOk && dualCb) dualCb.checked = false;
 
       // Recalc when changed
       div.querySelectorAll('input, select').forEach(el => {
@@ -860,23 +781,29 @@
     function buildVarietySummaryReadableGrouped() {
       const counts = new Map();
 
+      const dOk = dualAllowed();
+      const sOk = selfAllowed();
+
       for (let i = 0; i < varietiesContainer.children.length; i++) {
         const age = document.querySelector(`input[name="age${i}"]:checked`)?.value || "";
         const sex = document.querySelector(`input[name="sex${i}"]:checked`)?.value || "";
         const cls = document.querySelector(`select[name="class${i}"]`)?.value || "";
         const novice = document.querySelector(`input[name="novice${i}"]`)?.checked || false;
-        const pets = document.querySelector(`input[name="dualEntry${i}"]`)?.checked || false;
+
+        const self = sOk ? (document.querySelector(`input[name="selfEntry${i}"]`)?.checked || false) : false;
+        const pets = dOk ? (document.querySelector(`input[name="dualEntry${i}"]`)?.checked || false) : false;
 
         if (!age || !sex || !cls) continue;
 
-        const key = JSON.stringify({ age, sex, cls, novice, pets });
+        const key = JSON.stringify({ age, sex, cls, novice, self, pets });
         counts.set(key, (counts.get(key) || 0) + 1);
       }
 
       return Array.from(counts.entries())
         .map(([key, count]) => {
-          const { age, sex, cls, novice, pets } = JSON.parse(key);
+          const { age, sex, cls, novice, self, pets } = JSON.parse(key);
           const parts = [String(count), age, sex, cls];
+          if (self) parts.push("Self");
           if (novice) parts.push("Novice");
           if (pets) parts.push("Pets");
           return parts.join(" ");
@@ -887,24 +814,27 @@
 
     function buildSelfSummaryReadableGrouped() {
       const counts = new Map();
+      const dOk = dualAllowed();
 
       for (let i = 0; i < selfContainer.children.length; i++) {
         const age = document.querySelector(`input[name="selfAge${i}"]:checked`)?.value || "";
         const sex = document.querySelector(`input[name="selfSex${i}"]:checked`)?.value || "";
         const cls = document.querySelector(`select[name="selfClass${i}"]`)?.value || "";
         const novice = document.querySelector(`input[name="selfNovice${i}"]`)?.checked || false;
+        const pets = dOk ? (document.querySelector(`input[name="selfDualEntry${i}"]`)?.checked || false) : false;
 
         if (!age || !sex || !cls) continue;
 
-        const key = JSON.stringify({ age, sex, cls, novice });
+        const key = JSON.stringify({ age, sex, cls, novice, pets });
         counts.set(key, (counts.get(key) || 0) + 1);
       }
 
       return Array.from(counts.entries())
         .map(([key, count]) => {
-          const { age, sex, cls, novice } = JSON.parse(key);
-          const parts = [String(count), "Self", age, sex, cls];
+          const { age, sex, cls, novice, pets } = JSON.parse(key);
+          const parts = [String(count), age, sex, cls, "Self"];
           if (novice) parts.push("Novice");
+          if (pets) parts.push("Pets");
           return parts.join(" ");
         })
         .sort((a, b) => a.localeCompare(b))
@@ -943,13 +873,24 @@
 
       const entryPrice = getEntryPrice();
 
-      // Base entries (Varieties + Self + Pets)
+      // Base entries (Varieties + Self-only + Pets section)
       total += (varietyCount * entryPrice) + (selfCount * entryPrice) + (petCount * entryPrice);
 
-      // Dual Entry (only if allowed)
-      if (ACTIVE_SHOW?.allowDualEntry !== false) {
-        const dualChecks = document.querySelectorAll('input[name^="dualEntry"]');
-        dualChecks.forEach(cb => { if (cb.checked) total += entryPrice; });
+      // Dual Entry (Varieties) + Dual Entry (Self-only) if allowed
+      if (dualAllowed()) {
+        document.querySelectorAll('input[name^="dualEntry"]').forEach(cb => {
+          if (cb.checked) total += entryPrice;
+        });
+        document.querySelectorAll('input[name^="selfDualEntry"]').forEach(cb => {
+          if (cb.checked) total += entryPrice;
+        });
+      }
+
+      // Self tick on Varieties if allowed
+      if (selfAllowed()) {
+        document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => {
+          if (cb.checked) total += entryPrice;
+        });
       }
 
       totalCostDisplay.innerText = total.toFixed(2);
@@ -969,7 +910,6 @@
         return;
       }
 
-      // Hidden fields
       hireTanksTextField.value = hireTanksCheckbox.checked ? 'Yes' : 'No';
       tankCostField.value = (tankCostSpan.innerText || '0.00').trim();
       totalCostField.value = (totalCostDisplay.innerText || '0.00').trim();
