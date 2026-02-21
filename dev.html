@@ -308,7 +308,7 @@
     function getTankPrice()  { return ACTIVE_SHOW?.tankPrice ?? 5; }
     function getMaxTanks()   { return ACTIVE_SHOW?.maxTanks ?? 2; }
     function dualAllowed()   { return ACTIVE_SHOW?.allowDualEntry !== false; }
-    function selfAllowed()   { return !!ACTIVE_SHOW?.allowSelfShow; }
+    function selfAllowed()   { return !!ACTIVE_SHOW?.allowSelfShow; !== false; }
 
     function populateEmailDropdown() {
       showEmailSelect.innerHTML = "";
