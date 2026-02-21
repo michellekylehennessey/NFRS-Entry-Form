@@ -170,9 +170,9 @@
             Add Varieties?
           </label>
 
-          <label id="addSelfRow" class="hidden">
-            <input type="checkbox" id="addSelfCheckbox" />
-            Add Self?
+          <label id="addSelfRow">
+           <input type="checkbox" id="addSelfCheckbox" />
+           Add Self?
           </label>
         </div>
 
@@ -373,13 +373,13 @@
 const sOk = selfAllowed();
 const dOk = dualAllowed();
 
-// Top "Add Self?" toggle visibility
-addSelfRow.classList.toggle("hidden", !sOk);
+// hide/show the entire "Add Self?" label (checkbox + text)
+addSelfRow.style.display = sOk ? "flex" : "none";
 
 // Self OFF: clear + hide self-only section AND hide/clear self tickboxes in varieties
 if (!sOk) {
   addSelfCheckbox.checked = false;
-
+  addSelfCheckbox.disabled = true;
   selfContainer.classList.add("hidden");
   addSelfBtn.classList.add("hidden");
   selfContainer.innerHTML = "";
@@ -389,9 +389,11 @@ if (!sOk) {
   document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => cb.checked = false);
   document.querySelectorAll(".selfRow").forEach(row => row.style.display = "none");
 } else {
-  // Self ON: show self tickboxes in varieties
+  // Re-enable Add Self toggle
+  addSelfCheckbox.disabled = false;
+
+  // Show self tickboxes in varieties
   document.querySelectorAll(".selfRow").forEach(row => row.style.display = "");
-}
 
 // Dual entry rows (varieties + self section): show/hide + clear if disabled
 document.querySelectorAll(".dualEntryRow").forEach(row => {
