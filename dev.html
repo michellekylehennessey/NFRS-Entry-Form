@@ -308,7 +308,7 @@
     function getTankPrice()  { return ACTIVE_SHOW?.tankPrice ?? 5; }
     function getMaxTanks()   { return ACTIVE_SHOW?.maxTanks ?? 2; }
     function dualAllowed()   { return ACTIVE_SHOW?.allowDualEntry !== false; }
-    function selfAllowed()   { return !!ACTIVE_SHOW?.allowSelfShow; !== false; }
+    function selfAllowed()   { return !!ACTIVE_SHOW?.allowSelfShow; }
 
     function populateEmailDropdown() {
       showEmailSelect.innerHTML = "";
@@ -366,25 +366,42 @@
 
       populateEmailDropdown();
 
-      // Self show: show/hide "Add Self?" toggle + reset if disabled
-      const sOk = selfAllowed();
-      addSelfRow.classList.toggle('hidden', !sOk);
+      // Self + Dual toggles (UI must match show config)
+    const sOk = selfAllowed();
+    const dOk = dualAllowed();
 
-      if (!sOk) {
-        addSelfCheckbox.checked = false;
-        selfContainer.classList.add('hidden');
-        addSelfBtn.classList.add('hidden');
-        selfContainer.innerHTML = '';
-        selfCount = 0;
-        selfLimitMsg.style.display = 'none';
-      }
+     // 1) Top "Add Self?" row
+    addSelfRow.classList.toggle('hidden', !sOk);
+
+    // 2) If self OFF: clear + hide ALL self UI (top section + per-exhibit checkboxes)
+    if (!sOk) {
+    // self-only section
+   addSelfCheckbox.checked = false;
+   selfContainer.classList.add('hidden');
+   addSelfBtn.classList.add('hidden');
+   selfContainer.innerHTML = '';
+   selfCount = 0;
+    selfLimitMsg.style.display = 'none';
+
+     // self tickboxes inside varieties
+   document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => cb.checked = false);
+   document.querySelectorAll('.selfRow').forEach(row => row.style.display = 'none');
+ } else {
+   // self ON: show self rows inside varieties
+   document.querySelectorAll('.selfRow').forEach(row => row.style.display = '');
+ }
+
+ // 3) Dual entry rows inside varieties + self section
+  document.querySelectorAll('.dualEntryRow').forEach(row => {
+  row.style.display = dOk ? '' : 'none';
+  const cb = row.querySelector('input[type="checkbox"]');
+  if (!dOk && cb) cb.checked = false;
+  });
 
       applyShowRulesToExistingExhibits();
 
-      showMetaText.textContent =
-        `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}). ` +
-        `Dual entry: ${(dualAllowed() ? "Yes" : "No")}. ` +
-        `Self Show: ${(selfAllowed() ? "Yes" : "No")}.`;
+     showMetaText.textContent =
+  `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}).`;
 
       updateTankCost();
       updateTotalCost();
