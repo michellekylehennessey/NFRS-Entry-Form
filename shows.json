@@ -3,8 +3,8 @@
     "id": "standard-1",
     "name": "Standard 1* Show",
     "emails": [
-      "michellekylehennessey@gmail.com",
-      "michellekylehennessey+standard@gmail.com"
+      "woodford@testnfrs.org",
+      "clevedon@testnfrs.org"
     ],
     "defaultEmail": "michellekylehennessey@gmail.com",
     "entryPrice": 2,
@@ -17,8 +17,8 @@
     "id": "cup-3",
     "name": "Cup (3*) Show",
     "emails": [
-      "michellekylehennessey@gmail.com",
-      "michellekylehennessey+cup@gmail.com"
+      "springcup@testnfrs.org",
+      "summercup@testnfrs.org"
     ],
     "defaultEmail": "michellekylehennessey@gmail.com",
     "entryPrice": 3,
