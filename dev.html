@@ -370,18 +370,19 @@
     const sOk = selfAllowed();
     const dOk = dualAllowed();
 
-     // 1) Top "Add Self?" row
-    addSelfRow.classList.toggle('hidden', !sOk);
+     // hide/show the TOP "Add Self?" control
+addSelfRow.classList.toggle("hidden", !sOk);
 
-    // 2) If self OFF: clear + hide ALL self UI (top section + per-exhibit checkboxes)
-    if (!sOk) {
-    // self-only section
-   addSelfCheckbox.checked = false;
-   selfContainer.classList.add('hidden');
-   addSelfBtn.classList.add('hidden');
-   selfContainer.innerHTML = '';
-   selfCount = 0;
-    selfLimitMsg.style.display = 'none';
+// if self OFF, clear the self-only section completely
+if (!sOk) {
+  addSelfCheckbox.checked = false;
+
+  selfContainer.classList.add("hidden");
+  addSelfBtn.classList.add("hidden");
+  selfContainer.innerHTML = "";
+  selfCount = 0;
+  selfLimitMsg.style.display = "none";
+}
 
      // self tickboxes inside varieties
    document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => cb.checked = false);
@@ -620,7 +621,9 @@
 
     /*************** Self Show logic (separate section) ***************/
     addSelfCheckbox.addEventListener('change', () => {
-      const checked = addSelfCheckbox.checked;
+  if (!selfAllowed()) return; // Self disabled, ignore clicks
+
+  const checked = addSelfCheckbox.checked;
 
       selfContainer.classList.toggle('hidden', !checked);
       addSelfBtn.classList.toggle('hidden', !checked);
