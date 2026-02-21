@@ -11,7 +11,7 @@
     "tankPrice": 5,
     "maxTanks": 2,
     "allowDualEntry": false,
-    "allowSelfShow": false
+    "allowSelfShow": true
   },
   {
     "id": "cup-3",
