@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>NFRS Entry Form (DEV)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, 
+    initial-scale=1.0" />
 
   <style>
-    body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background: #f5f5f5; }
-    .form-shell { max-width: 900px; margin: 0 auto; }
+    body { margin: 0; padding: 40px 10px; font-family: Arial, 
+      sans-serif; background: #f5f5f5; }
+    .form-shell { max-width: 900px; margin: 0 auto; 
+    }
     .form-card { background: #ffffff; border-radius: 12px; padding: 32px 32px 28px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); box-sizing: border-box; }
     .form-header { text-align: center; margin-bottom: 24px; }
     .form-header img { max-width: 450px; width: 100%; height: auto; display: block; margin: 0 auto 12px; }
@@ -58,7 +61,7 @@
   <div class="form-shell">
     <form id="entryForm" class="form-card">
       <div class="form-header">
-        <!-- Put your logo back if you want it visible -->
+       
         <!-- <img src="assets/nfrs_logo.png" alt="NFRS logo" /> -->
         <h1 class="form-title">NFRS ENTRIES (DEV)</h1>
         <p class="form-subtitle">Test build. Entries are emailed via the configured service/template.</p>
@@ -367,13 +370,13 @@
       populateEmailDropdown();
 
       // Self + Dual toggles (UI must match show config)
-    const sOk = selfAllowed();
-    const dOk = dualAllowed();
+const sOk = selfAllowed();
+const dOk = dualAllowed();
 
-     // hide/show the TOP "Add Self?" control
+// Top "Add Self?" toggle visibility
 addSelfRow.classList.toggle("hidden", !sOk);
 
-// if self OFF, clear the self-only section completely
+// Self OFF: clear + hide self-only section AND hide/clear self tickboxes in varieties
 if (!sOk) {
   addSelfCheckbox.checked = false;
 
@@ -382,22 +385,20 @@ if (!sOk) {
   selfContainer.innerHTML = "";
   selfCount = 0;
   selfLimitMsg.style.display = "none";
+
+  document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => cb.checked = false);
+  document.querySelectorAll(".selfRow").forEach(row => row.style.display = "none");
+} else {
+  // Self ON: show self tickboxes in varieties
+  document.querySelectorAll(".selfRow").forEach(row => row.style.display = "");
 }
 
-     // self tickboxes inside varieties
-   document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => cb.checked = false);
-   document.querySelectorAll('.selfRow').forEach(row => row.style.display = 'none');
- } else {
-   // self ON: show self rows inside varieties
-   document.querySelectorAll('.selfRow').forEach(row => row.style.display = '');
- }
-
- // 3) Dual entry rows inside varieties + self section
-  document.querySelectorAll('.dualEntryRow').forEach(row => {
-  row.style.display = dOk ? '' : 'none';
+// Dual entry rows (varieties + self section): show/hide + clear if disabled
+document.querySelectorAll(".dualEntryRow").forEach(row => {
+  row.style.display = dOk ? "" : "none";
   const cb = row.querySelector('input[type="checkbox"]');
   if (!dOk && cb) cb.checked = false;
-  });
+});
 
       applyShowRulesToExistingExhibits();
 
