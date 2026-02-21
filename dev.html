@@ -360,56 +360,53 @@
     }
 
     function applyShowConfig() {
-      if (!ACTIVE_SHOW) return;
+  if (!ACTIVE_SHOW) return;
 
-      showIdField.value = ACTIVE_SHOW.id || "";
-      showNameField.value = ACTIVE_SHOW.name || "";
-      entryPriceHidden.value = String(getEntryPrice());
-      tankPriceHidden.value = String(getTankPrice());
+  showIdField.value = ACTIVE_SHOW.id || "";
+  showNameField.value = ACTIVE_SHOW.name || "";
+  entryPriceHidden.value = String(getEntryPrice());
+  tankPriceHidden.value = String(getTankPrice());
 
-      populateEmailDropdown();
+  populateEmailDropdown();
 
-      // Self + Dual toggles (UI must match show config)
-const sOk = selfAllowed();
-const dOk = dualAllowed();
+  const sOk = selfAllowed();
+  const dOk = dualAllowed();
 
-// hide/show the entire "Add Self?" label (checkbox + text)
-addSelfRow.style.display = sOk ? "flex" : "none";
+  // Hide/show the entire "Add Self?" label (checkbox + text)
+  addSelfRow.style.display = sOk ? "flex" : "none";
 
-// Self OFF: clear + hide self-only section AND hide/clear self tickboxes in varieties
-if (!sOk) {
-  addSelfCheckbox.checked = false;
-  addSelfCheckbox.disabled = true;
-  selfContainer.classList.add("hidden");
-  addSelfBtn.classList.add("hidden");
-  selfContainer.innerHTML = "";
-  selfCount = 0;
-  selfLimitMsg.style.display = "none";
+  if (!sOk) {
+    addSelfCheckbox.checked = false;
+    addSelfCheckbox.disabled = true;
 
-  document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => cb.checked = false);
-  document.querySelectorAll(".selfRow").forEach(row => row.style.display = "none");
-} else {
-  // Re-enable Add Self toggle
-  addSelfCheckbox.disabled = false;
+    selfContainer.classList.add("hidden");
+    addSelfBtn.classList.add("hidden");
+    selfContainer.innerHTML = "";
+    selfCount = 0;
+    selfLimitMsg.style.display = "none";
 
-  // Show self tickboxes in varieties
-  document.querySelectorAll(".selfRow").forEach(row => row.style.display = "");
+    document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll(".selfRow").forEach(row => row.style.display = "none");
+  } else {
+    addSelfCheckbox.disabled = false;
+    document.querySelectorAll(".selfRow").forEach(row => row.style.display = "");
+  }
 
-// Dual entry rows (varieties + self section): show/hide + clear if disabled
-document.querySelectorAll(".dualEntryRow").forEach(row => {
-  row.style.display = dOk ? "" : "none";
-  const cb = row.querySelector('input[type="checkbox"]');
-  if (!dOk && cb) cb.checked = false;
-});
+  // Dual entry rows (varieties + self section): show/hide + clear if disabled
+  document.querySelectorAll(".dualEntryRow").forEach(row => {
+    row.style.display = dOk ? "" : "none";
+    const cb = row.querySelector('input[type="checkbox"]');
+    if (!dOk && cb) cb.checked = false;
+  });
 
-      applyShowRulesToExistingExhibits();
+  applyShowRulesToExistingExhibits();
 
-     showMetaText.textContent =
-  `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}).`;
+  showMetaText.textContent =
+    `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}).`;
 
-      updateTankCost();
-      updateTotalCost();
-    }
+  updateTankCost();
+  updateTotalCost();
+}
 
     showSelect.addEventListener("change", () => {
       const idx = parseInt(showSelect.value, 10);
