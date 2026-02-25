@@ -8,7 +8,7 @@
     "tankPrice": 5,
     "maxTanks": 2,
     "allowDualEntry": true,
-    "allowSelfShow": false,
+    "allowSelfShow": true,
     "allowMarkedShow": false
   },
   {
