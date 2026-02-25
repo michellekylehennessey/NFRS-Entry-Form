@@ -245,6 +245,7 @@
 
     /*************** DOM elements ***************/
     const studNameField = document.getElementById('studName');
+    const juniorCheckbox = document.querySelector('input[name="junior"]');
 
     const hireTanksCheckbox = document.getElementById('hireTanksCheckbox');
     const tankNumberDiv = document.getElementById('tankNumberDiv');
@@ -1061,25 +1062,34 @@ function addMarkedExhibit() {
     
 
     function buildPetsSummaryOwnedByStud() {
-      if (petsContainer.children.length === 0) return "";
+  if (petsContainer.children.length === 0) return "";
 
-      const studFilled = (studNameField.value || "").trim().length > 0;
-      const ownedLabel = studFilled ? "Breeder Owned" : "Adult Owned";
+  const studFilled = (studNameField.value || "").trim().length > 0;
+  const isJunior = juniorCheckbox?.checked || false;
 
-      let buckCount = 0;
-      let doeCount = 0;
+  let ownedLabel = "Adult Owned";
 
-      for (let i = 0; i < petsContainer.children.length; i++) {
-        const sex = document.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
-        if (sex === "Buck") buckCount += 1;
-        if (sex === "Doe") doeCount += 1;
-      }
+  if (isJunior) {
+    ownedLabel = "Junior Owned";
+  } else if (studFilled) {
+    ownedLabel = "Breeder Owned";
+  }
 
-      const lines = [];
-      if (buckCount > 0) lines.push(`${buckCount} ${ownedLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
-      if (doeCount > 0) lines.push(`${doeCount} ${ownedLabel} ${pluralize(doeCount, "Doe", "Does")}`);
-      return lines.join("\n");
-    }
+  let buckCount = 0;
+  let doeCount = 0;
+
+  for (let i = 0; i < petsContainer.children.length; i++) {
+    const sex = document.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
+    if (sex === "Buck") buckCount += 1;
+    if (sex === "Doe") doeCount += 1;
+  }
+
+  const lines = [];
+  if (buckCount > 0) lines.push(`${buckCount} ${ownedLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
+  if (doeCount > 0) lines.push(`${doeCount} ${ownedLabel} ${pluralize(doeCount, "Doe", "Does")}`);
+
+  return lines.join("\n");
+}
 
     /*************** Total cost ***************/
     function updateTotalCost() {
