@@ -2,9 +2,21 @@
   {
     "id": "standard-1",
     "name": "Standard 1* Show",
-    "emails": ["michellekylehennessey@gmail.com","michellekylehennessey+standard@gmail.com"],
+    "emails": ["woodford@testnfrs.org","clevedon@testnfrs.org"],
     "defaultEmail": "michellekylehennessey@gmail.com",
     "entryPrice": 2,
+    "tankPrice": 5,
+    "maxTanks": 2,
+    "allowDualEntry": true,
+    "allowSelfShow": true,
+    "allowMarkedShow": true
+  },
+  {
+    "id": "cup-3",
+    "name": "Cup (3*) Show",
+    "emails": ["springcup@testnfrs.org","summercup@testnfrs.org"],
+    "defaultEmail": "michellekylehennessey@gmail.com",
+    "entryPrice": 3,
     "tankPrice": 5,
     "maxTanks": 2,
     "allowDualEntry": true,
@@ -12,27 +24,15 @@
     "allowMarkedShow": true
   },
   {
-    "id": "cup-3",
-    "name": "Cup (3*) Show",
-    "emails": ["michellekylehennessey@gmail.com","michellekylehennessey+cup@gmail.com"],
-    "defaultEmail": "michellekylehennessey@gmail.com",
-    "entryPrice": 3,
-    "tankPrice": 5,
-    "maxTanks": 2,
-    "allowDualEntry": true,
-    "allowSelfShow": true,
-    "allowMarkedShow": true
-  },
-  {
     "id": "random-other",
     "name": "Random Other Show",
-    "emails": ["michellekylehennessey@gmail.com","michellekylehennessey+other@gmail.com"],
+    "emails": ["tempsford@testnfrs.org","scawsby@testnfrs.org"],
     "defaultEmail": "michellekylehennessey@gmail.com",
     "entryPrice": 2,
     "tankPrice": 5,
     "maxTanks": 2,
-    "allowDualEntry": true,
-    "allowSelfShow": true,
-    "allowMarkedShow": true
+    "allowDualEntry": false,
+    "allowSelfShow": false,
+    "allowMarkedShow": false
   }
 ]
