@@ -1129,34 +1129,24 @@ totalCostDisplay.innerText = total.toFixed(2);
 
     /*************** Form submission ***************/
     document.getElementById('entryForm').addEventListener('submit', function (event) {
-      event.preventDefault();
+  event.preventDefault();
 
-      if (!ACTIVE_SHOW) {
-        alert("Please select a show before submitting.");
-        return;
-      }
+  hireTanksTextField.value = hireTanksCheckbox.checked ? 'Yes' : 'No';
+  tankCostField.value = (tankCostSpan.innerText || '0.00').trim();
+  totalCostField.value = (totalCostDisplay.innerText || '0.00').trim();
 
-      if (!selectedShowEmailField.value) {
-        alert("Please select a recipient email before submitting.");
-        return;
-      }
+  varietySummaryField.value = buildVarietySummaryReadableGrouped();
+  selfSummaryField.value = buildSelfSummaryReadableGrouped();
+  markedSummaryField.value = buildMarkedSummaryReadableGrouped();
+  petsSummaryField.value = buildPetsSummaryOwnedByStud();
 
-      hireTanksTextField.value = hireTanksCheckbox.checked ? 'Yes' : 'No';
-      tankCostField.value = (tankCostSpan.innerText || '0.00').trim();
-      totalCostField.value = (totalCostDisplay.innerText || '0.00').trim();
-
-      varietySummaryField.value = buildVarietySummaryReadableGrouped();
-      selfSummaryField.value = buildSelfSummaryReadableGrouped();
-      markedSummaryField.value = buildMarkedSummaryReadableGrouped();
-      petsSummaryField.value = buildPetsSummaryOwnedByStud();
-      
-
-      emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
-        .then(() => { alert('Entry submitted successfully!'); })
-        .catch((error) => {
-          alert('Submission failed: ' + (error?.text || JSON.stringify(error)));
-          console.error(error);
-        });
+  emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
+    .then(() => { alert('Entry submitted successfully!'); })
+    .catch((error) => {
+      alert('Submission failed: ' + (error?.text || JSON.stringify(error)));
+      console.error(error);
+    });
+}); 
   </script>
 </body>
 </html>
