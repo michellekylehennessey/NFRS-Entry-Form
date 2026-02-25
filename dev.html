@@ -1141,9 +1141,16 @@ totalCostDisplay.innerText = total.toFixed(2);
   document.getElementById('entryForm').addEventListener('submit', function (event) {
   event.preventDefault();
 
-  hireTanksTextField.value = hireTanksCheckbox.checked ? 'Yes' : 'No';
+ hireTanksTextField.value = hireTanksCheckbox.checked ? 'Yes' : 'No';
+
+if (!hireTanksCheckbox.checked) {
+  tankNumber.value = "";
+  tankCostField.value = "0.00";
+} else {
   tankCostField.value = (tankCostSpan.innerText || '0.00').trim();
-  totalCostField.value = (totalCostDisplay.innerText || '0.00').trim();
+}
+
+totalCostField.value = (totalCostDisplay.innerText || '0.00').trim();
 
   varietySummaryField.value = buildVarietySummaryReadableGrouped();
   selfSummaryField.value = buildSelfSummaryReadableGrouped();
