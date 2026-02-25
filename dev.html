@@ -306,18 +306,17 @@
     let SHOWS = [];
     let ACTIVE_SHOW = null;
 
-    /*************** Self Show classes ***************/
-    const SELF_SHOW_CLASSES = [
-      "Pink Eyed White","Champagne","Buff","Platinum","Quicksilver",
-      "British Blue","Black","Chocolate","Mink","Ivory","Lilac"
+   /*************** Self Show classes ***************/
+const SELF_SHOW_CLASSES = [
+  "Pink Eyed White","Champagne","Buff","Platinum","Quicksilver",
+  "British Blue","Black","Chocolate","Mink","Ivory","Lilac"
+];
 
-      
-  /*************** Marked Show classes ***************/
-   const MARKED_SHOW_CLASSES = [
-       "Berkshire/Badger","Irish","Hooded","Variegated","Capped",
-       "Essex","Chinchilla","Squirrel","Roan/Striped Roan"
-      
-    ];
+/*************** Marked Show classes ***************/
+const MARKED_SHOW_CLASSES = [
+  "Berkshire/Badger","Irish","Hooded","Variegated","Capped",
+  "Essex","Chinchilla","Squirrel","Roan/Striped Roan"
+];
 
     /*************** shows.json loading ***************/
     async function loadShows() {
@@ -983,13 +982,13 @@ function addMarkedExhibit() {
 
         if (!age || !sex || !cls) continue;
 
-        const key = JSON.stringify({ age, sex, cls, novice, self, pets });
+        const key = JSON.stringify({ age, sex, cls, novice, self, marked, pets });
         counts.set(key, (counts.get(key) || 0) + 1);
       }
 
       return Array.from(counts.entries())
         .map(([key, count]) => {
-          const { age, sex, cls, novice, self, pets } = JSON.parse(key);
+          const { age, sex, cls, novice, self, marked, pets } = JSON.parse(key);
           const parts = [String(count), age, sex, cls];
           if (self) parts.push("Self");
           if (marked) parts.push("Marked");
@@ -1111,19 +1110,20 @@ function addMarkedExhibit() {
       }
 
       // Self tick on Varieties if allowed
-      if (selfAllowed()) {
+         if (selfAllowed()) {
         document.querySelectorAll('input[name^="selfEntry"]').forEach(cb => {
           if (cb.checked) total += entryPrice;
+  });
+}
 
-      if (markedAllowed()) {
-        document.querySelectorAll('input[name^="markedEntry"]').forEach(cb => { 
-          if (cb.checked) total += entryPrice;
-          
-        });
-      }
+     // Marked tick on Varieties if allowed
+         if (markedAllowed()) {
+          document.querySelectorAll('input[name^="markedEntry"]').forEach(cb => {
+        if (cb.checked) total += entryPrice;
+  });
+}
 
-      totalCostDisplay.innerText = total.toFixed(2);
-    }
+totalCostDisplay.innerText = total.toFixed(2);
 
     
 
