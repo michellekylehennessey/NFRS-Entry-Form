@@ -1128,7 +1128,7 @@ totalCostDisplay.innerText = total.toFixed(2);
     
 
     /*************** Form submission ***************/
-    document.getElementById('entryForm').addEventListener('submit', function (event) {
+  document.getElementById('entryForm').addEventListener('submit', function (event) {
   event.preventDefault();
 
   hireTanksTextField.value = hireTanksCheckbox.checked ? 'Yes' : 'No';
@@ -1146,7 +1146,7 @@ totalCostDisplay.innerText = total.toFixed(2);
       alert('Submission failed: ' + (error?.text || JSON.stringify(error)));
       console.error(error);
     });
-}); 
-  </script>
+});
+</script>
 </body>
 </html>
