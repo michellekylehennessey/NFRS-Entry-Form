@@ -575,7 +575,12 @@ const MARKED_SHOW_CLASSES = [
       const mOk = markedAllowed();
 
       div.innerHTML = `
-        <div class="subsection-header">Exhibit ${index + 1} (click to toggle)</div>
+        <div class="subsection-header">
+        <span class="exhibit-title">Exhibit ${index + 1} (click to toggle)</span>
+        <a href="#" class="delete-exhibit" style="float:right; font-weight:normal; font-size:0.9rem;">
+        Click to Delete Exhibit
+       </a>
+      </div>
         <div class="subsection-content">
           <label>Rat Name:
             <input type="text" name="ratName${index}">
@@ -631,6 +636,16 @@ const MARKED_SHOW_CLASSES = [
 
       varietiesContainer.appendChild(div);
       varietyCount += 1;
+      // Delete exhibit link
+     const deleteLink = div.querySelector(".delete-exhibit");
+     deleteLink.addEventListener("click", (e) => {
+     e.preventDefault();
+     e.stopPropagation(); // stops header toggle firing
+     div.remove();
+     reindexVarieties();   // IMPORTANT
+      updateTotalCost();
+      });
+      
 
       // Toggle open/close
       const header = div.querySelector('.subsection-header');
@@ -701,6 +716,40 @@ const MARKED_SHOW_CLASSES = [
         varietyLimitMsg.style.display = 'none';
       }
     }
+
+
+    function reindexVarieties() {
+  const exhibits = Array.from(varietiesContainer.children);
+
+  exhibits.forEach((div, newIndex) => {
+    // Update header label
+    const title = div.querySelector(".exhibit-title");
+    if (title) title.textContent = `Exhibit ${newIndex + 1} (click to toggle)`;
+
+    // Rename ALL inputs/selects inside this exhibit from old index to newIndex
+    // We assume your fields follow patterns like:
+    // ratName${i}, age${i}, sex${i}, section${i}, class${i}, novice${i}, dualEntry${i}, markedEntry${i}, selfEntry${i}
+    const renamers = [
+      ["ratName", "input[type='text']"],
+      ["age", "input[type='radio'][name^='age']"],
+      ["sex", "input[type='radio'][name^='sex']"],
+      ["section", "select[name^='section']"],
+      ["class", "select[name^='class']"],
+      ["novice", "input[type='checkbox'][name^='novice']"],
+      ["dualEntry", "input[type='checkbox'][name^='dualEntry']"],
+      ["markedEntry", "input[type='checkbox'][name^='markedEntry']"],
+      ["selfEntry", "input[type='checkbox'][name^='selfEntry']"],
+    ];
+
+    // For text/select/checkbox: one element each
+    div.querySelectorAll("input, select, textarea").forEach((el) => {
+      if (!el.name) return;
+
+      el.name = el.name.replace(/\d+$/, String(newIndex));
+    });
+  });
+}
+    
 
     function getClassOptions(section) {
       const data = {
