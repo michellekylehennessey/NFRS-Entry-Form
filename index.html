@@ -66,7 +66,7 @@
       <form id="entryForm" class="form-card">
         <div class="form-header">
           <img src="assets/nfrs-logo.png" alt="NFRS logo" />
-          <h1 class="form-title">NFRS Show Entry Form</h1>
+          <h1 class="form-title" id="formTitle">NFRS Show Entry Form</h1>
           <p class="form-subtitle">
             The Show Secretary will send you confirmation of your entries via email when the entries have
             been entered on to the show program. Entries close at midnight on the Wednesday prior to the
@@ -341,6 +341,23 @@
         return await res.json();
       }
 
+      function starSuffixFromTypeId(showTypeId) {
+     // "1star" -> "*", "2star" -> "**", "3star" -> "***"
+       const m = /^(\d)star$/i.exec(String(showTypeId || ""));
+      return m ? "*".repeat(Number(m[1])) : "";
+     }
+
+function updateFormTitle(showName, showTypeId) {
+  const suffix = starSuffixFromTypeId(showTypeId);
+  const titleText = `NFRS ${showName}${suffix} Entry Form`;
+
+  const h1 = document.getElementById("formTitle");
+  if (h1) h1.textContent = titleText;
+
+  document.title = titleText;
+}
+      
+
       function applyConfigToActiveShow(cfg) {
         const active = cfg && cfg.active ? cfg.active : null;
         const types = Array.isArray(cfg && cfg.showTypes) ? cfg.showTypes : [];
@@ -351,6 +368,8 @@
 
         const type = types.find((t) => t && t.id === active.showTypeId);
         if (!type) throw new Error(`Show type not found: ${active.showTypeId}`);
+
+        updateFormTitle(active.showName || "Show", active.showTypeId);
 
         ACTIVE_SHOW = {
           id: active.showTypeId,
