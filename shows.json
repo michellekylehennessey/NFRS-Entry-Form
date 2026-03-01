@@ -9,7 +9,7 @@
     "maxTanks": 2,
     "allowDualEntry": true,
     "allowSelfShow": true,
-    "allowMarkedShow": true
+    "allowMarkedShow": false
   },
   {
     "id": "cup-3",
