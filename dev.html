@@ -531,6 +531,20 @@ const MARKED_SHOW_CLASSES = [
       updateTotalCost();
     });
 
+    function syncMarkedCheckboxForExhibit(div) {
+    const sectionSelect = div.querySelector(".sectionSelect");
+    const markedCb = div.querySelector(".markedEntryCheckbox");
+    if (!sectionSelect || !markedCb) return;
+
+    const isMarkedSection = sectionSelect.value === "Marked";
+
+    markedCb.disabled = !isMarkedSection;
+
+    if (!isMarkedSection) {
+    markedCb.checked = false;
+     }
+   }
+
     function addVariety() {
       if (varietiesContainer.children.length >= MAX_EXHIBITS) {
         addVarietyBtn.disabled = true;
@@ -590,7 +604,7 @@ const MARKED_SHOW_CLASSES = [
           </label>
 
           <label class="markedRow">
-            <input type="checkbox" name="markedEntry${index}">
+            <input type="checkbox" name="markedEntry${index}" class="markedEntryCheckbox">
             Marked
            </label>
           
@@ -638,6 +652,9 @@ const MARKED_SHOW_CLASSES = [
       // Populate class options by section
       const sectionSelect = div.querySelector('.sectionSelect');
       const classSelect = div.querySelector('.classSelect');
+
+      syncMarkedCheckboxForExhibit(div);
+      
       sectionSelect.addEventListener('change', () => {
         const options = getClassOptions(sectionSelect.value);
         classSelect.innerHTML = '';
@@ -651,6 +668,7 @@ const MARKED_SHOW_CLASSES = [
           o.value = opt;
           o.innerText = opt;
           classSelect.appendChild(o);
+         syncMarkedCheckboxForExhibit(div);
         });
 
         updateTotalCost();
