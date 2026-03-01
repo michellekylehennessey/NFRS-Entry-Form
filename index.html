@@ -1,771 +1,1513 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title> NFRS Show Entry Form</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-   
-    body {
-      margin: 0;
-      padding: 40px 10px;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-    }
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>NFRS Show Entry Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    .form-shell {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    <style>
+      body {
+        margin: 0;
+        padding: 40px 10px;
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+      }
 
-    
-    .form-card {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 32px 32px 28px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      box-sizing: border-box; 
-    }
+      p {
+        margin: 5px 0;
+      }
 
-    
-    .form-header {
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .member-flags {
-  margin-top: 16px;   
-}
-
-.member-flags span {
-  display: block;
-  margin-bottom: 6px; 
-}
-
-    .form-header img {
-      max-width: 450px; 
-      width: 100%;      
-      height: auto;
-      display: block;
-      margin: 0 auto 12px;
-    }
-
-    /* Mobile tweaks */
-    @media (max-width: 600px) {
-      body { padding: 20px 8px; }
+      .form-shell {
+        max-width: 900px;
+        margin: 0 auto;
+      }
 
       .form-card {
-        padding: 24px 16px 20px;
-        border-radius: 10px;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 32px 32px 28px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        box-sizing: border-box;
       }
 
-      .form-header img { max-width: 260px; }
+      .section {
+        margin-top: 24px;
+        padding-top: 8px;
+        border-top: 1px solid #e0e0e0;
+      }
 
-      .two-col { grid-template-columns: 1fr; } 
-    }
+      .section:first-of-type {
+        border-top: none;
+        padding-top: 0;
+        margin-top: 0;
+      }
 
-    .form-title {
-      margin: 0;
-      font-size: 1.6rem;
-      letter-spacing: 0.06em;
-      font-weight: bold;
-    }
+      .section h2 {
+        margin: 0 0 10px;
+        font-size: 1.1rem;
+      }
 
-    .form-subtitle {
-      margin: 8px auto 0;
-      max-width: 640px;
-      font-size: 0.9rem;
-      color: #555;
-      line-height: 1.4;
-    }
+      .two-col {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px 24px;
+      }
 
-    /* Helper text */
-    .helper-text {
-      font-size: 0.8rem;
-      color: #666;
-      margin-top: 4px;
-      font-style: italic;
-    }
+      .form-header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
 
-    
-    .section {
-      margin-top: 24px;
-      padding-top: 8px;
-      border-top: 1px solid #e0e0e0;
-    }
+      .form-header img {
+        max-width: 450px;
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto 12px;
+      }
 
-    .section:first-of-type {
-      border-top: none;
-      padding-top: 0;
-      margin-top: 0;
-    }
+      .form-title {
+        margin: 0;
+        font-size: 1.6rem;
+        letter-spacing: 0.06em;
+        font-weight: bold;
+      }
 
-    .section h2 {
-      margin: 0 0 10px;
-      font-size: 1.1rem;
-    }
+      .form-subtitle {
+        margin: 8px auto 0;
+        max-width: 640px;
+        font-size: 0.9rem;
+        color: #555;
+        line-height: 1.4;
+      }
 
-    label {
-      display: block;
-      margin-top: 10px;
-      font-size: 0.9rem;
-    }
+      .helper-text {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 4px;
+        font-style: italic;
+      }
 
-    input[type=text],
-    input[type=email],
-    input[type=number],
-    select,
-    textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      box-sizing: border-box;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 0.95rem;
-    }
+      label {
+        display: block;
+        margin-top: 10px;
+        font-size: 0.9rem;
+      }
 
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
+      input[type="text"],
+      input[type="email"],
+      input[type="number"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 4px;
+        box-sizing: border-box;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 0.95rem;
+      }
 
-    
-    .two-col {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px 24px;
-    }
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
 
-    
-    .inline-options {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      font-size: 0.9rem;
-      align-items: center;
-    }
+      .inline-options {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.9rem;
+        align-items: center;
+      }
 
-    .inline-options label {
-      margin-top: 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: normal;
-    }
+      .inline-options label {
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: normal;
+      }
 
-    .subsection {
-      margin-top: 10px;
-      padding: 10px;
-      border-left: 2px solid #aaa;
-      background: #f9f9f9;
-      border-radius: 6px;
-    }
+      .flex-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
 
-    .subsection-header {
-      cursor: pointer;
-      background: #e2e2e2;
-      padding: 8px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 0.95rem;
-    }
+      .flex-row label {
+        flex: 1;
+        margin-top: 6px;
+      }
 
-    .subsection-content { margin-top: 8px; }
+      .subsection {
+        margin-top: 10px;
+        padding: 10px;
+        border-left: 2px solid #aaa;
+        background: #f9f9f9;
+        border-radius: 6px;
+      }
 
-    .flex-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-    }
+      .subsection-header {
+        cursor: pointer;
+        background: #e2e2e2;
+        padding: 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.95rem;
+      }
 
-    .flex-row label {
-      flex: 1;
-      margin-top: 6px;
-    }
+      .subsection-content {
+        margin-top: 8px;
+      }
 
-    p { margin: 5px 0; }
+      .subsection-delete-link {
+        float: right;
+        font-weight: normal;
+        font-size: 0.9rem;
+      }
 
-    #totalCost {
-      font-weight: bold;
-      font-size: 18px;
-    }
+      #totalCost {
+        font-weight: bold;
+        font-size: 18px;
+      }
 
-    /* Submit button */
-    .submit-row {
-      text-align: left;
-      margin-top: 20px;
-    }
+      .submit-row {
+        text-align: left;
+        margin-top: 20px;
+      }
 
-    button[type=submit],
-    button[type=button] {
-      margin-top: 10px;
-      padding: 10px 18px;
-      font-size: 15px;
-      cursor: pointer;
-      border-radius: 6px;
-      border: none;
-      background-color: #000;
-      color: white;
-    }
+      button[type="submit"],
+      button[type="button"] {
+        margin-top: 10px;
+        padding: 10px 18px;
+        font-size: 15px;
+        cursor: pointer;
+        border-radius: 6px;
+        border: none;
+        background-color: #000;
+        color: white;
+      }
 
-    button[type=button] {
-      background-color: #444;
-      font-size: 14px;
-    }
+      button[type="button"] {
+        background-color: #444;
+        font-size: 14px;
+      }
 
-    .hidden { display: none; }
+      .hidden {
+        display: none;
+      }
 
-    
-    .exhibitor-bold label span { font-weight: bold; }
-    
-    .exhibitor-bold .member-flags span { font-weight: bold; }
-    
-    
-    .sr-only {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      padding: 0 !important;
-      margin: -1px !important;
-      overflow: hidden !important;
-      clip: rect(0, 0, 0, 0) !important;
-      white-space: nowrap !important;
-      border: 0 !important;
-    }
-  </style>
-</head>
+      .sr-only {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+      }
 
-<body>
-  <div class="form-shell">
-    <form id="entryForm" class="form-card">
-      <div class="form-header">
-        <img src="assets/nfrs-logo.png" alt="NFRS logo" />
-                <p class="form-subtitle">
-          The Show Secretary will send you confirmation of your entries via email when the
-          entries have been entered on to the show program. Entries close at midnight on the Wednesday
-          prior to the show.
-        </p>
-      </div>
+      @media (max-width: 600px) {
+        body {
+          padding: 20px 8px;
+        }
 
-      
-      <!-- Use {{studName}}, {{varietySummary}}, {{petsSummary}}, {{hireTanksText}}, {{tankNumber}}, {{tankCost}}, {{totalCost}} -->
-      <textarea class="sr-only" name="varietySummary" id="varietySummary" aria-hidden="true"></textarea>
-      <textarea class="sr-only" name="petsSummary" id="petsSummary" aria-hidden="true"></textarea>
-      <input class="sr-only" type="text" name="hireTanksText" id="hireTanksText" aria-hidden="true" />
-      <input class="sr-only" type="text" name="tankCost" id="tankCostField" aria-hidden="true" />
-      <input class="sr-only" type="text" name="totalCost" id="totalCostField" aria-hidden="true" />
+        .form-card {
+          padding: 24px 16px 20px;
+          border-radius: 10px;
+        }
 
-      
-      <div class="section exhibitor-bold">
-        <h2>Exhibitor details</h2>
+        .form-header img {
+          max-width: 260px;
+        }
 
-        
-        <div class="two-col">
-          <label><span>Name*:</span>
-            <input type="text" name="memberName" required />
-          </label>
+        .two-col {
+          grid-template-columns: 1fr;
+        }
 
-          <label><span>Stud Name:</span>
-            <!-- NOT required, because pets logic depends on whether this is blank or not -->
-            <input type="text" name="studName" id="studName" />
-          </label>
+        .flex-row {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .flex-row label {
+          width: 100%;
+        }
+
+        .subsection-delete-link {
+          float: none;
+          display: inline-block;
+          margin-top: 6px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="form-shell">
+      <form id="entryForm" class="form-card">
+        <div class="form-header">
+          <img src="assets/nfrs-logo.png" alt="NFRS logo" />
+          <h1 class="form-title">NFRS Show Entry Form</h1>
+          <p class="form-subtitle">
+            The Show Secretary will send you confirmation of your entries via email when the entries have
+            been entered on to the show program. Entries close at midnight on the Wednesday prior to the
+            show.
+          </p>
         </div>
 
-        
-        <div class="two-col">
-          <label><span>Email*:</span>
-            <input type="email" name="memberEmail" required />
-          </label>
+        <textarea class="sr-only" name="varietySummary" id="varietySummary" aria-hidden="true"></textarea>
+        <textarea class="sr-only" name="selfSummary" id="selfSummary" aria-hidden="true"></textarea>
+        <textarea class="sr-only" name="petsSummary" id="petsSummary" aria-hidden="true"></textarea>
+        <textarea class="sr-only" name="markedSummary" id="markedSummary" aria-hidden="true"></textarea>
 
-          <label><span>Phone:</span>
-            <input type="text" name="phone" />
-          </label>
-        </div>
+        <input class="sr-only" type="text" name="hireTanksText" id="hireTanksText" aria-hidden="true" />
+        <input class="sr-only" type="text" name="tankCost" id="tankCostField" aria-hidden="true" />
+        <input class="sr-only" type="text" name="totalCost" id="totalCostField" aria-hidden="true" />
 
-        
-        <div class="two-col member-flags">
-  <div>
-    <span>NFRS Member</span>
-    <div class="inline-options">
-      <label><input type="checkbox" name="NFRSMember" value="Yes"> Yes</label>
-    </div>
-  </div>
+        <div class="section">
+          <h2>Show selection</h2>
 
-  <div>
-    <span>Junior (under 16)</span>
-    <div class="inline-options">
-      <label><input type="checkbox" name="junior" /> Yes</label>
-    </div>
-  </div>
-</div>
-
-      
-      <div class="section">
-        <h2>Hire Tanks</h2>
-        <div class="inline-options">
           <label>
-            <input type="checkbox" id="hireTanksCheckbox" name="hireTanks" />
-            Do you require hire tanks?
+            Show ID*:
+            <select id="showSelect" required>
+              <option value="">Loading shows...</option>
+            </select>
           </label>
-        </div>
 
-        <div id="tankNumberDiv" class="hidden">
-          <label>Number of tanks (max 2) @ £5.00 each:
-            <input type="number" id="tankNumber" name="tankNumber" min="1" max="2" value="1" />
-          </label>
-          <p>Tank Cost: £<span id="tankCost">1.50</span></p>
-        </div>
-      </div>
-
-      
-      <div class="section">
-        <h2>Show Entries</h2>
-        <div class="inline-options">
           <label>
-            <input type="checkbox" id="addVarietiesCheckbox" />
-            Add Varieties?
+            Send entries to*:
+            <select id="showEmailSelect" required>
+              <option value="">Select a show first</option>
+            </select>
           </label>
+
+          <p class="helper-text" id="showMetaText"></p>
+
+          <input class="sr-only" type="text" name="showId" id="showId" aria-hidden="true" />
+          <input class="sr-only" type="text" name="showName" id="showName" aria-hidden="true" />
+          <input class="sr-only" type="text" name="selectedShowEmail" id="selectedShowEmail" aria-hidden="true" />
+          <input class="sr-only" type="text" name="entryPrice" id="entryPriceHidden" aria-hidden="true" />
+          <input class="sr-only" type="text" name="tankPrice" id="tankPriceHidden" aria-hidden="true" />
         </div>
-        <div id="varietiesContainer" class="hidden"></div>
-        <button type="button" id="addVarietyBtn" class="hidden">Add Another Exhibit</button>
-        <p class="helper-text" id="varietyLimitMsg" style="display:none;">Maximum 10 exhibits reached.</p>
-      </div>
 
-      
-      <div class="section">
-        <h2>Pets</h2>
-        <div class="inline-options">
-          <label>
-            <input type="checkbox" id="addPetsCheckbox" />
-            Add Pets?
-          </label>
-        </div>
-        <div id="petsContainer" class="hidden"></div>
-        <button type="button" id="addPetBtn" class="hidden">Add Another Pet</button>
-        <p class="helper-text" id="petLimitMsg" style="display:none;">Maximum 10 pets reached.</p>
-      </div>
+        <div class="section">
+          <h2>Exhibitor details</h2>
 
-      
-      <div class="section">
-        <h2>Additional information</h2>
-        <label>Any other information:
-          <textarea name="otherInfo" rows="4"></textarea>
-        </label>
-        <p class="helper-text">
-          Use this space to inform the show secretary of anything else relevant, e.g. bringing
-          kittens to the show for collection etc.
-        </p>
-      </div>
-
-      <!-- Total Cost -->
-      <div class="section">
-        <h2>Total Cost</h2>
-        <p>Total Cost: £<span id="totalCost">0.00</span></p>
-      </div>
-
-      <div class="submit-row">
-        <button type="submit">Submit</button>
-      </div>
-    </form>
-  </div>
-
-  <!-- EmailJS + logic -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    /***************  EMAILJS SETUP  ***************/
-    emailjs.init('kGDNowkNSzNlhztoC'); // public key
-    const EMAILJS_SERVICE_ID = 'service_wlaqz5n';
-    const EMAILJS_TEMPLATE_ID = 'template_ksgglxk';
-
-    const MAX_EXHIBITS = 10;
-    const MAX_PETS = 10;
-
-    // DOM elements
-    const studNameField      = document.getElementById('studName');
-
-    const hireTanksCheckbox  = document.getElementById('hireTanksCheckbox');
-    const tankNumberDiv      = document.getElementById('tankNumberDiv');
-    const tankNumber         = document.getElementById('tankNumber');
-    const tankCostSpan       = document.getElementById('tankCost');
-
-    const totalCostDisplay   = document.getElementById('totalCost');
-
-    const addVarietiesCheckbox = document.getElementById('addVarietiesCheckbox');
-    const varietiesContainer   = document.getElementById('varietiesContainer');
-    const addVarietyBtn        = document.getElementById('addVarietyBtn');
-    const varietyLimitMsg      = document.getElementById('varietyLimitMsg');
-
-    const addPetsCheckbox    = document.getElementById('addPetsCheckbox');
-    const petsContainer      = document.getElementById('petsContainer');
-    const addPetBtn          = document.getElementById('addPetBtn');
-    const petLimitMsg        = document.getElementById('petLimitMsg');
-
-    // Hidden fields for EmailJS
-    const varietySummaryField = document.getElementById('varietySummary');
-    const petsSummaryField    = document.getElementById('petsSummary');
-    const hireTanksTextField  = document.getElementById('hireTanksText');
-    const tankCostField       = document.getElementById('tankCostField');
-    const totalCostField      = document.getElementById('totalCostField');
-
-    // Cost counters
-    let varietyCount = 0;
-    let petCount = 0;
-
-    /*************** Tank cost logic ***************/
-    hireTanksCheckbox.addEventListener('change', () => {
-      const checked = hireTanksCheckbox.checked;
-      tankNumberDiv.classList.toggle('hidden', !checked);
-
-      if (!checked) {
-        
-        tankNumber.value = '';
-        tankCostSpan.innerText = '0.00';
-      } else {
-        if (!tankNumber.value) tankNumber.value = 1;
-        updateTankCost();
-      }
-
-      updateTotalCost();
-    });
-
-    tankNumber.addEventListener('input', () => {
-      updateTankCost();
-      updateTotalCost();
-    });
-
-    function updateTankCost() {
-      let num = parseInt(tankNumber.value);
-      if (isNaN(num)) {
-        tankCostSpan.innerText = '0.00';
-        return;
-      }
-      num = Math.min(Math.max(num, 1), 2);
-      tankNumber.value = num;
-      tankCostSpan.innerText = (num * 5).toFixed(2);
-    }
-
-    /*************** Varieties logic ***************/
-    addVarietiesCheckbox.addEventListener('change', () => {
-      const checked = addVarietiesCheckbox.checked;
-
-      varietiesContainer.classList.toggle('hidden', !checked);
-      addVarietyBtn.classList.toggle('hidden', !checked);
-
-      if (checked) {
-        if (varietiesContainer.children.length === 0) addVariety();
-      } else {
-        varietiesContainer.innerHTML = '';
-        varietyCount = 0;
-        addVarietyBtn.disabled = false;
-        varietyLimitMsg.style.display = 'none';
-      }
-
-      updateTotalCost();
-    });
-
-    addVarietyBtn.addEventListener('click', () => {
-      addVariety();
-      updateTotalCost();
-    });
-
-    function addVariety() {
-      if (varietiesContainer.children.length >= MAX_EXHIBITS) {
-        addVarietyBtn.disabled = true;
-        varietyLimitMsg.style.display = 'block';
-        return;
-      }
-
-      const div = document.createElement('div');
-      div.className = 'subsection';
-      const index = varietiesContainer.children.length;
-
-      div.innerHTML = `
-        <div class="subsection-header">Exhibit ${index + 1} (click to toggle)</div>
-        <div class="subsection-content">
-          <label>Rat Name:
-            <input type="text" name="ratName${index}">
-          </label>
-          <div class="flex-row">
-            <label>Age:
-              <input type="radio" name="age${index}" value="Adult"> Adult
-              <input type="radio" name="age${index}" value="Kitten"> Kitten
+          <div class="two-col">
+            <label>
+              Name*:
+              <input type="text" name="memberName" required />
             </label>
-            <label>Sex:
-              <input type="radio" name="sex${index}" value="Doe"> Doe
-              <input type="radio" name="sex${index}" value="Buck"> Buck
+
+            <label>
+              Stud Name:
+              <input type="text" name="studName" id="studName" />
             </label>
           </div>
-          <label>Section:
-            <select name="section${index}" class="sectionSelect">
-              <option value="">Select Section</option>
-              <option value="Provisional Standard">Provisional Standard</option>
-              <option value="Self">Self</option>
-              <option value="Marked">Marked</option>
-              <option value="Russian">Russian</option>
-              <option value="Shaded">Shaded</option>
-              <option value="AOV">AOV</option>
-              <option value="Rex">Rex</option>
-              <option value="Dumbo">Dumbo</option>
-              <option value="Guide Standard">Guide Standard</option>
-            </select>
-          </label>
-          <label>Class:
-            <select name="class${index}" class="classSelect">
-              <option value="">Select Section first</option>
-            </select>
-          </label>
-          <label><input type="checkbox" name="novice${index}"> Novice</label>
-          <label><input type="checkbox" name="dualEntry${index}"> Dual Entry (Pets)</label>
+
+          <div class="two-col">
+            <label>
+              Email*:
+              <input type="email" name="memberEmail" required />
+            </label>
+
+            <label>
+              Phone:
+              <input type="text" name="phone" />
+            </label>
+          </div>
+
+          <div class="two-col" style="margin-top: 10px">
+            <div>
+              <span style="display: block; margin-bottom: 6px; font-weight: bold">NFRS Member</span>
+              <div class="inline-options">
+                <label><input type="checkbox" name="NFRSMember" value="Yes" /> Yes</label>
+              </div>
+            </div>
+
+            <div>
+              <span style="display: block; margin-bottom: 6px; font-weight: bold">Junior (under 16)</span>
+              <div class="inline-options">
+                <label><input type="checkbox" name="junior" value="Yes" /> Yes</label>
+              </div>
+            </div>
+          </div>
         </div>
-      `;
 
-      varietiesContainer.appendChild(div);
-      varietyCount += 1;
+        <div class="section">
+          <h2>Hire Tanks</h2>
 
-      // Toggle open/close
-      const header = div.querySelector('.subsection-header');
-      const content = div.querySelector('.subsection-content');
-      content.style.display = 'block';
-      header.addEventListener('click', () => {
-        content.style.display = content.style.display === 'none' ? 'block' : 'none';
-      });
+          <div class="inline-options">
+            <label>
+              <input type="checkbox" id="hireTanksCheckbox" name="hireTanks" />
+              Do you require hire tanks?
+            </label>
+          </div>
 
-      // Populate class options by section
-      const sectionSelect = div.querySelector('.sectionSelect');
-      const classSelect   = div.querySelector('.classSelect');
-      sectionSelect.addEventListener('change', () => {
-        const options = getClassOptions(sectionSelect.value);
-        classSelect.innerHTML = '';
-        const first = document.createElement('option');
-        first.value = '';
-        first.innerText = options.length ? 'Select Class' : 'No classes available';
-        classSelect.appendChild(first);
+          <div id="tankNumberDiv" class="hidden">
+            <label>
+              Number of tanks (max 2) @ £5.00 each:
+              <input type="number" id="tankNumber" name="tankNumber" min="1" max="2" value="1" />
+            </label>
+            <p>Tank Cost: £<span id="tankCost">0.00</span></p>
+          </div>
+        </div>
 
-        options.forEach(opt => {
-          const o = document.createElement('option');
-          o.value = opt;
-          o.innerText = opt;
-          classSelect.appendChild(o);
+        <div class="section">
+          <h2>Show Entries</h2>
+
+          <div class="inline-options">
+            <label>
+              <input type="checkbox" id="addVarietiesCheckbox" />
+              Add Varieties?
+            </label>
+
+            <label id="addSelfRow">
+              <input type="checkbox" id="addSelfCheckbox" />
+              Add Self?
+            </label>
+
+            <label id="addMarkedRow" class="hidden">
+              <input type="checkbox" id="addMarkedCheckbox" />
+              Add Marked?
+            </label>
+          </div>
+
+          <div id="varietiesContainer" class="hidden"></div>
+          <button type="button" id="addVarietyBtn" class="hidden">Add Another Exhibit</button>
+          <p class="helper-text" id="varietyLimitMsg" style="display: none">Maximum 10 exhibits reached.</p>
+
+          <div id="selfContainer" class="hidden"></div>
+          <button type="button" id="addSelfBtn" class="hidden">Add Another Self Exhibit</button>
+          <p class="helper-text" id="selfLimitMsg" style="display: none">Maximum 10 self exhibits reached.</p>
+
+          <div id="markedContainer" class="hidden"></div>
+          <button type="button" id="addMarkedBtn" class="hidden">Add Another Marked Exhibit</button>
+          <p class="helper-text" id="markedLimitMsg" style="display: none">Maximum 10 marked exhibits reached.</p>
+        </div>
+
+        <div class="section">
+          <h2>Pets</h2>
+
+          <div class="inline-options">
+            <label>
+              <input type="checkbox" id="addPetsCheckbox" />
+              Add Pets?
+            </label>
+          </div>
+
+          <div id="petsContainer" class="hidden"></div>
+          <button type="button" id="addPetBtn" class="hidden">Add Another Pet</button>
+          <p class="helper-text" id="petLimitMsg" style="display: none">Maximum 10 pets reached.</p>
+        </div>
+
+        <div class="section">
+          <h2>Additional information</h2>
+          <label>
+            Any other information:
+            <textarea name="otherInfo" rows="4"></textarea>
+          </label>
+        </div>
+
+        <div class="section">
+          <h2>Total Cost</h2>
+          <p>Total Cost: £<span id="totalCost">0.00</span></p>
+        </div>
+
+        <div class="submit-row">
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+    <script>
+      emailjs.init("kGDNowkNSzNlhztoC");
+      const EMAILJS_SERVICE_ID = "service_wlaqz5n";
+      const EMAILJS_TEMPLATE_ID = "template_ksgglxk";
+
+      const MAX_EXHIBITS = 10;
+      const MAX_PETS = 10;
+      const MAX_SELF = 10;
+      const MAX_MARKED = 10;
+
+      const studNameField = document.getElementById("studName");
+      const juniorCheckbox = document.querySelector('input[name="junior"]');
+
+      const hireTanksCheckbox = document.getElementById("hireTanksCheckbox");
+      const tankNumberDiv = document.getElementById("tankNumberDiv");
+      const tankNumber = document.getElementById("tankNumber");
+      const tankCostSpan = document.getElementById("tankCost");
+
+      const totalCostDisplay = document.getElementById("totalCost");
+
+      const addVarietiesCheckbox = document.getElementById("addVarietiesCheckbox");
+      const varietiesContainer = document.getElementById("varietiesContainer");
+      const addVarietyBtn = document.getElementById("addVarietyBtn");
+      const varietyLimitMsg = document.getElementById("varietyLimitMsg");
+
+      const addPetsCheckbox = document.getElementById("addPetsCheckbox");
+      const petsContainer = document.getElementById("petsContainer");
+      const addPetBtn = document.getElementById("addPetBtn");
+      const petLimitMsg = document.getElementById("petLimitMsg");
+
+      const addSelfRow = document.getElementById("addSelfRow");
+      const addSelfCheckbox = document.getElementById("addSelfCheckbox");
+      const selfContainer = document.getElementById("selfContainer");
+      const addSelfBtn = document.getElementById("addSelfBtn");
+      const selfLimitMsg = document.getElementById("selfLimitMsg");
+
+      const addMarkedRow = document.getElementById("addMarkedRow");
+      const addMarkedCheckbox = document.getElementById("addMarkedCheckbox");
+      const markedContainer = document.getElementById("markedContainer");
+      const addMarkedBtn = document.getElementById("addMarkedBtn");
+      const markedLimitMsg = document.getElementById("markedLimitMsg");
+
+      const varietySummaryField = document.getElementById("varietySummary");
+      const selfSummaryField = document.getElementById("selfSummary");
+      const markedSummaryField = document.getElementById("markedSummary");
+      const petsSummaryField = document.getElementById("petsSummary");
+      const hireTanksTextField = document.getElementById("hireTanksText");
+      const tankCostField = document.getElementById("tankCostField");
+      const totalCostField = document.getElementById("totalCostField");
+
+      const showSelect = document.getElementById("showSelect");
+      const showEmailSelect = document.getElementById("showEmailSelect");
+      const showMetaText = document.getElementById("showMetaText");
+
+      const showIdField = document.getElementById("showId");
+      const showNameField = document.getElementById("showName");
+      const selectedShowEmailField = document.getElementById("selectedShowEmail");
+      const entryPriceHidden = document.getElementById("entryPriceHidden");
+      const tankPriceHidden = document.getElementById("tankPriceHidden");
+
+      let SHOWS = [];
+      let ACTIVE_SHOW = null;
+
+      const SELF_SHOW_CLASSES = [
+        "Pink Eyed White",
+        "Champagne",
+        "Buff",
+        "Platinum",
+        "Quicksilver",
+        "British Blue",
+        "Black",
+        "Chocolate",
+        "Mink",
+        "Ivory",
+        "Lilac",
+      ];
+
+      const MARKED_SHOW_CLASSES = [
+        "Berkshire/Badger",
+        "Irish",
+        "Hooded",
+        "Variegated",
+        "Capped",
+        "Essex",
+        "Chinchilla",
+        "Squirrel",
+        "Roan/Striped Roan",
+      ];
+
+      async function loadShows() {
+        const res = await fetch("./shows.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(`shows.json HTTP ${res.status}`);
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error("shows.json must be an array");
+        SHOWS = data;
+
+        showSelect.innerHTML = '<option value="">Select a show</option>';
+        SHOWS.forEach((s, idx) => {
+          const opt = document.createElement("option");
+          opt.value = String(idx);
+          opt.textContent = s.name;
+          showSelect.appendChild(opt);
         });
+      }
+
+      function getEntryPrice() {
+        return ACTIVE_SHOW?.entryPrice ?? 2;
+      }
+
+      function getTankPrice() {
+        return ACTIVE_SHOW?.tankPrice ?? 5;
+      }
+
+      function getMaxTanks() {
+        return ACTIVE_SHOW?.maxTanks ?? 2;
+      }
+
+      function dualAllowed() {
+        return ACTIVE_SHOW?.allowDualEntry !== false;
+      }
+
+      function selfAllowed() {
+        return !!ACTIVE_SHOW?.allowSelfShow;
+      }
+
+      function markedAllowed() {
+        return !!ACTIVE_SHOW?.allowMarkedShow;
+      }
+
+      function populateEmailDropdown() {
+        showEmailSelect.innerHTML = "";
+
+        if (!ACTIVE_SHOW) {
+          showEmailSelect.innerHTML = '<option value="">Select a show first</option>';
+          selectedShowEmailField.value = "";
+          return;
+        }
+
+        const emails = Array.isArray(ACTIVE_SHOW.emails) ? ACTIVE_SHOW.emails : [];
+        const defaultEmail = ACTIVE_SHOW.defaultEmail || emails[0] || "";
+
+        if (emails.length === 0) {
+          showEmailSelect.innerHTML = '<option value="">No emails configured</option>';
+          selectedShowEmailField.value = "";
+          return;
+        }
+
+        showEmailSelect.appendChild(new Option("Select recipient", ""));
+        emails.forEach((e) => showEmailSelect.appendChild(new Option(e, e)));
+
+        showEmailSelect.value = defaultEmail;
+        selectedShowEmailField.value = defaultEmail;
+      }
+
+      function applyShowRulesToExistingExhibits() {
+        const dOk = dualAllowed();
+        const sOk = selfAllowed();
+        const mOk = markedAllowed();
+
+        document.querySelectorAll(".dualEntryRow").forEach((row) => {
+          row.style.display = dOk ? "" : "none";
+          const cb = row.querySelector('input[type="checkbox"]');
+          if (!dOk && cb) cb.checked = false;
+        });
+
+        document.querySelectorAll(".selfRow").forEach((row) => {
+          row.style.display = sOk ? "" : "none";
+          const cb = row.querySelector('input[type="checkbox"]');
+          if (!sOk && cb) cb.checked = false;
+        });
+
+        document.querySelectorAll(".markedRow").forEach((row) => {
+          row.style.display = mOk ? "" : "none";
+          const cb = row.querySelector('input[type="checkbox"]');
+          if (!mOk && cb) cb.checked = false;
+        });
+
+        updateTotalCost();
+      }
+
+      function applyShowConfig() {
+        if (!ACTIVE_SHOW) return;
+
+        showIdField.value = ACTIVE_SHOW.id || "";
+        showNameField.value = ACTIVE_SHOW.name || "";
+        entryPriceHidden.value = String(getEntryPrice());
+        tankPriceHidden.value = String(getTankPrice());
+
+        populateEmailDropdown();
+
+        const sOk = selfAllowed();
+        const mOk = markedAllowed();
+
+        addSelfRow.style.display = sOk ? "flex" : "none";
+        if (!sOk) {
+          addSelfCheckbox.checked = false;
+          addSelfCheckbox.disabled = true;
+
+          selfContainer.classList.add("hidden");
+          addSelfBtn.classList.add("hidden");
+          selfContainer.innerHTML = "";
+          selfLimitMsg.style.display = "none";
+
+          document.querySelectorAll('input[name^="selfEntry"]').forEach((cb) => (cb.checked = false));
+        } else {
+          addSelfCheckbox.disabled = false;
+        }
+
+        addMarkedRow.style.display = mOk ? "flex" : "none";
+        if (!mOk) {
+          addMarkedCheckbox.checked = false;
+          addMarkedCheckbox.disabled = true;
+
+          markedContainer.classList.add("hidden");
+          addMarkedBtn.classList.add("hidden");
+          markedContainer.innerHTML = "";
+          markedLimitMsg.style.display = "none";
+
+          document.querySelectorAll('input[name^="markedEntry"]').forEach((cb) => (cb.checked = false));
+        } else {
+          addMarkedCheckbox.disabled = false;
+        }
+
+        applyShowRulesToExistingExhibits();
+
+        showMetaText.textContent = `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}).`;
+
+        updateTankCost();
+        updateTotalCost();
+      }
+
+      showSelect.addEventListener("change", () => {
+        const idx = parseInt(showSelect.value, 10);
+        ACTIVE_SHOW = Number.isNaN(idx) ? null : SHOWS[idx];
+        applyShowConfig();
       });
 
-      // Recalc when novice/dual toggled or when class changes
-      const noviceCheckbox = div.querySelector(`input[name="novice${index}"]`);
-      const dualCheckbox   = div.querySelector(`input[name="dualEntry${index}"]`);
-      if (noviceCheckbox) noviceCheckbox.addEventListener('change', () => { updateTotalCost(); });
-      if (dualCheckbox) dualCheckbox.addEventListener('change', () => { updateTotalCost(); });
-      if (classSelect) classSelect.addEventListener('change', () => { updateTotalCost(); });
-
-      // Limit button state
-      if (varietiesContainer.children.length >= MAX_EXHIBITS) {
-        addVarietyBtn.disabled = true;
-        varietyLimitMsg.style.display = 'block';
-      } else {
-        addVarietyBtn.disabled = false;
-        varietyLimitMsg.style.display = 'none';
-      }
-    }
-
-    function getClassOptions(section) {
-      const data = {
-        "Provisional Standard": ["Bareback","Chestnut","Cinnamon Chinchilla","Copper","Dwarf","Merle","Pink Eyed Ivory","Powder Blue","Tonkinese (Self type)","Tonkinese (Agouti type)","Variegated Downunder"],
-        "Self": ["Pink Eyed White","Champagne","Buff","Platinum","Quicksilver","British Blue","Black Chocolate","Mink","Ivory","Lilac"],
-        "Marked": ["Berkshire/Badger","Irish","Hooded","Variegated","Capped","Essex","Chinchilla","Squirrel","Roan/Striped Roan"],
-        "Russian": ["Russian Blue","Russian Dove","Russian Buff","Russian Blue Agouti","Russian Dove Agouti","Russian Silver","Russian Topaz"],
-        "Shaded": ["Argente Crème","Himalayan","Siamese","Blue Point Siamese","Burmese","Wheaten Burmese","Golden Himalayan","Golden Siamese","Marten","Silver Agouti","Cream Agouti"],
-        "AOV": ["Cream","Topaz","Silver Fawn","Silver","Agouti","Cinnamon","British Blue Agouti","Lilac Agouti","Pearl","Cinnamon Pearl","Platinum Agouti"],
-        "Rex": ["Self","Marked","Russian","Shaded","AOV"],
-        "Dumbo": ["Self","Marked","Russian","Shaded","AOV","Rex"],
-        "Guide Standard": ["Blue Point Himalayan","Russian Burmese","Russian Silver Agouti","Sable Burmese","Spotted Down Under","Silken"]
-      };
-      return data[section] || [];
-    }
-
-    /*************** Pets logic ***************/
-    addPetsCheckbox.addEventListener('change', () => {
-      const checked = addPetsCheckbox.checked;
-
-      petsContainer.classList.toggle('hidden', !checked);
-      addPetBtn.classList.toggle('hidden', !checked);
-
-      if (checked) {
-        if (petsContainer.children.length === 0) addPet();
-      } else {
-        petsContainer.innerHTML = '';
-        petCount = 0;
-        addPetBtn.disabled = false;
-        petLimitMsg.style.display = 'none';
-      }
-
-      updateTotalCost();
-    });
-
-    addPetBtn.addEventListener('click', () => {
-      addPet();
-      updateTotalCost();
-    });
-
-    function addPet() {
-      if (petsContainer.children.length >= MAX_PETS) {
-        addPetBtn.disabled = true;
-        petLimitMsg.style.display = 'block';
-        return;
-      }
-
-      const div = document.createElement('div');
-      div.className = 'subsection';
-      const index = petsContainer.children.length;
-
-      div.innerHTML = `
-        <div class="subsection-header">Pet ${index + 1} (click to toggle)</div>
-        <div class="subsection-content">
-          <label>Rat Name:
-            <input type="text" name="petName${index}">
-          </label>
-
-          <label>Sex:
-            <input type="radio" name="petSex${index}" value="Buck"> Buck
-            <input type="radio" name="petSex${index}" value="Doe"> Doe
-          </label>
-        </div>
-      `;
-
-      petsContainer.appendChild(div);
-      petCount += 1;
-
-      const header = div.querySelector('.subsection-header');
-      const content = div.querySelector('.subsection-content');
-      content.style.display = 'block';
-      header.addEventListener('click', () => {
-        content.style.display = content.style.display === 'none' ? 'block' : 'none';
+      showEmailSelect.addEventListener("change", () => {
+        selectedShowEmailField.value = showEmailSelect.value || "";
       });
 
-      // Recalc when pet sex changes
-      const sexRadios = div.querySelectorAll(`input[name="petSex${index}"]`);
-      sexRadios.forEach(r => r.addEventListener('change', () => updateTotalCost()));
+      loadShows().catch((err) => {
+        console.error(err);
+        showSelect.innerHTML = '<option value="">Shows unavailable</option>';
+        showEmailSelect.innerHTML = '<option value="">Shows unavailable</option>';
+        showMetaText.textContent = "Could not load shows.json.";
+      });
 
-      if (petsContainer.children.length >= MAX_PETS) {
-        addPetBtn.disabled = true;
-        petLimitMsg.style.display = 'block';
-      } else {
-        addPetBtn.disabled = false;
-        petLimitMsg.style.display = 'none';
-      }
-    }
+      hireTanksCheckbox.addEventListener("change", () => {
+        const checked = hireTanksCheckbox.checked;
+        tankNumberDiv.classList.toggle("hidden", !checked);
 
-    /*************** NFRS format ***************/
-    function pluralize(n, singular, plural = singular + "s") {
-  return n === 1 ? singular : plural;
-}
+        if (!checked) {
+          tankNumber.value = "";
+          tankCostSpan.innerText = "0.00";
+        } else {
+          if (!tankNumber.value) tankNumber.value = 1;
+          updateTankCost();
+        }
 
-/**
- * VARIETIES SUMMARY (grouped + readable)
- * Example:
- * 1 Adult Buck Silver Fawn Novice Pets
- * 2 Adult Doe Agouti
- */
-function buildVarietySummaryReadableGrouped() {
-  const counts = new Map();
+        updateTotalCost();
+      });
 
-  for (let i = 0; i < varietiesContainer.children.length; i++) {
-    const age = document.querySelector(`input[name="age${i}"]:checked`)?.value || "";
-    const sex = document.querySelector(`input[name="sex${i}"]:checked`)?.value || "";
-    const cls = document.querySelector(`select[name="class${i}"]`)?.value || "";
-    const novice = document.querySelector(`input[name="novice${i}"]`)?.checked || false;
-    const pets = document.querySelector(`input[name="dualEntry${i}"]`)?.checked || false;
+      tankNumber.addEventListener("input", () => {
+        updateTankCost();
+        updateTotalCost();
+      });
 
-    if (!age || !sex || !cls) continue;
+      function updateTankCost() {
+        let num = parseInt(tankNumber.value, 10);
+        if (Number.isNaN(num)) {
+          tankCostSpan.innerText = "0.00";
+          return;
+        }
 
-    const key = JSON.stringify({ age, sex, cls, novice, pets });
-    counts.set(key, (counts.get(key) || 0) + 1);
-  }
-
-  const lines = Array.from(counts.entries())
-    .map(([key, count]) => {
-      const { age, sex, cls, novice, pets } = JSON.parse(key);
-      const parts = [String(count), age, sex, cls];
-      if (novice) parts.push("Novice");
-      if (pets) parts.push("Pets");
-      return parts.join(" ");
-    })
-    .sort((a, b) => a.localeCompare(b));
-
-  return lines.join("\n");
-}
-
-/**
- * PETS SUMMARY
- * If stud name filled → Breeder Owned
- * If blank → Adult Owned
- *
- * Example:
- * 2 Breeder Owned Bucks
- * 1 Breeder Owned Doe
- */
-function buildPetsSummaryOwnedByStud() {
-  if (petsContainer.children.length === 0) return "";
-
-  const studFilled = (studNameField.value || "").trim().length > 0;
-  const ownedLabel = studFilled ? "Breeder Owned" : "Adult Owned";
-
-  let buckCount = 0;
-  let doeCount = 0;
-
-  for (let i = 0; i < petsContainer.children.length; i++) {
-    const sex = document.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
-    if (sex === "Buck") buckCount += 1;
-    if (sex === "Doe") doeCount += 1;
-  }
-
-  const lines = [];
-  if (buckCount > 0) lines.push(`${buckCount} ${ownedLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
-  if (doeCount > 0) lines.push(`${doeCount} ${ownedLabel} ${pluralize(doeCount, "Doe", "Does")}`);
-
-  return lines.join("\n");
-}
-
-
-    /*************** Total cost ***************/
-    function updateTotalCost() {
-      let total = 0;
-
-      // Tanks: £1.50 each, max 2
-      if (hireTanksCheckbox.checked) {
-       total += Math.min(parseInt(tankNumber.value) || 0, 2) * 5
+        num = Math.min(Math.max(num, 1), getMaxTanks());
+        tankNumber.value = num;
+        tankCostSpan.innerText = (num * getTankPrice()).toFixed(2);
       }
 
-      // £2 per variety and £2 per pet 
-      total += (varietyCount * 2) + (petCount * 2)
+      function reindexContainer(containerEl, titleSelector, labelPrefix) {
+        const items = Array.from(containerEl.children);
 
-      // +£1 for each Dual Entry (Pets) ticked
-      const dualChecks = document.querySelectorAll('input[name^="dualEntry"]');
-      dualChecks.forEach(cb => { if (cb.checked) total += 2; });
+        items.forEach((div, newIndex) => {
+          const titleEl = div.querySelector(titleSelector);
+          if (titleEl) titleEl.textContent = `${labelPrefix} ${newIndex + 1} (click to toggle)`;
 
-      totalCostDisplay.innerText = total.toFixed(2);
-    }
+          div.querySelectorAll("input, select, textarea").forEach((el) => {
+            if (!el.name) return;
+            el.name = el.name.replace(/\d+$/, String(newIndex));
+          });
+        });
+      }
 
-    /*************** Form submission via EmailJS ***************/
-    document.getElementById('entryForm').addEventListener('submit', function (event) {
-      event.preventDefault();
+      function reindexVarieties() {
+        reindexContainer(varietiesContainer, ".exhibit-title", "Exhibit");
+      }
 
-      // Fill hidden fields that EmailJS will send
-      const tanksText = hireTanksCheckbox.checked ? 'Yes' : 'No';
-      hireTanksTextField.value = tanksText;
+      function reindexPets() {
+        reindexContainer(petsContainer, ".pet-title", "Pet");
+      }
 
-      // keep tankCost + totalCost as actual fields (EmailJS sends form fields, not spans)
-      tankCostField.value = (tankCostSpan.innerText || '0.00').trim();
-      totalCostField.value = (totalCostDisplay.innerText || '0.00').trim();
+      function reindexSelf() {
+        reindexContainer(selfContainer, ".self-title", "Self Exhibit");
+      }
 
-      // NFRS format summaries
-      varietySummaryField.value = buildVarietySummaryReadableGrouped();
-      petsSummaryField.value = buildPetsSummaryOwnedByStud();
+      function reindexMarked() {
+        reindexContainer(markedContainer, ".marked-title", "Marked Exhibit");
+      }
 
-      emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
-        .then(() => { alert('Entry submitted successfully!'); },
-              (error) => { alert('Submission failed: ' + JSON.stringify(error)); });
-    });
-  </script>
-</body>
+      addVarietiesCheckbox.addEventListener("change", () => {
+        const checked = addVarietiesCheckbox.checked;
+
+        varietiesContainer.classList.toggle("hidden", !checked);
+        addVarietyBtn.classList.toggle("hidden", !checked);
+
+        if (checked) {
+          if (varietiesContainer.children.length === 0) addVariety();
+        } else {
+          varietiesContainer.innerHTML = "";
+          addVarietyBtn.disabled = false;
+          varietyLimitMsg.style.display = "none";
+        }
+
+        updateTotalCost();
+      });
+
+      addVarietyBtn.addEventListener("click", () => {
+        addVariety();
+        updateTotalCost();
+      });
+
+      function syncMarkedCheckboxForExhibit(div) {
+        const sectionSelect = div.querySelector(".sectionSelect");
+        const markedCb = div.querySelector(".markedEntryCheckbox");
+        if (!sectionSelect || !markedCb) return;
+
+        const isMarkedSection = sectionSelect.value === "Marked";
+        markedCb.disabled = !isMarkedSection;
+        if (!isMarkedSection) markedCb.checked = false;
+      }
+
+      function syncSelfCheckboxForExhibit(div) {
+        const sectionSelect = div.querySelector(".sectionSelect");
+        const selfCb = div.querySelector(".selfEntryCheckbox");
+        if (!sectionSelect || !selfCb) return;
+
+        const isSelfSection = sectionSelect.value === "Self";
+        selfCb.disabled = !isSelfSection;
+        if (!isSelfSection) selfCb.checked = false;
+      }
+
+      function addVariety() {
+        if (varietiesContainer.children.length >= MAX_EXHIBITS) {
+          addVarietyBtn.disabled = true;
+          varietyLimitMsg.style.display = "block";
+          return;
+        }
+
+        const div = document.createElement("div");
+        div.className = "subsection";
+        const index = varietiesContainer.children.length;
+
+        const dOk = dualAllowed();
+        const sOk = selfAllowed();
+        const mOk = markedAllowed();
+
+        div.innerHTML = `
+          <div class="subsection-header">
+            <span class="exhibit-title">Exhibit ${index + 1} (click to toggle)</span>
+            <a href="#" class="delete-variety subsection-delete-link">Click to Delete Exhibit</a>
+          </div>
+
+          <div class="subsection-content">
+            <label>
+              Rat Name:
+              <input type="text" name="ratName${index}">
+            </label>
+
+            <div class="flex-row">
+              <label>
+                Age:
+                <input type="radio" name="age${index}" value="Adult"> Adult
+                <input type="radio" name="age${index}" value="Kitten"> Kitten
+              </label>
+
+              <label>
+                Sex:
+                <input type="radio" name="sex${index}" value="Doe"> Doe
+                <input type="radio" name="sex${index}" value="Buck"> Buck
+              </label>
+            </div>
+
+            <label>
+              Section:
+              <select name="section${index}" class="sectionSelect">
+                <option value="">Select Section</option>
+                <option value="Provisional Standard">Provisional Standard</option>
+                <option value="Self">Self</option>
+                <option value="Marked">Marked</option>
+                <option value="Russian">Russian</option>
+                <option value="Shaded">Shaded</option>
+                <option value="AOV">AOV</option>
+                <option value="Rex">Rex</option>
+                <option value="Dumbo">Dumbo</option>
+                <option value="Guide Standard">Guide Standard</option>
+              </select>
+            </label>
+
+            <label>
+              Class:
+              <select name="class${index}" class="classSelect">
+                <option value="">Select Section first</option>
+              </select>
+            </label>
+
+            <label><input type="checkbox" name="novice${index}"> Novice</label>
+
+            <label class="selfRow">
+              <input type="checkbox" name="selfEntry${index}" class="selfEntryCheckbox">
+              Self
+            </label>
+
+            <label class="markedRow">
+              <input type="checkbox" name="markedEntry${index}" class="markedEntryCheckbox">
+              Marked
+            </label>
+
+            <label class="dualEntryRow">
+              <input type="checkbox" name="dualEntry${index}">
+              Dual Entry (Pets)
+            </label>
+          </div>
+        `;
+
+        varietiesContainer.appendChild(div);
+
+        div.querySelector(".delete-variety").addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          div.remove();
+          reindexVarieties();
+          updateTotalCost();
+        });
+
+        const header = div.querySelector(".subsection-header");
+        const content = div.querySelector(".subsection-content");
+        content.style.display = "block";
+        header.addEventListener("click", () => {
+          content.style.display = content.style.display === "none" ? "block" : "none";
+        });
+
+        const selfRow = div.querySelector(".selfRow");
+        if (selfRow) selfRow.style.display = sOk ? "" : "none";
+        const selfCb = div.querySelector(`input[name="selfEntry${index}"]`);
+        if (!sOk && selfCb) selfCb.checked = false;
+
+        const markedRow = div.querySelector(".markedRow");
+        if (markedRow) markedRow.style.display = mOk ? "" : "none";
+        const markedCb = div.querySelector(`input[name="markedEntry${index}"]`);
+        if (!mOk && markedCb) markedCb.checked = false;
+
+        const dualRow = div.querySelector(".dualEntryRow");
+        if (dualRow) dualRow.style.display = dOk ? "" : "none";
+        const dualCb = div.querySelector(`input[name="dualEntry${index}"]`);
+        if (!dOk && dualCb) dualCb.checked = false;
+
+        div.querySelectorAll("input, select").forEach((el) => {
+          el.addEventListener("change", () => updateTotalCost());
+        });
+
+        const sectionSelect = div.querySelector(".sectionSelect");
+        const classSelect = div.querySelector(".classSelect");
+
+        syncMarkedCheckboxForExhibit(div);
+        syncSelfCheckboxForExhibit(div);
+
+        sectionSelect.addEventListener("change", () => {
+          const options = getClassOptions(sectionSelect.value);
+          classSelect.innerHTML = "";
+
+          const first = document.createElement("option");
+          first.value = "";
+          first.innerText = options.length ? "Select Class" : "No classes available";
+          classSelect.appendChild(first);
+
+          options.forEach((opt) => {
+            const o = document.createElement("option");
+            o.value = opt;
+            o.innerText = opt;
+            classSelect.appendChild(o);
+          });
+
+          syncMarkedCheckboxForExhibit(div);
+          syncSelfCheckboxForExhibit(div);
+
+          updateTotalCost();
+        });
+
+        if (varietiesContainer.children.length >= MAX_EXHIBITS) {
+          addVarietyBtn.disabled = true;
+          varietyLimitMsg.style.display = "block";
+        } else {
+          addVarietyBtn.disabled = false;
+          varietyLimitMsg.style.display = "none";
+        }
+      }
+
+      function getClassOptions(section) {
+        const data = {
+          "Provisional Standard": [
+            "Bareback",
+            "Chestnut",
+            "Cinnamon Chinchilla",
+            "Copper",
+            "Dwarf",
+            "Merle",
+            "Pink Eyed Ivory",
+            "Powder Blue",
+            "Tonkinese (Self type)",
+            "Tonkinese (Agouti type)",
+            "Variegated Downunder",
+          ],
+          Self: SELF_SHOW_CLASSES,
+          Marked: MARKED_SHOW_CLASSES,
+          Russian: [
+            "Russian Blue",
+            "Russian Dove",
+            "Russian Buff",
+            "Russian Blue Agouti",
+            "Russian Dove Agouti",
+            "Russian Silver",
+            "Russian Topaz",
+          ],
+          Shaded: [
+            "Argente Crème",
+            "Himalayan",
+            "Siamese",
+            "Blue Point Siamese",
+            "Burmese",
+            "Wheaten Burmese",
+            "Golden Himalayan",
+            "Golden Siamese",
+            "Marten",
+            "Silver Agouti",
+            "Cream Agouti",
+          ],
+          AOV: [
+            "Cream",
+            "Topaz",
+            "Silver Fawn",
+            "Silver",
+            "Agouti",
+            "Cinnamon",
+            "British Blue Agouti",
+            "Lilac Agouti",
+            "Pearl",
+            "Cinnamon Pearl",
+            "Platinum Agouti",
+          ],
+          Rex: ["Self", "Marked", "Russian", "Shaded", "AOV"],
+          Dumbo: ["Self", "Marked", "Russian", "Shaded", "AOV", "Rex"],
+          "Guide Standard": [
+            "Blue Point Himalayan",
+            "Russian Burmese",
+            "Russian Silver Agouti",
+            "Sable Burmese",
+            "Spotted Down Under",
+            "Silken",
+          ],
+        };
+
+        return data[section] || [];
+      }
+
+      addSelfCheckbox.addEventListener("change", () => {
+        if (!selfAllowed()) return;
+
+        const checked = addSelfCheckbox.checked;
+
+        selfContainer.classList.toggle("hidden", !checked);
+        addSelfBtn.classList.toggle("hidden", !checked);
+
+        if (checked) {
+          if (selfContainer.children.length === 0) addSelfExhibit();
+        } else {
+          selfContainer.innerHTML = "";
+          addSelfBtn.disabled = false;
+          selfLimitMsg.style.display = "none";
+        }
+
+        updateTotalCost();
+      });
+
+      addSelfBtn.addEventListener("click", () => {
+        addSelfExhibit();
+        updateTotalCost();
+      });
+
+      function addSelfExhibit() {
+        if (selfContainer.children.length >= MAX_SELF) {
+          addSelfBtn.disabled = true;
+          selfLimitMsg.style.display = "block";
+          return;
+        }
+
+        const div = document.createElement("div");
+        div.className = "subsection";
+        const index = selfContainer.children.length;
+
+        const dOk = dualAllowed();
+
+        div.innerHTML = `
+          <div class="subsection-header">
+            <span class="self-title">Self Exhibit ${index + 1} (click to toggle)</span>
+            <a href="#" class="delete-self subsection-delete-link">Click to Delete Self Exhibit</a>
+          </div>
+
+          <div class="subsection-content">
+            <label>
+              Rat Name:
+              <input type="text" name="selfRatName${index}">
+            </label>
+
+            <div class="flex-row">
+              <label>
+                Age:
+                <input type="radio" name="selfAge${index}" value="Adult"> Adult
+                <input type="radio" name="selfAge${index}" value="Kitten"> Kitten
+              </label>
+
+              <label>
+                Sex:
+                <input type="radio" name="selfSex${index}" value="Doe"> Doe
+                <input type="radio" name="selfSex${index}" value="Buck"> Buck
+              </label>
+            </div>
+
+            <label>
+              Class:
+              <select name="selfClass${index}" class="selfClassSelect">
+                <option value="">Select Class</option>
+                ${SELF_SHOW_CLASSES.map((c) => `<option value="${c}">${c}</option>`).join("")}
+              </select>
+            </label>
+
+            <label><input type="checkbox" name="selfNovice${index}"> Novice</label>
+
+            <label class="dualEntryRow">
+              <input type="checkbox" name="selfDualEntry${index}">
+              Dual Entry (Pets)
+            </label>
+          </div>
+        `;
+
+        selfContainer.appendChild(div);
+
+        div.querySelector(".delete-self").addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          div.remove();
+          reindexSelf();
+          updateTotalCost();
+        });
+
+        const header = div.querySelector(".subsection-header");
+        const content = div.querySelector(".subsection-content");
+        content.style.display = "block";
+        header.addEventListener("click", () => {
+          content.style.display = content.style.display === "none" ? "block" : "none";
+        });
+
+        const dualRow = div.querySelector(".dualEntryRow");
+        if (dualRow) dualRow.style.display = dOk ? "" : "none";
+        const dualCb = div.querySelector(`input[name="selfDualEntry${index}"]`);
+        if (!dOk && dualCb) dualCb.checked = false;
+
+        div.querySelectorAll("input, select").forEach((el) => {
+          el.addEventListener("change", () => updateTotalCost());
+        });
+
+        if (selfContainer.children.length >= MAX_SELF) {
+          addSelfBtn.disabled = true;
+          selfLimitMsg.style.display = "block";
+        } else {
+          addSelfBtn.disabled = false;
+          selfLimitMsg.style.display = "none";
+        }
+      }
+
+      addMarkedCheckbox.addEventListener("change", () => {
+        if (!markedAllowed()) return;
+
+        const checked = addMarkedCheckbox.checked;
+        markedContainer.classList.toggle("hidden", !checked);
+        addMarkedBtn.classList.toggle("hidden", !checked);
+
+        if (checked) {
+          if (markedContainer.children.length === 0) addMarkedExhibit();
+        } else {
+          markedContainer.innerHTML = "";
+          addMarkedBtn.disabled = false;
+          markedLimitMsg.style.display = "none";
+        }
+
+        updateTotalCost();
+      });
+
+      addMarkedBtn.addEventListener("click", () => {
+        addMarkedExhibit();
+        updateTotalCost();
+      });
+
+      function addMarkedExhibit() {
+        if (markedContainer.children.length >= MAX_MARKED) {
+          addMarkedBtn.disabled = true;
+          markedLimitMsg.style.display = "block";
+          return;
+        }
+
+        const div = document.createElement("div");
+        div.className = "subsection";
+        const index = markedContainer.children.length;
+
+        const dOk = dualAllowed();
+
+        div.innerHTML = `
+          <div class="subsection-header">
+            <span class="marked-title">Marked Exhibit ${index + 1} (click to toggle)</span>
+            <a href="#" class="delete-marked subsection-delete-link">Click to Delete Marked Exhibit</a>
+          </div>
+
+          <div class="subsection-content">
+            <label>
+              Rat Name:
+              <input type="text" name="markedRatName${index}">
+            </label>
+
+            <div class="flex-row">
+              <label>
+                Age:
+                <input type="radio" name="markedAge${index}" value="Adult"> Adult
+                <input type="radio" name="markedAge${index}" value="Kitten"> Kitten
+              </label>
+
+              <label>
+                Sex:
+                <input type="radio" name="markedSex${index}" value="Doe"> Doe
+                <input type="radio" name="markedSex${index}" value="Buck"> Buck
+              </label>
+            </div>
+
+            <label>
+              Class:
+              <select name="markedClass${index}">
+                <option value="">Select Class</option>
+                ${MARKED_SHOW_CLASSES.map((c) => `<option value="${c}">${c}</option>`).join("")}
+              </select>
+            </label>
+
+            <label><input type="checkbox" name="markedNovice${index}"> Novice</label>
+
+            <label class="dualEntryRow">
+              <input type="checkbox" name="markedDualEntry${index}">
+              Dual Entry (Pets)
+            </label>
+          </div>
+        `;
+
+        markedContainer.appendChild(div);
+
+        div.querySelector(".delete-marked").addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          div.remove();
+          reindexMarked();
+          updateTotalCost();
+        });
+
+        const header = div.querySelector(".subsection-header");
+        const content = div.querySelector(".subsection-content");
+        content.style.display = "block";
+        header.addEventListener("click", () => {
+          content.style.display = content.style.display === "none" ? "block" : "none";
+        });
+
+        const dualRow = div.querySelector(".dualEntryRow");
+        if (dualRow) dualRow.style.display = dOk ? "" : "none";
+        const dualCb = div.querySelector(`input[name="markedDualEntry${index}"]`);
+        if (!dOk && dualCb) dualCb.checked = false;
+
+        div.querySelectorAll("input, select").forEach((el) => {
+          el.addEventListener("change", () => updateTotalCost());
+        });
+
+        if (markedContainer.children.length >= MAX_MARKED) {
+          addMarkedBtn.disabled = true;
+          markedLimitMsg.style.display = "block";
+        } else {
+          addMarkedBtn.disabled = false;
+          markedLimitMsg.style.display = "none";
+        }
+      }
+
+      addPetsCheckbox.addEventListener("change", () => {
+        const checked = addPetsCheckbox.checked;
+
+        petsContainer.classList.toggle("hidden", !checked);
+        addPetBtn.classList.toggle("hidden", !checked);
+
+        if (checked) {
+          if (petsContainer.children.length === 0) addPet();
+        } else {
+          petsContainer.innerHTML = "";
+          addPetBtn.disabled = false;
+          petLimitMsg.style.display = "none";
+        }
+
+        updateTotalCost();
+      });
+
+      addPetBtn.addEventListener("click", () => {
+        addPet();
+        updateTotalCost();
+      });
+
+      function addPet() {
+        if (petsContainer.children.length >= MAX_PETS) {
+          addPetBtn.disabled = true;
+          petLimitMsg.style.display = "block";
+          return;
+        }
+
+        const div = document.createElement("div");
+        div.className = "subsection";
+        const index = petsContainer.children.length;
+
+        div.innerHTML = `
+          <div class="subsection-header">
+            <span class="pet-title">Pet ${index + 1} (click to toggle)</span>
+            <a href="#" class="delete-pet subsection-delete-link">Click to Delete Pet</a>
+          </div>
+
+          <div class="subsection-content">
+            <label>
+              Sex:
+              <input type="radio" name="petSex${index}" value="Buck"> Buck
+              <input type="radio" name="petSex${index}" value="Doe"> Doe
+            </label>
+          </div>
+        `;
+
+        petsContainer.appendChild(div);
+
+        div.querySelector(".delete-pet").addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          div.remove();
+          reindexPets();
+          updateTotalCost();
+        });
+
+        const header = div.querySelector(".subsection-header");
+        const content = div.querySelector(".subsection-content");
+        content.style.display = "block";
+        header.addEventListener("click", () => {
+          content.style.display = content.style.display === "none" ? "block" : "none";
+        });
+
+        div.querySelectorAll("input").forEach((el) => el.addEventListener("change", () => updateTotalCost()));
+
+        if (petsContainer.children.length >= MAX_PETS) {
+          addPetBtn.disabled = true;
+          petLimitMsg.style.display = "block";
+        } else {
+          addPetBtn.disabled = false;
+          petLimitMsg.style.display = "none";
+        }
+      }
+
+      function pluralize(n, singular, plural = singular + "s") {
+        return n === 1 ? singular : plural;
+      }
+
+      function buildVarietySummaryReadableGrouped() {
+        const counts = new Map();
+        const dOk = dualAllowed();
+        const sOk = selfAllowed();
+        const mOk = markedAllowed();
+
+        for (let i = 0; i < varietiesContainer.children.length; i++) {
+          const age = document.querySelector(`input[name="age${i}"]:checked`)?.value || "";
+          const sex = document.querySelector(`input[name="sex${i}"]:checked`)?.value || "";
+          const cls = document.querySelector(`select[name="class${i}"]`)?.value || "";
+          const novice = document.querySelector(`input[name="novice${i}"]`)?.checked || false;
+
+          const self = sOk ? document.querySelector(`input[name="selfEntry${i}"]`)?.checked || false : false;
+          const pets = dOk ? document.querySelector(`input[name="dualEntry${i}"]`)?.checked || false : false;
+          const marked = mOk ? document.querySelector(`input[name="markedEntry${i}"]`)?.checked || false : false;
+
+          if (!age || !sex || !cls) continue;
+
+          const key = JSON.stringify({ age, sex, cls, novice, self, marked, pets });
+          counts.set(key, (counts.get(key) || 0) + 1);
+        }
+
+        return Array.from(counts.entries())
+          .map(([key, count]) => {
+            const { age, sex, cls, novice, self, marked, pets } = JSON.parse(key);
+            const parts = [String(count), age, sex, cls];
+            if (self) parts.push("Self");
+            if (marked) parts.push("Marked");
+            if (novice) parts.push("Novice");
+            if (pets) parts.push("Pets");
+            return parts.join(" ");
+          })
+          .sort((a, b) => a.localeCompare(b))
+          .join("\n");
+      }
+
+      function buildSelfSummaryReadableGrouped() {
+        const counts = new Map();
+        const dOk = dualAllowed();
+
+        for (let i = 0; i < selfContainer.children.length; i++) {
+          const age = document.querySelector(`input[name="selfAge${i}"]:checked`)?.value || "";
+          const sex = document.querySelector(`input[name="selfSex${i}"]:checked`)?.value || "";
+          const cls = document.querySelector(`select[name="selfClass${i}"]`)?.value || "";
+          const novice = document.querySelector(`input[name="selfNovice${i}"]`)?.checked || false;
+          const pets = dOk ? document.querySelector(`input[name="selfDualEntry${i}"]`)?.checked || false : false;
+
+          if (!age || !sex || !cls) continue;
+
+          const key = JSON.stringify({ age, sex, cls, novice, pets });
+          counts.set(key, (counts.get(key) || 0) + 1);
+        }
+
+        return Array.from(counts.entries())
+          .map(([key, count]) => {
+            const { age, sex, cls, novice, pets } = JSON.parse(key);
+            const parts = [String(count), age, sex, cls, "Self"];
+            if (novice) parts.push("Novice");
+            if (pets) parts.push("Pets");
+            return parts.join(" ");
+          })
+          .sort((a, b) => a.localeCompare(b))
+          .join("\n");
+      }
+
+      function buildMarkedSummaryReadableGrouped() {
+        const counts = new Map();
+        const dOk = dualAllowed();
+
+        for (let i = 0; i < markedContainer.children.length; i++) {
+          const age = document.querySelector(`input[name="markedAge${i}"]:checked`)?.value || "";
+          const sex = document.querySelector(`input[name="markedSex${i}"]:checked`)?.value || "";
+          const cls = document.querySelector(`select[name="markedClass${i}"]`)?.value || "";
+          const novice = document.querySelector(`input[name="markedNovice${i}"]`)?.checked || false;
+          const pets = dOk ? document.querySelector(`input[name="markedDualEntry${i}"]`)?.checked || false : false;
+
+          if (!age || !sex || !cls) continue;
+
+          const key = JSON.stringify({ age, sex, cls, novice, pets });
+          counts.set(key, (counts.get(key) || 0) + 1);
+        }
+
+        return Array.from(counts.entries())
+          .map(([key, count]) => {
+            const { age, sex, cls, novice, pets } = JSON.parse(key);
+            const parts = [String(count), age, sex, cls, "Marked"];
+            if (novice) parts.push("Novice");
+            if (pets) parts.push("Pets");
+            return parts.join(" ");
+          })
+          .sort((a, b) => a.localeCompare(b))
+          .join("\n");
+      }
+
+      function buildPetsSummaryOwnedByStud() {
+        if (petsContainer.children.length === 0) return "";
+
+        const studFilled = (studNameField.value || "").trim().length > 0;
+        const isJunior = juniorCheckbox?.checked || false;
+
+        let ownedLabel = "Adult Owned";
+        if (isJunior) ownedLabel = "Junior Owned";
+        else if (studFilled) ownedLabel = "Breeder Owned";
+
+        let buckCount = 0;
+        let doeCount = 0;
+
+        for (let i = 0; i < petsContainer.children.length; i++) {
+          const sex = document.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
+          if (sex === "Buck") buckCount += 1;
+          if (sex === "Doe") doeCount += 1;
+        }
+
+        const lines = [];
+        if (buckCount > 0) lines.push(`${buckCount} ${ownedLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
+        if (doeCount > 0) lines.push(`${doeCount} ${ownedLabel} ${pluralize(doeCount, "Doe", "Does")}`);
+        return lines.join("\n");
+      }
+
+      function updateTotalCost() {
+        let total = 0;
+
+        const varietyCount = varietiesContainer.children.length;
+        const petCount = petsContainer.children.length;
+        const selfCount = selfContainer.children.length;
+        const markedCount = markedContainer.children.length;
+
+        if (hireTanksCheckbox.checked) {
+          total += Math.min(parseInt(tankNumber.value, 10) || 0, getMaxTanks()) * getTankPrice();
+        }
+
+        const entryPrice = getEntryPrice();
+
+        total += varietyCount * entryPrice;
+        total += selfCount * entryPrice;
+        total += markedCount * entryPrice;
+        total += petCount * entryPrice;
+
+        if (dualAllowed()) {
+          document.querySelectorAll('input[name^="dualEntry"]').forEach((cb) => {
+            if (cb.checked) total += entryPrice;
+          });
+
+          document.querySelectorAll('input[name^="selfDualEntry"]').forEach((cb) => {
+            if (cb.checked) total += entryPrice;
+          });
+
+          document.querySelectorAll('input[name^="markedDualEntry"]').forEach((cb) => {
+            if (cb.checked) total += entryPrice;
+          });
+        }
+
+        if (selfAllowed()) {
+          document.querySelectorAll('input[name^="selfEntry"]').forEach((cb) => {
+            if (cb.checked) total += entryPrice;
+          });
+        }
+
+        if (markedAllowed()) {
+          document.querySelectorAll('input[name^="markedEntry"]').forEach((cb) => {
+            if (cb.checked) total += entryPrice;
+          });
+        }
+
+        totalCostDisplay.innerText = total.toFixed(2);
+      }
+
+      document.getElementById("entryForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        hireTanksTextField.value = hireTanksCheckbox.checked ? "Yes" : "No";
+
+        if (!hireTanksCheckbox.checked) {
+          tankNumber.value = "";
+          tankCostField.value = "0.00";
+        } else {
+          tankCostField.value = (tankCostSpan.innerText || "0.00").trim();
+        }
+
+        totalCostField.value = (totalCostDisplay.innerText || "0.00").trim();
+
+        varietySummaryField.value = buildVarietySummaryReadableGrouped();
+        selfSummaryField.value = buildSelfSummaryReadableGrouped();
+        markedSummaryField.value = buildMarkedSummaryReadableGrouped();
+        petsSummaryField.value = buildPetsSummaryOwnedByStud();
+
+        emailjs
+          .sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
+          .then(() => {
+            alert("Entry submitted successfully!");
+          })
+          .catch((error) => {
+            alert("Submission failed: " + (error?.text || JSON.stringify(error)));
+            console.error(error);
+          });
+      });
+    </script>
+  </body>
 </html>
