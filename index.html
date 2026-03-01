@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <style>
-body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background: #f5f5f5; }
+    body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background: #f5f5f5; }
     .form-shell { max-width: 900px; margin: 0 auto; }
     .form-card { background: #ffffff; border-radius: 12px; padding: 32px 32px 28px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); box-sizing: border-box; }
     .form-header { text-align: center; margin-bottom: 24px; }
@@ -40,7 +40,7 @@ body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background
     .subsection-content { margin-top: 8px; }
     .subsection-delete-link { float: right; font-weight: normal; font-size: 0.9rem; }
 
-    /* THIS is what makes Age + Sex sit side-by-side */
+    /* This is what makes Age + Sex sit side-by-side */
     .flex-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
     .flex-row label { flex: 1; margin-top: 6px; }
 
@@ -83,6 +83,7 @@ body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background
         <input class="sr-only" type="text" name="tankCost" id="tankCostField" aria-hidden="true" />
         <input class="sr-only" type="text" name="totalCost" id="totalCostField" aria-hidden="true" />
 
+        <!-- Hidden admin-only show selection UI -->
         <div class="section hidden" id="showSelectionSection">
           <h2>Show selection</h2>
 
@@ -334,20 +335,62 @@ body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background
         return n === 1 ? singular : plural;
       }
 
-      async function loadShows() {
-        const res = await fetch("./shows.json", { cache: "no-store" });
-        if (!res.ok) throw new Error(`shows.json HTTP ${res.status}`);
-        const data = await res.json();
-        if (!Array.isArray(data)) throw new Error("shows.json must be an array");
-        SHOWS = data;
+      async function loadServerConfig() {
+        const res = await fetch(`./data/config.json?v=${Date.now()}`, { cache: "no-store" });
+        if (!res.ok) throw new Error(`config.json HTTP ${res.status}`);
+        return await res.json();
+      }
 
-        showSelect.innerHTML = '<option value="">Select a show</option>';
-        SHOWS.forEach((s, idx) => {
-          const opt = document.createElement("option");
-          opt.value = String(idx);
-          opt.textContent = s.name;
-          showSelect.appendChild(opt);
-        });
+      function applyConfigToActiveShow(cfg) {
+        const active = cfg && cfg.active ? cfg.active : null;
+        const types = Array.isArray(cfg && cfg.showTypes) ? cfg.showTypes : [];
+
+        if (!active) throw new Error("config.json missing 'active'");
+        if (!active.entryEmail) throw new Error("config.json missing active.entryEmail");
+        if (!active.showTypeId) throw new Error("config.json missing active.showTypeId");
+
+        const type = types.find((t) => t && t.id === active.showTypeId);
+        if (!type) throw new Error(`Show type not found: ${active.showTypeId}`);
+
+        ACTIVE_SHOW = {
+          id: active.showTypeId,
+          name: `${active.showName || "NFRS Show"} (${active.showDate || ""})`,
+          emails: [active.entryEmail],
+          defaultEmail: active.entryEmail,
+          entryPrice: type.entryPrice,
+          tankPrice: type.tankPrice,
+          maxTanks: type.maxTanks,
+          allowDualEntry: type.allowDualEntry,
+          allowSelfShow: type.allowSelfShow,
+          allowMarkedShow: type.allowMarkedShow,
+        };
+
+        // Prevent hidden required fields blocking submission
+        if (showSelect) {
+          showSelect.required = false;
+          showSelect.disabled = true;
+          showSelect.innerHTML = "";
+          showSelect.appendChild(new Option(ACTIVE_SHOW.name, ACTIVE_SHOW.id));
+          showSelect.value = ACTIVE_SHOW.id;
+        }
+
+        if (showEmailSelect) {
+          showEmailSelect.required = false;
+          showEmailSelect.disabled = true;
+          showEmailSelect.innerHTML = "";
+          showEmailSelect.appendChild(new Option(active.entryEmail, active.entryEmail));
+          showEmailSelect.value = active.entryEmail;
+        }
+
+        showIdField.value = ACTIVE_SHOW.id || "";
+        showNameField.value = ACTIVE_SHOW.name || "";
+        selectedShowEmailField.value = active.entryEmail || "";
+        entryPriceHidden.value = String(type.entryPrice ?? "");
+        tankPriceHidden.value = String(type.tankPrice ?? "");
+
+        if (tankNumber) tankNumber.max = String(type.maxTanks ?? 2);
+
+        applyShowConfig();
       }
 
       function getEntryPrice() {
@@ -473,28 +516,24 @@ body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background
 
         applyShowRulesToExistingExhibits();
 
-        showMetaText.textContent = `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}).`;
+        showMetaText.textContent =
+          `Entries £${getEntryPrice()} each. Tanks £${getTankPrice()} each (max ${getMaxTanks()}).`;
 
         updateTankCost();
         updateTotalCost();
       }
 
-      showSelect.addEventListener("change", () => {
-        const idx = parseInt(showSelect.value, 10);
-        ACTIVE_SHOW = Number.isNaN(idx) ? null : SHOWS[idx];
-        applyShowConfig();
-      });
-
       showEmailSelect.addEventListener("change", () => {
         selectedShowEmailField.value = showEmailSelect.value || "";
       });
 
-      loadShows().catch((err) => {
-        console.error(err);
-        showSelect.innerHTML = '<option value="">Shows unavailable</option>';
-        showEmailSelect.innerHTML = '<option value="">Shows unavailable</option>';
-        showMetaText.textContent = "Could not load shows.json.";
-      });
+      loadServerConfig()
+        .then(applyConfigToActiveShow)
+        .catch((err) => {
+          console.error(err);
+          showMetaText.textContent = "Could not load data/config.json.";
+          alert("Configuration error. Please contact the webmaster.");
+        });
 
       hireTanksCheckbox.addEventListener("change", () => {
         const checked = hireTanksCheckbox.checked;
@@ -832,8 +871,8 @@ body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background
 
         return data[section] || [];
       }
-	  
-	  addSelfCheckbox.addEventListener("change", () => {
+
+      addSelfCheckbox.addEventListener("change", () => {
         if (!selfAllowed()) return;
 
         const checked = addSelfCheckbox.checked;
@@ -1331,4 +1370,3 @@ body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background
     </script>
   </body>
 </html>
-
