@@ -227,6 +227,30 @@
           width: 100%;
         }
 
+        .flex-row {
+        display: flex;
+       flex-wrap: wrap;
+       gap: 12px;
+      align-items: center;
+     }
+
+      .flex-row label {
+       flex: 1;
+      margin-top: 6px;
+   }
+
+    /* Mobile: stack them */
+     @media (max-width: 600px) {
+       .flex-row {
+     flex-direction: column;
+     align-items: stretch;
+  }
+
+  .flex-row label {
+    width: 100%;
+  }
+}
+        
         .subsection-delete-link {
           float: none;
           display: inline-block;
