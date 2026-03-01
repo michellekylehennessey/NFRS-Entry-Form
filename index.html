@@ -157,18 +157,6 @@
         font-size: 0.9rem;
       }
 
-      .flex-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: center;
-      }
-
-      .flex-row label {
-        flex: 1;
-        margin-top: 6px;
-      }
-
       #totalCost {
         font-weight: bold;
         font-size: 18px;
@@ -255,8 +243,9 @@
           <img src="assets/nfrs-logo.png" alt="NFRS logo" />
           <h1 class="form-title">NFRS Show Entry Form</h1>
           <p class="form-subtitle">
-            The Show Secretary will send you confirmation of your entries via email when the entries have been entered on to the show program.
-            Entries close at midnight on the Wednesday prior to the show.
+            The Show Secretary will send you confirmation of your entries via email when the entries have
+            been entered on to the show program. Entries close at midnight on the Wednesday prior to the
+            show.
           </p>
         </div>
 
@@ -275,7 +264,7 @@
           <label>
             Show ID*:
             <select id="showSelect" required>
-              <option value="">Loading shows...</option>
+              <option value="">Loading shows.</option>
             </select>
           </label>
 
@@ -490,66 +479,6 @@
       let SHOWS = [];
       let ACTIVE_SHOW = null;
 
-      /*************** Hostinger server config (data/config.json) ***************/
-      async function loadServerConfig() {
-        const res = await fetch(`./data/config.json?v=${Date.now()}`, { cache: "no-store" });
-        if (!res.ok) throw new Error(`config.json HTTP ${res.status}`);
-        return await res.json();
-      }
-
-      function applyConfigToActiveShow(cfg) {
-        const active = cfg && cfg.active ? cfg.active : null;
-        const showTypes = Array.isArray(cfg && cfg.showTypes) ? cfg.showTypes : [];
-
-        if (!active) throw new Error("config.json missing 'active'");
-        if (!active.entryEmail) throw new Error("config.json missing active.entryEmail");
-        if (!active.showTypeId) throw new Error("config.json missing active.showTypeId");
-
-        const type = showTypes.find((t) => t && t.id === active.showTypeId);
-        if (!type) throw new Error(`Show type not found: ${active.showTypeId}`);
-
-        // Build ACTIVE_SHOW in the shape the existing form code expects
-        ACTIVE_SHOW = {
-          id: active.showTypeId,
-          name: `${active.showName || "NFRS Show"} (${active.showDate || ""})`,
-          emails: [active.entryEmail],
-          defaultEmail: active.entryEmail,
-
-          entryPrice: type.entryPrice,
-          tankPrice: type.tankPrice,
-          maxTanks: type.maxTanks,
-          allowDualEntry: type.allowDualEntry,
-          allowSelfShow: type.allowSelfShow,
-          allowMarkedShow: type.allowMarkedShow
-        };
-
-        // Disable the old admin selects so required validation can't block submission
-        if (showSelect) {
-          showSelect.required = false;
-          showSelect.disabled = true;
-          showSelect.innerHTML = "";
-          showSelect.appendChild(new Option(ACTIVE_SHOW.name, ACTIVE_SHOW.id));
-          showSelect.value = ACTIVE_SHOW.id;
-        }
-        if (showEmailSelect) {
-          showEmailSelect.required = false;
-          showEmailSelect.disabled = true;
-          showEmailSelect.innerHTML = "";
-          showEmailSelect.appendChild(new Option(active.entryEmail, active.entryEmail));
-          showEmailSelect.value = active.entryEmail;
-        }
-
-        // Fill hidden fields (EmailJS template params)
-        showIdField.value = ACTIVE_SHOW.id || "";
-        showNameField.value = ACTIVE_SHOW.name || "";
-        selectedShowEmailField.value = active.entryEmail || "";
-        entryPriceHidden.value = String(type.entryPrice ?? "");
-        tankPriceHidden.value = String(type.tankPrice ?? "");
-
-        // Apply toggle rules + pricing to the UI
-        applyShowConfig();
-      }
-
       const SELF_SHOW_CLASSES = [
         "Pink Eyed White",
         "Champagne",
@@ -580,24 +509,20 @@
         return n === 1 ? singular : plural;
       }
 
-      function loadShows() {
-        return fetch("./shows.json", { cache: "no-store" })
-          .then((r) => {
-            if (!r.ok) throw new Error("shows.json not found");
-            return r.json();
-          })
-          .then((data) => {
-            if (!Array.isArray(data)) throw new Error("shows.json must be an array");
-            SHOWS = data;
+      async function loadShows() {
+        const res = await fetch("./shows.json", { cache: "no-store" });
+        if (!res.ok) throw new Error(`shows.json HTTP ${res.status}`);
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error("shows.json must be an array");
+        SHOWS = data;
 
-            showSelect.innerHTML = '<option value="">Select a show</option>';
-            SHOWS.forEach((s, idx) => {
-              const opt = document.createElement("option");
-              opt.value = String(idx);
-              opt.textContent = s.name;
-              showSelect.appendChild(opt);
-            });
-          });
+        showSelect.innerHTML = '<option value="">Select a show</option>';
+        SHOWS.forEach((s, idx) => {
+          const opt = document.createElement("option");
+          opt.value = String(idx);
+          opt.textContent = s.name;
+          showSelect.appendChild(opt);
+        });
       }
 
       function getEntryPrice() {
@@ -636,8 +561,17 @@
         const emails = Array.isArray(ACTIVE_SHOW.emails) ? ACTIVE_SHOW.emails : [];
         const defaultEmail = ACTIVE_SHOW.defaultEmail || emails[0] || "";
 
+        if (emails.length === 0) {
+          showEmailSelect.innerHTML = '<option value="">No emails configured</option>';
+          selectedShowEmailField.value = "";
+          return;
+        }
+
         showEmailSelect.appendChild(new Option("Select recipient", ""));
-        emails.forEach((email) => showEmailSelect.appendChild(new Option(email, email)));
+
+        emails.forEach((email) => {
+          showEmailSelect.appendChild(new Option(email, email));
+        });
 
         showEmailSelect.value = defaultEmail;
         selectedShowEmailField.value = defaultEmail;
@@ -720,20 +654,22 @@
         updateTotalCost();
       }
 
-      // Hostinger mode: show selection is controlled by data/config.json (no exhibitor controls)
+      showSelect.addEventListener("change", () => {
+        const idx = parseInt(showSelect.value, 10);
+        ACTIVE_SHOW = Number.isNaN(idx) ? null : SHOWS[idx];
+        applyShowConfig();
+      });
 
       showEmailSelect.addEventListener("change", () => {
         selectedShowEmailField.value = showEmailSelect.value || "";
       });
 
-      // Hostinger mode: do not load shows.json
-      loadServerConfig()
-        .then(applyConfigToActiveShow)
-        .catch((err) => {
-          console.error(err);
-          if (showMetaText) showMetaText.textContent = "Could not load data/config.json.";
-          alert("Configuration error. Please contact the webmaster.");
-        });
+      loadShows().catch((err) => {
+        console.error(err);
+        showSelect.innerHTML = '<option value="">Shows unavailable</option>';
+        showEmailSelect.innerHTML = '<option value="">Shows unavailable</option>';
+        showMetaText.textContent = "Could not load shows.json.";
+      });
 
       hireTanksCheckbox.addEventListener("change", () => {
         const checked = hireTanksCheckbox.checked;
@@ -851,88 +787,143 @@
           return;
         }
 
-        const idx = varietiesContainer.children.length;
-
         const div = document.createElement("div");
         div.className = "subsection";
+        const index = varietiesContainer.children.length;
+
+        const dOk = dualAllowed();
+        const sOk = selfAllowed();
+        const mOk = markedAllowed();
 
         div.innerHTML = `
-          <div class="subsection-header exhibit-title">Exhibit ${idx + 1} (click to toggle)
-            <span class="subsection-delete-link"><a href="#" class="delete-link">Delete</a></span>
+          <div class="subsection-header">
+            <span class="exhibit-title">Exhibit ${index + 1} (click to toggle)</span>
+            <a href="#" class="delete-variety subsection-delete-link">Click to Delete Exhibit</a>
           </div>
+
           <div class="subsection-content">
-            <div class="two-col">
-              <label>Rat name:
-                <input type="text" name="varietyName${idx}" />
+            <label>
+              Rat Name:
+              <input type="text" name="ratName${index}">
+            </label>
+
+            <div class="flex-row">
+              <label>
+                Age:
+                <input type="radio" name="age${index}" value="Adult"> Adult
+                <input type="radio" name="age${index}" value="Kitten"> Kitten
               </label>
-              <label>Sex:
-                <select name="varietySex${idx}">
-                  <option value="">Select</option>
-                  <option value="Buck">Buck</option>
-                  <option value="Doe">Doe</option>
-                </select>
+
+              <label>
+                Sex:
+                <input type="radio" name="sex${index}" value="Doe"> Doe
+                <input type="radio" name="sex${index}" value="Buck"> Buck
               </label>
             </div>
 
-            <div class="two-col">
-              <label>Variety:
-                <input type="text" name="varietyVariety${idx}" />
-              </label>
-              <label>Owner:
-                <select name="varietyOwner${idx}">
-                  <option value="My">My</option>
-                  <option value="Stud">Stud</option>
-                </select>
-              </label>
-            </div>
+            <label>
+              Section:
+              <select name="section${index}" class="sectionSelect">
+                <option value="">Select Section</option>
+                <option value="Provisional Standard">Provisional Standard</option>
+                <option value="Self">Self</option>
+                <option value="Marked">Marked</option>
+                <option value="Russian">Russian</option>
+                <option value="Shaded">Shaded</option>
+                <option value="AOV">AOV</option>
+                <option value="Rex">Rex</option>
+                <option value="Dumbo">Dumbo</option>
+                <option value="Guide Standard">Guide Standard</option>
+              </select>
+            </label>
 
-            <div class="two-col">
-              <label>Section:
-                <select name="varietySection${idx}" class="sectionSelect">
-                  <option value="Varieties">Varieties</option>
-                  <option value="Self">Self</option>
-                  <option value="Marked">Marked</option>
-                </select>
-              </label>
+            <label>
+              Class:
+              <select name="class${index}" class="classSelect">
+                <option value="">Select Section first</option>
+              </select>
+            </label>
 
-              <label>Class:
-                <select name="varietyClass${idx}" class="classSelect">
-                  <option value="">Select</option>
-                  ${[...SELF_SHOW_CLASSES, ...MARKED_SHOW_CLASSES].map(c => `<option value="${c}">${c}</option>`).join("")}
-                </select>
-              </label>
-            </div>
+            <label><input type="checkbox" name="novice${index}"> Novice</label>
 
-            <div class="inline-options">
-              <label class="dualEntryRow"><input type="checkbox" name="dualEntry${idx}" /> Dual entry?</label>
-              <label class="selfRow"><input type="checkbox" name="selfEntry${idx}" class="selfEntryCheckbox" /> Self entry?</label>
-              <label class="markedRow"><input type="checkbox" name="markedEntry${idx}" class="markedEntryCheckbox" /> Marked entry?</label>
-            </div>
+            <label class="selfRow">
+              <input type="checkbox" name="selfEntry${index}" class="selfEntryCheckbox">
+              Self
+            </label>
+
+            <label class="markedRow">
+              <input type="checkbox" name="markedEntry${index}" class="markedEntryCheckbox">
+              Marked
+            </label>
+
+            <label class="dualEntryRow">
+              <input type="checkbox" name="dualEntry${index}">
+              Dual Entry (Pets)
+            </label>
           </div>
         `;
 
-        div.querySelector(".subsection-header").addEventListener("click", (e) => {
-          if (e.target.closest(".delete-link")) return;
-          div.querySelector(".subsection-content").classList.toggle("hidden");
-        });
+        varietiesContainer.appendChild(div);
 
-        div.querySelector(".delete-link").addEventListener("click", (e) => {
+        div.querySelector(".delete-variety").addEventListener("click", (e) => {
           e.preventDefault();
+          e.stopPropagation();
           div.remove();
           reindexVarieties();
-
-          addVarietyBtn.disabled = false;
-          if (varietiesContainer.children.length < MAX_EXHIBITS) varietyLimitMsg.style.display = "none";
-
           updateTotalCost();
+        });
+
+        const header = div.querySelector(".subsection-header");
+        const content = div.querySelector(".subsection-content");
+        content.style.display = "block";
+        header.addEventListener("click", () => {
+          content.style.display = content.style.display === "none" ? "block" : "none";
+        });
+
+        const selfRow = div.querySelector(".selfRow");
+        if (selfRow) selfRow.style.display = sOk ? "" : "none";
+        const selfCb = div.querySelector(`input[name="selfEntry${index}"]`);
+        if (!sOk && selfCb) selfCb.checked = false;
+
+        const markedRow = div.querySelector(".markedRow");
+        if (markedRow) markedRow.style.display = mOk ? "" : "none";
+        const markedCb = div.querySelector(`input[name="markedEntry${index}"]`);
+        if (!mOk && markedCb) markedCb.checked = false;
+
+        const dualRow = div.querySelector(".dualEntryRow");
+        if (dualRow) dualRow.style.display = dOk ? "" : "none";
+        const dualCb = div.querySelector(`input[name="dualEntry${index}"]`);
+        if (!dOk && dualCb) dualCb.checked = false;
+
+        div.querySelectorAll("input, select").forEach((el) => {
+          el.addEventListener("change", () => updateTotalCost());
         });
 
         const sectionSelect = div.querySelector(".sectionSelect");
         const classSelect = div.querySelector(".classSelect");
 
+        syncMarkedCheckboxForExhibit(div);
+        syncSelfCheckboxForExhibit(div);
+
         sectionSelect.addEventListener("change", () => {
+          const options = getClassOptions(sectionSelect.value);
+          classSelect.innerHTML = "";
+
+          const first = document.createElement("option");
+          first.value = "";
+          first.innerText = options.length ? "Select Class" : "No classes available";
+          classSelect.appendChild(first);
+
+          options.forEach((opt) => {
+            const o = document.createElement("option");
+            o.value = opt;
+            o.innerText = opt;
+            classSelect.appendChild(o);
+          });
+
           syncMarkedCheckboxForExhibit(div);
           syncSelfCheckboxForExhibit(div);
+
           updateTotalCost();
         });
 
@@ -941,19 +932,307 @@
           updateTotalCost();
         });
 
-        div.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
-          cb.addEventListener("change", updateTotalCost);
-        });
-
-        varietiesContainer.appendChild(div);
-        reindexVarieties();
-
-        syncMarkedCheckboxForExhibit(div);
-        syncSelfCheckboxForExhibit(div);
-
         if (varietiesContainer.children.length >= MAX_EXHIBITS) {
           addVarietyBtn.disabled = true;
           varietyLimitMsg.style.display = "block";
+        } else {
+          addVarietyBtn.disabled = false;
+          varietyLimitMsg.style.display = "none";
+        }
+      }
+
+      function getClassOptions(section) {
+        const data = {
+          "Provisional Standard": [
+            "Bareback",
+            "Chestnut",
+            "Cinnamon Chinchilla",
+            "Copper",
+            "Dwarf",
+            "Merle",
+            "Pink Eyed Ivory",
+            "Powder Blue",
+            "Tonkinese (Self type)",
+            "Tonkinese (Agouti type)",
+            "Variegated Downunder",
+          ],
+          Self: SELF_SHOW_CLASSES,
+          Marked: MARKED_SHOW_CLASSES,
+          Russian: [
+            "Russian Blue",
+            "Russian Dove",
+            "Russian Buff",
+            "Russian Blue Agouti",
+            "Russian Dove Agouti",
+            "Russian Silver",
+            "Russian Topaz",
+          ],
+          Shaded: [
+            "Argente Crème",
+            "Himalayan",
+            "Siamese",
+            "Blue Point Siamese",
+            "Burmese",
+            "Wheaten Burmese",
+            "Golden Himalayan",
+            "Golden Siamese",
+            "Marten",
+            "Silver Agouti",
+            "Cream Agouti",
+          ],
+          AOV: [
+            "Cream",
+            "Topaz",
+            "Silver Fawn",
+            "Silver",
+            "Agouti",
+            "Cinnamon",
+            "British Blue Agouti",
+            "Lilac Agouti",
+            "Pearl",
+            "Cinnamon Pearl",
+            "Platinum Agouti",
+          ],
+          Rex: ["Self", "Marked", "Russian", "Shaded", "AOV"],
+          Dumbo: ["Self", "Marked", "Russian", "Shaded", "AOV", "Rex"],
+          "Guide Standard": [
+            "Blue Point Himalayan",
+            "Russian Burmese",
+            "Russian Silver Agouti",
+            "Sable Burmese",
+            "Spotted Down Under",
+            "Silken",
+          ],
+        };
+
+        return data[section] || [];
+      }
+
+      addSelfCheckbox.addEventListener("change", () => {
+        if (!selfAllowed()) return;
+
+        const checked = addSelfCheckbox.checked;
+        selfContainer.classList.toggle("hidden", !checked);
+        addSelfBtn.classList.toggle("hidden", !checked);
+
+        if (checked) {
+          if (selfContainer.children.length === 0) addSelfExhibit();
+        } else {
+          selfContainer.innerHTML = "";
+          addSelfBtn.disabled = false;
+          selfLimitMsg.style.display = "none";
+        }
+
+        updateTotalCost();
+      });
+
+      addSelfBtn.addEventListener("click", () => {
+        addSelfExhibit();
+        updateTotalCost();
+      });
+
+      function addSelfExhibit() {
+        if (selfContainer.children.length >= MAX_SELF) {
+          addSelfBtn.disabled = true;
+          selfLimitMsg.style.display = "block";
+          return;
+        }
+
+        const div = document.createElement("div");
+        div.className = "subsection";
+        const index = selfContainer.children.length;
+
+        const dOk = dualAllowed();
+
+        div.innerHTML = `
+          <div class="subsection-header">
+            <span class="self-title">Self Exhibit ${index + 1} (click to toggle)</span>
+            <a href="#" class="delete-self subsection-delete-link">Click to Delete Self Exhibit</a>
+          </div>
+
+          <div class="subsection-content">
+            <label>
+              Rat Name:
+              <input type="text" name="selfRatName${index}">
+            </label>
+
+            <div class="flex-row">
+              <label>
+                Age:
+                <input type="radio" name="selfAge${index}" value="Adult"> Adult
+                <input type="radio" name="selfAge${index}" value="Kitten"> Kitten
+              </label>
+
+              <label>
+                Sex:
+                <input type="radio" name="selfSex${index}" value="Doe"> Doe
+                <input type="radio" name="selfSex${index}" value="Buck"> Buck
+              </label>
+            </div>
+
+            <label>
+              Class:
+              <select name="selfClass${index}">
+                <option value="">Select Class</option>
+                ${SELF_SHOW_CLASSES.map((c) => `<option value="${c}">${c}</option>`).join("")}
+              </select>
+            </label>
+
+            <label><input type="checkbox" name="selfNovice${index}"> Novice</label>
+
+            <label class="dualEntryRow">
+              <input type="checkbox" name="selfDualEntry${index}">
+              Dual Entry (Pets)
+            </label>
+          </div>
+        `;
+
+        selfContainer.appendChild(div);
+
+        div.querySelector(".delete-self").addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          div.remove();
+          reindexSelf();
+          updateTotalCost();
+        });
+
+        const header = div.querySelector(".subsection-header");
+        const content = div.querySelector(".subsection-content");
+        content.style.display = "block";
+        header.addEventListener("click", () => {
+          content.style.display = content.style.display === "none" ? "block" : "none";
+        });
+
+        const dualRow = div.querySelector(".dualEntryRow");
+        if (dualRow) dualRow.style.display = dOk ? "" : "none";
+        const dualCb = div.querySelector(`input[name="selfDualEntry${index}"]`);
+        if (!dOk && dualCb) dualCb.checked = false;
+
+        div.querySelectorAll("input, select").forEach((el) => {
+          el.addEventListener("change", () => updateTotalCost());
+        });
+
+        if (selfContainer.children.length >= MAX_SELF) {
+          addSelfBtn.disabled = true;
+          selfLimitMsg.style.display = "block";
+        } else {
+          addSelfBtn.disabled = false;
+          selfLimitMsg.style.display = "none";
+        }
+      }
+
+      addMarkedCheckbox.addEventListener("change", () => {
+        if (!markedAllowed()) return;
+
+        const checked = addMarkedCheckbox.checked;
+        markedContainer.classList.toggle("hidden", !checked);
+        addMarkedBtn.classList.toggle("hidden", !checked);
+
+        if (checked) {
+          if (markedContainer.children.length === 0) addMarkedExhibit();
+        } else {
+          markedContainer.innerHTML = "";
+          addMarkedBtn.disabled = false;
+          markedLimitMsg.style.display = "none";
+        }
+
+        updateTotalCost();
+      });
+
+      addMarkedBtn.addEventListener("click", () => {
+        addMarkedExhibit();
+        updateTotalCost();
+      });
+
+      function addMarkedExhibit() {
+        if (markedContainer.children.length >= MAX_MARKED) {
+          addMarkedBtn.disabled = true;
+          markedLimitMsg.style.display = "block";
+          return;
+        }
+
+        const div = document.createElement("div");
+        div.className = "subsection";
+        const index = markedContainer.children.length;
+
+        const dOk = dualAllowed();
+
+        div.innerHTML = `
+          <div class="subsection-header">
+            <span class="marked-title">Marked Exhibit ${index + 1} (click to toggle)</span>
+            <a href="#" class="delete-marked subsection-delete-link">Click to Delete Marked Exhibit</a>
+          </div>
+
+          <div class="subsection-content">
+            <label>
+              Rat Name:
+              <input type="text" name="markedRatName${index}">
+            </label>
+
+            <div class="flex-row">
+              <label>
+                Age:
+                <input type="radio" name="markedAge${index}" value="Adult"> Adult
+                <input type="radio" name="markedAge${index}" value="Kitten"> Kitten
+              </label>
+
+              <label>
+                Sex:
+                <input type="radio" name="markedSex${index}" value="Doe"> Doe
+                <input type="radio" name="markedSex${index}" value="Buck"> Buck
+              </label>
+            </div>
+
+            <label>
+              Class:
+              <select name="markedClass${index}">
+                <option value="">Select Class</option>
+                ${MARKED_SHOW_CLASSES.map((c) => `<option value="${c}">${c}</option>`).join("")}
+              </select>
+            </label>
+
+            <label><input type="checkbox" name="markedNovice${index}"> Novice</label>
+
+            <label class="dualEntryRow">
+              <input type="checkbox" name="markedDualEntry${index}">
+              Dual Entry (Pets)
+            </label>
+          </div>
+        `;
+
+        markedContainer.appendChild(div);
+
+        div.querySelector(".delete-marked").addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          div.remove();
+          reindexMarked();
+          updateTotalCost();
+        });
+
+        const header = div.querySelector(".subsection-header");
+        const content = div.querySelector(".subsection-content");
+        content.style.display = "block";
+        header.addEventListener("click", () => {
+          content.style.display = content.style.display === "none" ? "block" : "none";
+        });
+
+        const dualRow = div.querySelector(".dualEntryRow");
+        if (dualRow) dualRow.style.display = dOk ? "" : "none";
+        const dualCb = div.querySelector(`input[name="markedDualEntry${index}"]`);
+        if (!dOk && dualCb) dualCb.checked = false;
+
+        div.querySelectorAll("input, select").forEach((el) => {
+          el.addEventListener("change", () => updateTotalCost());
+        });
+
+        if (markedContainer.children.length >= MAX_MARKED) {
+          addMarkedBtn.disabled = true;
+          markedLimitMsg.style.display = "block";
+        } else {
+          addMarkedBtn.disabled = false;
+          markedLimitMsg.style.display = "none";
         }
       }
 
@@ -986,237 +1265,69 @@
           return;
         }
 
-        const idx = petsContainer.children.length;
-
         const div = document.createElement("div");
         div.className = "subsection";
+        const index = petsContainer.children.length;
 
         div.innerHTML = `
-          <div class="subsection-header pet-title">Pet ${idx + 1} (click to toggle)
-            <span class="subsection-delete-link"><a href="#" class="delete-link">Delete</a></span>
+          <div class="subsection-header">
+            <span class="pet-title">Pet ${index + 1} (click to toggle)</span>
+            <a href="#" class="delete-pet subsection-delete-link">Click to Delete Pet</a>
           </div>
+
           <div class="subsection-content">
-            <div class="two-col">
-              <label>Pet name:
-                <input type="text" name="petName${idx}" />
-              </label>
-              <label>Sex:
-                <select name="petSex${idx}">
-                  <option value="">Select</option>
-                  <option value="Buck">Buck</option>
-                  <option value="Doe">Doe</option>
-                </select>
+            <label>
+              Pet Name:
+              <input type="text" name="petName${index}">
+            </label>
+
+            <div class="flex-row">
+              <label>
+                Sex:
+                <input type="radio" name="petSex${index}" value="Doe"> Doe
+                <input type="radio" name="petSex${index}" value="Buck"> Buck
               </label>
             </div>
 
-            <div class="two-col">
-              <label>Owner:
-                <select name="petOwner${idx}">
-                  <option value="My">My</option>
-                  <option value="Stud">Stud</option>
-                </select>
-              </label>
-              <label>Notes:
-                <input type="text" name="petNotes${idx}" />
-              </label>
-            </div>
+            <label><input type="checkbox" name="petNovice${index}"> Novice</label>
+
+            <label>
+              Owner:
+              <select name="petOwner${index}">
+                <option value="My">My</option>
+                <option value="Stud">Stud</option>
+              </select>
+            </label>
           </div>
         `;
 
-        div.querySelector(".subsection-header").addEventListener("click", (e) => {
-          if (e.target.closest(".delete-link")) return;
-          div.querySelector(".subsection-content").classList.toggle("hidden");
-        });
+        petsContainer.appendChild(div);
 
-        div.querySelector(".delete-link").addEventListener("click", (e) => {
+        div.querySelector(".delete-pet").addEventListener("click", (e) => {
           e.preventDefault();
+          e.stopPropagation();
           div.remove();
           reindexPets();
-
-          addPetBtn.disabled = false;
-          if (petsContainer.children.length < MAX_PETS) petLimitMsg.style.display = "none";
-
           updateTotalCost();
         });
 
-        petsContainer.appendChild(div);
-        reindexPets();
+        const header = div.querySelector(".subsection-header");
+        const content = div.querySelector(".subsection-content");
+        content.style.display = "block";
+        header.addEventListener("click", () => {
+          content.style.display = content.style.display === "none" ? "block" : "none";
+        });
+
+        div.querySelectorAll("input, select").forEach((el) => {
+          el.addEventListener("change", () => updateTotalCost());
+        });
 
         if (petsContainer.children.length >= MAX_PETS) {
           addPetBtn.disabled = true;
           petLimitMsg.style.display = "block";
-        }
-      }
-
-      addSelfCheckbox.addEventListener("change", () => {
-        const checked = addSelfCheckbox.checked;
-
-        selfContainer.classList.toggle("hidden", !checked);
-        addSelfBtn.classList.toggle("hidden", !checked);
-
-        if (checked) {
-          if (selfContainer.children.length === 0) addSelf();
         } else {
-          selfContainer.innerHTML = "";
-          addSelfBtn.disabled = false;
-          selfLimitMsg.style.display = "none";
-        }
-
-        updateTotalCost();
-      });
-
-      addSelfBtn.addEventListener("click", () => {
-        addSelf();
-        updateTotalCost();
-      });
-
-      function addSelf() {
-        if (selfContainer.children.length >= MAX_SELF) {
-          addSelfBtn.disabled = true;
-          selfLimitMsg.style.display = "block";
-          return;
-        }
-
-        const idx = selfContainer.children.length;
-
-        const div = document.createElement("div");
-        div.className = "subsection";
-
-        div.innerHTML = `
-          <div class="subsection-header self-title">Self Exhibit ${idx + 1} (click to toggle)
-            <span class="subsection-delete-link"><a href="#" class="delete-link">Delete</a></span>
-          </div>
-          <div class="subsection-content">
-            <div class="two-col">
-              <label>Rat name:
-                <input type="text" name="selfName${idx}" />
-              </label>
-              <label>Class:
-                <select name="selfClass${idx}">
-                  <option value="">Select</option>
-                  ${SELF_SHOW_CLASSES.map(c => `<option value="${c}">${c}</option>`).join("")}
-                </select>
-              </label>
-            </div>
-
-            <div class="inline-options">
-              <label class="dualEntryRow"><input type="checkbox" name="selfDualEntry${idx}" /> Dual entry?</label>
-            </div>
-          </div>
-        `;
-
-        div.querySelector(".subsection-header").addEventListener("click", (e) => {
-          if (e.target.closest(".delete-link")) return;
-          div.querySelector(".subsection-content").classList.toggle("hidden");
-        });
-
-        div.querySelector(".delete-link").addEventListener("click", (e) => {
-          e.preventDefault();
-          div.remove();
-          reindexSelf();
-
-          addSelfBtn.disabled = false;
-          if (selfContainer.children.length < MAX_SELF) selfLimitMsg.style.display = "none";
-
-          updateTotalCost();
-        });
-
-        div.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
-          cb.addEventListener("change", updateTotalCost);
-        });
-
-        selfContainer.appendChild(div);
-        reindexSelf();
-
-        if (selfContainer.children.length >= MAX_SELF) {
-          addSelfBtn.disabled = true;
-          selfLimitMsg.style.display = "block";
-        }
-      }
-
-      addMarkedCheckbox.addEventListener("change", () => {
-        const checked = addMarkedCheckbox.checked;
-
-        markedContainer.classList.toggle("hidden", !checked);
-        addMarkedBtn.classList.toggle("hidden", !checked);
-
-        if (checked) {
-          if (markedContainer.children.length === 0) addMarked();
-        } else {
-          markedContainer.innerHTML = "";
-          addMarkedBtn.disabled = false;
-          markedLimitMsg.style.display = "none";
-        }
-
-        updateTotalCost();
-      });
-
-      addMarkedBtn.addEventListener("click", () => {
-        addMarked();
-        updateTotalCost();
-      });
-
-      function addMarked() {
-        if (markedContainer.children.length >= MAX_MARKED) {
-          addMarkedBtn.disabled = true;
-          markedLimitMsg.style.display = "block";
-          return;
-        }
-
-        const idx = markedContainer.children.length;
-
-        const div = document.createElement("div");
-        div.className = "subsection";
-
-        div.innerHTML = `
-          <div class="subsection-header marked-title">Marked Exhibit ${idx + 1} (click to toggle)
-            <span class="subsection-delete-link"><a href="#" class="delete-link">Delete</a></span>
-          </div>
-          <div class="subsection-content">
-            <div class="two-col">
-              <label>Rat name:
-                <input type="text" name="markedName${idx}" />
-              </label>
-              <label>Class:
-                <select name="markedClass${idx}">
-                  <option value="">Select</option>
-                  ${MARKED_SHOW_CLASSES.map(c => `<option value="${c}">${c}</option>`).join("")}
-                </select>
-              </label>
-            </div>
-
-            <div class="inline-options">
-              <label class="dualEntryRow"><input type="checkbox" name="markedDualEntry${idx}" /> Dual entry?</label>
-            </div>
-          </div>
-        `;
-
-        div.querySelector(".subsection-header").addEventListener("click", (e) => {
-          if (e.target.closest(".delete-link")) return;
-          div.querySelector(".subsection-content").classList.toggle("hidden");
-        });
-
-        div.querySelector(".delete-link").addEventListener("click", (e) => {
-          e.preventDefault();
-          div.remove();
-          reindexMarked();
-
-          addMarkedBtn.disabled = false;
-          if (markedContainer.children.length < MAX_MARKED) markedLimitMsg.style.display = "none";
-
-          updateTotalCost();
-        });
-
-        div.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
-          cb.addEventListener("change", updateTotalCost);
-        });
-
-        markedContainer.appendChild(div);
-        reindexMarked();
-
-        if (markedContainer.children.length >= MAX_MARKED) {
-          addMarkedBtn.disabled = true;
-          markedLimitMsg.style.display = "block";
+          addPetBtn.disabled = false;
+          petLimitMsg.style.display = "none";
         }
       }
 
@@ -1225,30 +1336,21 @@
         const exhibits = Array.from(varietiesContainer.children);
 
         exhibits.forEach((div, i) => {
-          const name = div.querySelector(`input[name="varietyName${i}"]`)?.value?.trim() || "";
-          const sex = div.querySelector(`select[name="varietySex${i}"]`)?.value || "";
-          const variety = div.querySelector(`input[name="varietyVariety${i}"]`)?.value?.trim() || "";
-          const owner = div.querySelector(`select[name="varietyOwner${i}"]`)?.value || "";
-          const section = div.querySelector(`select[name="varietySection${i}"]`)?.value || "";
-          const cls = div.querySelector(`select[name="varietyClass${i}"]`)?.value || "";
+          const name = div.querySelector(`input[name="ratName${i}"]`)?.value?.trim() || "";
+          const age = div.querySelector(`input[name="age${i}"]:checked`)?.value || "";
+          const sex = div.querySelector(`input[name="sex${i}"]:checked`)?.value || "";
+          const section = div.querySelector(`select[name="section${i}"]`)?.value || "";
+          const cls = div.querySelector(`select[name="class${i}"]`)?.value || "";
+          const novice = div.querySelector(`input[name="novice${i}"]`)?.checked ? "Yes" : "No";
 
-          const dual = div.querySelector(`input[name="dualEntry${i}"]`)?.checked ? "Yes" : "No";
           const self = div.querySelector(`input[name="selfEntry${i}"]`)?.checked ? "Yes" : "No";
           const marked = div.querySelector(`input[name="markedEntry${i}"]`)?.checked ? "Yes" : "No";
+          const dual = div.querySelector(`input[name="dualEntry${i}"]`)?.checked ? "Yes" : "No";
 
-          const label = `Exhibit ${i + 1}`;
           lines.push(
-            [
-              `${label}: ${name || "(no name)"}`,
-              `Sex: ${sex || "-"}`,
-              `Variety: ${variety || "-"}`,
-              `Owner: ${owner || "-"}`,
-              `Section: ${section || "-"}`,
-              `Class: ${cls || "-"}`,
-              `Dual: ${dual}`,
-              `Self: ${self}`,
-              `Marked: ${marked}`,
-            ].join(" | ")
+            `Exhibit ${i + 1}: ${name || "(no name)"} | Age: ${age || "-"} | Sex: ${sex || "-"} | Section: ${
+              section || "-"
+            } | Class: ${cls || "-"} | Novice: ${novice} | Self: ${self} | Marked: ${marked} | Dual: ${dual}`
           );
         });
 
@@ -1260,11 +1362,18 @@
         const exhibits = Array.from(selfContainer.children);
 
         exhibits.forEach((div, i) => {
-          const name = div.querySelector(`input[name="selfName${i}"]`)?.value?.trim() || "";
+          const name = div.querySelector(`input[name="selfRatName${i}"]`)?.value?.trim() || "";
+          const age = div.querySelector(`input[name="selfAge${i}"]:checked`)?.value || "";
+          const sex = div.querySelector(`input[name="selfSex${i}"]:checked`)?.value || "";
           const cls = div.querySelector(`select[name="selfClass${i}"]`)?.value || "";
+          const novice = div.querySelector(`input[name="selfNovice${i}"]`)?.checked ? "Yes" : "No";
           const dual = div.querySelector(`input[name="selfDualEntry${i}"]`)?.checked ? "Yes" : "No";
 
-          lines.push(`Self Exhibit ${i + 1}: ${name || "(no name)"} | Class: ${cls || "-"} | Dual: ${dual}`);
+          lines.push(
+            `Self Exhibit ${i + 1}: ${name || "(no name)"} | Age: ${age || "-"} | Sex: ${sex || "-"} | Class: ${
+              cls || "-"
+            } | Novice: ${novice} | Dual: ${dual}`
+          );
         });
 
         return lines.join("\n");
@@ -1275,11 +1384,18 @@
         const exhibits = Array.from(markedContainer.children);
 
         exhibits.forEach((div, i) => {
-          const name = div.querySelector(`input[name="markedName${i}"]`)?.value?.trim() || "";
+          const name = div.querySelector(`input[name="markedRatName${i}"]`)?.value?.trim() || "";
+          const age = div.querySelector(`input[name="markedAge${i}"]:checked`)?.value || "";
+          const sex = div.querySelector(`input[name="markedSex${i}"]:checked`)?.value || "";
           const cls = div.querySelector(`select[name="markedClass${i}"]`)?.value || "";
+          const novice = div.querySelector(`input[name="markedNovice${i}"]`)?.checked ? "Yes" : "No";
           const dual = div.querySelector(`input[name="markedDualEntry${i}"]`)?.checked ? "Yes" : "No";
 
-          lines.push(`Marked Exhibit ${i + 1}: ${name || "(no name)"} | Class: ${cls || "-"} | Dual: ${dual}`);
+          lines.push(
+            `Marked Exhibit ${i + 1}: ${name || "(no name)"} | Age: ${age || "-"} | Sex: ${sex || "-"} | Class: ${
+              cls || "-"
+            } | Novice: ${novice} | Dual: ${dual}`
+          );
         });
 
         return lines.join("\n");
@@ -1300,14 +1416,13 @@
           const owner = div.querySelector(`select[name="petOwner${i}"]`)?.value || "My";
           if (owner !== "Stud") return;
 
-          const sex = div.querySelector(`select[name="petSex${i}"]`)?.value || "";
+          const sex = div.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
           if (sex === "Buck") buckCount += 1;
           if (sex === "Doe") doeCount += 1;
         });
 
         if (buckCount > 0) lines.push(`${buckCount} ${ownedLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
         if (doeCount > 0) lines.push(`${doeCount} ${ownedLabel} ${pluralize(doeCount, "Doe", "Does")}`);
-
         return lines.join("\n");
       }
 
