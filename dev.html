@@ -545,6 +545,20 @@ const MARKED_SHOW_CLASSES = [
      }
    }
 
+   function syncSelfCheckboxForExhibit(div) {
+   const sectionSelect = div.querySelector(".sectionSelect");
+   const selfCb = div.querySelector(".selfEntryCheckbox");
+   if (!sectionSelect || !selfCb) return;
+
+   const isSelfSection = sectionSelect.value === "Self";
+
+   selfCb.disabled = !isSelfSection;
+
+   if (!isSelfSection) {
+    selfCb.checked = false;
+     }
+  }
+    
     function addVariety() {
       if (varietiesContainer.children.length >= MAX_EXHIBITS) {
         addVarietyBtn.disabled = true;
@@ -599,7 +613,7 @@ const MARKED_SHOW_CLASSES = [
           <label><input type="checkbox" name="novice${index}"> Novice</label>
 
           <label class="selfRow">
-            <input type="checkbox" name="selfEntry${index}">
+            <input type="checkbox" name="selfEntry${index}" class="selfEntryCheckbox">
             Self
           </label>
 
@@ -654,6 +668,7 @@ const MARKED_SHOW_CLASSES = [
       const classSelect = div.querySelector('.classSelect');
 
       syncMarkedCheckboxForExhibit(div);
+      syncSelfCheckboxForExhibit(div);
       
       sectionSelect.addEventListener('change', () => {
         const options = getClassOptions(sectionSelect.value);
@@ -669,6 +684,7 @@ const MARKED_SHOW_CLASSES = [
           o.innerText = opt;
           classSelect.appendChild(o);
          syncMarkedCheckboxForExhibit(div);
+         syncSelfCheckboxForExhibit(div);
         });
 
         updateTotalCost();
