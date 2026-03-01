@@ -359,59 +359,71 @@ function updateFormTitle(showName, showTypeId) {
       
 
       function applyConfigToActiveShow(cfg) {
-        const active = cfg && cfg.active ? cfg.active : null;
-        const types = Array.isArray(cfg && cfg.showTypes) ? cfg.showTypes : [];
+  const shows = Array.isArray(cfg && cfg.shows) ? cfg.shows : [];
+  const types = Array.isArray(cfg && cfg.showTypes) ? cfg.showTypes : [];
 
-        if (!active) throw new Error("config.json missing 'active'");
-        if (!active.entryEmail) throw new Error("config.json missing active.entryEmail");
-        if (!active.showTypeId) throw new Error("config.json missing active.showTypeId");
+  if (shows.length === 0) throw new Error("config.json missing 'shows' list");
+  if (types.length === 0) throw new Error("config.json missing 'showTypes' list");
 
-        const type = types.find((t) => t && t.id === active.showTypeId);
-        if (!type) throw new Error(`Show type not found: ${active.showTypeId}`);
+  const activeId = cfg.activeShowId;
+  const activeShow = shows.find((s) => s && s.id === activeId) || shows[0];
+  if (!activeShow) throw new Error("No active show found in shows list");
 
-        updateFormTitle(active.showName || "Show", active.showTypeId);
+  if (!activeShow.entryEmail) throw new Error("Active show missing entryEmail");
+  if (!activeShow.showTypeId) throw new Error("Active show missing showTypeId");
 
-        ACTIVE_SHOW = {
-          id: active.showTypeId,
-          name: `${active.showName || "NFRS Show"} (${active.showDate || ""})`,
-          emails: [active.entryEmail],
-          defaultEmail: active.entryEmail,
-          entryPrice: type.entryPrice,
-          tankPrice: type.tankPrice,
-          maxTanks: type.maxTanks,
-          allowDualEntry: type.allowDualEntry,
-          allowSelfShow: type.allowSelfShow,
-          allowMarkedShow: type.allowMarkedShow,
-        };
+  const type = types.find((t) => t && t.id === activeShow.showTypeId);
+  if (!type) throw new Error(`Show type not found: ${activeShow.showTypeId}`);
 
-        // Prevent hidden required fields blocking submission
-        if (showSelect) {
-          showSelect.required = false;
-          showSelect.disabled = true;
-          showSelect.innerHTML = "";
-          showSelect.appendChild(new Option(ACTIVE_SHOW.name, ACTIVE_SHOW.id));
-          showSelect.value = ACTIVE_SHOW.id;
-        }
+  // Title: NFRS Tempsford Show** Entry Form
+  updateFormTitle(activeShow.name || "Show", activeShow.showTypeId);
 
-        if (showEmailSelect) {
-          showEmailSelect.required = false;
-          showEmailSelect.disabled = true;
-          showEmailSelect.innerHTML = "";
-          showEmailSelect.appendChild(new Option(active.entryEmail, active.entryEmail));
-          showEmailSelect.value = active.entryEmail;
-        }
+  // Build ACTIVE_SHOW in the shape the rest of your code already expects
+  ACTIVE_SHOW = {
+    // IMPORTANT: use the SHOW id here (not the showTypeId)
+    id: activeShow.id,
+    name: activeShow.name || "NFRS Show",
 
-        showIdField.value = ACTIVE_SHOW.id || "";
-        showNameField.value = ACTIVE_SHOW.name || "";
-        selectedShowEmailField.value = active.entryEmail || "";
-        entryPriceHidden.value = String(type.entryPrice ?? "");
-        tankPriceHidden.value = String(type.tankPrice ?? "");
+    emails: [activeShow.entryEmail],
+    defaultEmail: activeShow.entryEmail,
 
-        if (tankNumber) tankNumber.max = String(type.maxTanks ?? 2);
+    entryPrice: type.entryPrice,
+    tankPrice: type.tankPrice,
+    maxTanks: type.maxTanks,
 
-        applyShowConfig();
-      }
+    allowDualEntry: !!activeShow.allowDualEntry,
+    allowSelfShow: !!activeShow.allowSelfShow,
+    allowMarkedShow: !!activeShow.allowMarkedShow,
+  };
 
+  // Prevent hidden required fields blocking submission
+  if (showSelect) {
+    showSelect.required = false;
+    showSelect.disabled = true;
+    showSelect.innerHTML = "";
+    showSelect.appendChild(new Option(ACTIVE_SHOW.name, ACTIVE_SHOW.id));
+    showSelect.value = ACTIVE_SHOW.id;
+  }
+
+  if (showEmailSelect) {
+    showEmailSelect.required = false;
+    showEmailSelect.disabled = true;
+    showEmailSelect.innerHTML = "";
+    showEmailSelect.appendChild(new Option(activeShow.entryEmail, activeShow.entryEmail));
+    showEmailSelect.value = activeShow.entryEmail;
+  }
+
+  // Hidden fields for EmailJS template
+  showIdField.value = ACTIVE_SHOW.id || "";
+  showNameField.value = ACTIVE_SHOW.name || "";
+  selectedShowEmailField.value = activeShow.entryEmail || "";
+  entryPriceHidden.value = String(type.entryPrice ?? "");
+  tankPriceHidden.value = String(type.tankPrice ?? "");
+
+  if (tankNumber) tankNumber.max = String(type.maxTanks ?? 2);
+
+  applyShowConfig();
+}
       function getEntryPrice() {
         return ACTIVE_SHOW?.entryPrice ?? 2;
       }
