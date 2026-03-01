@@ -6,249 +6,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <style>
-      body {
-        margin: 0;
-        padding: 40px 10px;
-        font-family: Arial, sans-serif;
-        background: #f5f5f5;
-      }
+body { margin: 0; padding: 40px 10px; font-family: Arial, sans-serif; background: #f5f5f5; }
+    .form-shell { max-width: 900px; margin: 0 auto; }
+    .form-card { background: #ffffff; border-radius: 12px; padding: 32px 32px 28px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); box-sizing: border-box; }
+    .form-header { text-align: center; margin-bottom: 24px; }
+    .form-header img { max-width: 450px; width: 100%; height: auto; display: block; margin: 0 auto 12px; }
+    @media (max-width: 600px) {
+      body { padding: 20px 8px; }
+      .form-card { padding: 24px 16px 20px; border-radius: 10px; }
+      .form-header img { max-width: 260px; }
+      .two-col { grid-template-columns: 1fr; }
 
-      p {
-        margin: 5px 0;
-      }
+      /* Keep delete link readable on small screens */
+      .subsection-delete-link { float: none; display: inline-block; margin-top: 6px; }
+    }
+    .form-title { margin: 0; font-size: 1.6rem; letter-spacing: 0.06em; font-weight: bold; }
+    .form-subtitle { margin: 8px auto 0; max-width: 640px; font-size: 0.9rem; color: #555; line-height: 1.4; }
+    .helper-text { font-size: 0.8rem; color: #666; margin-top: 4px; font-style: italic; }
+    .section { margin-top: 24px; padding-top: 8px; border-top: 1px solid #e0e0e0; }
+    .section:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+    .section h2 { margin: 0 0 10px; font-size: 1.1rem; }
+    label { display: block; margin-top: 10px; font-size: 0.9rem; }
+    input[type=text], input[type=email], input[type=number], select, textarea {
+      width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box;
+      border-radius: 6px; border: 1px solid #ccc; font-size: 0.95rem;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; }
+    .inline-options { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.9rem; align-items: center; }
+    .inline-options label { margin-top: 0; display: flex; align-items: center; gap: 6px; font-weight: normal; }
+    .subsection { margin-top: 10px; padding: 10px; border-left: 2px solid #aaa; background: #f9f9f9; border-radius: 6px; }
+    .subsection-header { cursor: pointer; background: #e2e2e2; padding: 8px; border-radius: 4px; font-weight: bold; font-size: 0.95rem; }
+    .subsection-content { margin-top: 8px; }
+    .subsection-delete-link { float: right; font-weight: normal; font-size: 0.9rem; }
 
-      .form-shell {
-        max-width: 900px;
-        margin: 0 auto;
-      }
+    /* THIS is what makes Age + Sex sit side-by-side */
+    .flex-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .flex-row label { flex: 1; margin-top: 6px; }
 
-      .form-card {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 32px 32px 28px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        box-sizing: border-box;
-      }
-
-      .section {
-        margin-top: 24px;
-        padding-top: 8px;
-        border-top: 1px solid #e0e0e0;
-      }
-
-      .section:first-of-type {
-        border-top: none;
-        padding-top: 0;
-        margin-top: 0;
-      }
-
-      .section h2 {
-        margin: 0 0 10px;
-        font-size: 1.1rem;
-      }
-
-      .two-col {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px 24px;
-      }
-
-      .form-header {
-        text-align: center;
-        margin-bottom: 24px;
-      }
-
-      .form-header img {
-        max-width: 450px;
-        width: 100%;
-        height: auto;
-        display: block;
-        margin: 0 auto 12px;
-      }
-
-      .form-title {
-        margin: 0;
-        font-size: 1.6rem;
-        letter-spacing: 0.06em;
-        font-weight: bold;
-      }
-
-      .form-subtitle {
-        margin: 8px auto 0;
-        max-width: 640px;
-        font-size: 0.9rem;
-        color: #555;
-        line-height: 1.4;
-      }
-
-      .helper-text {
-        font-size: 0.8rem;
-        color: #666;
-        margin-top: 4px;
-        font-style: italic;
-      }
-
-      label {
-        display: block;
-        margin-top: 10px;
-        font-size: 0.9rem;
-      }
-
-      input[type="text"],
-      input[type="email"],
-      input[type="number"],
-      select,
-      textarea {
-        width: 100%;
-        padding: 8px;
-        margin-top: 4px;
-        box-sizing: border-box;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 0.95rem;
-      }
-
-      textarea {
-        resize: vertical;
-        min-height: 80px;
-      }
-
-      .inline-options {
-        margin-top: 10px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        font-size: 0.9rem;
-        align-items: center;
-      }
-
-      .inline-options label {
-        margin-top: 0;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-weight: normal;
-      }
-
-      .subsection {
-        margin-top: 10px;
-        padding: 10px;
-        border-left: 2px solid #aaa;
-        background: #f9f9f9;
-        border-radius: 6px;
-      }
-
-      .subsection-header {
-        cursor: pointer;
-        background: #e2e2e2;
-        padding: 8px;
-        border-radius: 4px;
-        font-weight: bold;
-        font-size: 0.95rem;
-      }
-
-      .subsection-content {
-        margin-top: 8px;
-      }
-
-      .subsection-delete-link {
-        float: right;
-        font-weight: normal;
-        font-size: 0.9rem;
-      }
-
-      #totalCost {
-        font-weight: bold;
-        font-size: 18px;
-      }
-
-      .submit-row {
-        text-align: left;
-        margin-top: 20px;
-      }
-
-      button[type="submit"],
-      button[type="button"] {
-        margin-top: 10px;
-        padding: 10px 18px;
-        font-size: 15px;
-        cursor: pointer;
-        border-radius: 6px;
-        border: none;
-        background-color: #000;
-        color: white;
-      }
-
-      button[type="button"] {
-        background-color: #444;
-        font-size: 14px;
-      }
-
-      .hidden {
-        display: none;
-      }
-
-      .sr-only {
-        position: absolute !important;
-        width: 1px !important;
-        height: 1px !important;
-        padding: 0 !important;
-        margin: -1px !important;
-        overflow: hidden !important;
-        clip: rect(0, 0, 0, 0) !important;
-        white-space: nowrap !important;
-        border: 0 !important;
-      }
-
-      @media (max-width: 600px) {
-        body {
-          padding: 20px 8px;
-        }
-
-        .form-card {
-          padding: 24px 16px 20px;
-          border-radius: 10px;
-        }
-
-        .form-header img {
-          max-width: 260px;
-        }
-
-        .two-col {
-          grid-template-columns: 1fr;
-        }
-
-        .flex-row {
-        display: flex;
-       flex-wrap: wrap;
-       gap: 12px;
-      align-items: center;
-     }
-
-      .flex-row label {
-       flex: 1;
-      margin-top: 6px;
-   }
-
-    /* Mobile: stack them */
-     @media (max-width: 600px) {
-       .flex-row {
-     flex-direction: column;
-     align-items: stretch;
-  }
-
-  .flex-row label {
-    width: 100%;
-  }
-}
-        
-        .subsection-delete-link {
-          float: none;
-          display: inline-block;
-          margin-top: 6px;
-        }
-      }
-    </style>
+    p { margin: 5px 0; }
+    #totalCost { font-weight: bold; font-size: 18px; }
+    .submit-row { text-align: left; margin-top: 20px; }
+    button[type=submit], button[type=button] {
+      margin-top: 10px; padding: 10px 18px; font-size: 15px; cursor: pointer;
+      border-radius: 6px; border: none; background-color: #000; color: white;
+    }
+    button[type=button] { background-color: #444; font-size: 14px; }
+    .hidden { display: none; }
+    .sr-only {
+      position: absolute !important; width: 1px !important; height: 1px !important;
+      padding: 0 !important; margin: -1px !important; overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important;
+    }
+  </style>
   </head>
 
   <body>
@@ -1022,8 +832,8 @@
 
         return data[section] || [];
       }
-
-      addSelfCheckbox.addEventListener("change", () => {
+	  
+	  addSelfCheckbox.addEventListener("change", () => {
         if (!selfAllowed()) return;
 
         const checked = addSelfCheckbox.checked;
@@ -1521,3 +1331,4 @@
     </script>
   </body>
 </html>
+
