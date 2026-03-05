@@ -347,9 +347,13 @@
       return m ? "*".repeat(Number(m[1])) : "";
      }
 
-function updateFormTitle(showName, showTypeId) {
+function updateFormTitle(showName, showTypeId, titlePrefix) {
   const suffix = starSuffixFromTypeId(showTypeId);
-  const titleText = `NFRS ${showName}${suffix} Entry Form`;
+
+  const prefix = (titlePrefix || "").trim();
+  const cleanedName = String(showName || "Show").replace(/^NFRS\s+/i, "").trim();
+
+  const titleText = `${prefix ? prefix + " " : ""}${cleanedName}${suffix} Entry Form`;
 
   const h1 = document.getElementById("formTitle");
   if (h1) h1.textContent = titleText;
@@ -375,12 +379,12 @@ function updateFormTitle(showName, showTypeId) {
   const type = types.find((t) => t && t.id === activeShow.showTypeId);
   if (!type) throw new Error(`Show type not found: ${activeShow.showTypeId}`);
 
-  // Title: NFRS Tempsford Show** Entry Form
-  updateFormTitle(activeShow.name || "Show", activeShow.showTypeId);
+  
+  updateFormTitle(activeShow.name || "Show", activeShow.showTypeId, activeShow.titlePrefix || "");
 
-  // Build ACTIVE_SHOW in the shape the rest of your code already expects
+  
   ACTIVE_SHOW = {
-    // IMPORTANT: use the SHOW id here (not the showTypeId)
+    
     id: activeShow.id,
     name: activeShow.name || "NFRS Show",
 
