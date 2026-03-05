@@ -347,13 +347,15 @@
       return m ? "*".repeat(Number(m[1])) : "";
      }
 
-function updateFormTitle(showName, showTypeId, titlePrefix) {
+function updateFormTitle(showName, showTypeId) {
   const suffix = starSuffixFromTypeId(showTypeId);
 
-  const prefix = (titlePrefix || "").trim();
-  const cleanedName = String(showName || "Show").replace(/^NFRS\s+/i, "").trim();
+  const cleanedName = String(showName || "Show").trim();
 
-  const titleText = `${prefix ? prefix + " " : ""}${cleanedName}${suffix} Entry Form`;
+  // Auto rule: "The ..." shows do NOT get NFRS prefix
+  const needsPrefix = !/^the\s+/i.test(cleanedName);
+
+  const titleText = `${needsPrefix ? "NFRS " : ""}${cleanedName}${suffix} Entry Form`;
 
   const h1 = document.getElementById("formTitle");
   if (h1) h1.textContent = titleText;
