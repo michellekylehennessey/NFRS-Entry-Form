@@ -394,6 +394,7 @@ function updateFormTitle(showName, showTypeId) {
     allowDualEntry: !!activeShow.allowDualEntry,
     allowSelfShow: !!activeShow.allowSelfShow,
     allowMarkedShow: !!activeShow.allowMarkedShow,
+    allowVarieties: activeShow.allowVarieties !== false,
   };
 
   // Prevent hidden required fields blocking submission
@@ -448,6 +449,10 @@ function updateFormTitle(showName, showTypeId) {
         return !!ACTIVE_SHOW?.allowMarkedShow;
       }
 
+      function varietiesAllowed() {
+        return ACTIVE_SHOW?.allowVarieties !== false;
+       }
+
       function populateEmailDropdown() {
         showEmailSelect.innerHTML = "";
 
@@ -480,6 +485,26 @@ function updateFormTitle(showName, showTypeId) {
         const dOk = dualAllowed();
         const sOk = selfAllowed();
         const mOk = markedAllowed();
+        const vOk = varietiesAllowed();
+
+        
+       const varietiesLabel = addVarietiesCheckbox.closest("label");
+        if (varietiesLabel) varietiesLabel.style.display = vOk ? "" : "none";
+
+        if (!vOk) {
+  
+        addVarietiesCheckbox.checked = false;
+         addVarietiesCheckbox.disabled = true;
+
+         varietiesContainer.classList.add("hidden");
+         addVarietyBtn.classList.add("hidden");
+         varietiesContainer.innerHTML = "";
+
+         addVarietyBtn.disabled = false;
+         varietyLimitMsg.style.display = "none";
+           } else {
+         addVarietiesCheckbox.disabled = false;
+         }
 
         document.querySelectorAll(".dualEntryRow").forEach((row) => {
           row.style.display = dOk ? "" : "none";
@@ -629,6 +654,11 @@ function updateFormTitle(showName, showTypeId) {
       }
 
       addVarietiesCheckbox.addEventListener("change", () => {
+       if (!varietiesAllowed()) {
+         addVarietiesCheckbox.checked = false;
+       return;
+       }
+        
         const checked = addVarietiesCheckbox.checked;
 
         varietiesContainer.classList.toggle("hidden", !checked);
