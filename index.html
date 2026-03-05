@@ -1195,36 +1195,27 @@ function updateFormTitle(showName, showTypeId) {
         const index = petsContainer.children.length;
 
         div.innerHTML = `
-          <div class="subsection-header">
-            <span class="pet-title">Pet ${index + 1} (click to toggle)</span>
-            <a href="#" class="delete-pet subsection-delete-link">Click to Delete Pet</a>
-          </div>
+  <div class="subsection-header">
+    <span class="pet-title">Pet ${index + 1} (click to toggle)</span>
+    <a href="#" class="delete-pet subsection-delete-link">Click to Delete Pet</a>
+  </div>
 
-          <div class="subsection-content">
-            <label>
-              Pet Name:
-              <input type="text" name="petName${index}">
-            </label>
+  <div class="subsection-content">
+    <label>
+      Pet Name:
+      <input type="text" name="petName${index}">
+    </label>
 
-            <div class="flex-row">
-              <label>
-                Sex:
-                <input type="radio" name="petSex${index}" value="Doe"> Doe
-                <input type="radio" name="petSex${index}" value="Buck"> Buck
-              </label>
-            </div>
-
-            <label><input type="checkbox" name="petNovice${index}"> Novice</label>
-
-            <label>
-              Owner:
-              <select name="petOwner${index}">
-                <option value="My">My</option>
-                <option value="Stud">Stud</option>
-              </select>
-            </label>
-          </div>
-        `;
+    <div class="flex-row">
+      <label>
+        Sex:
+        <input type="radio" name="petSex${index}" value="Doe"> Doe
+        <input type="radio" name="petSex${index}" value="Buck"> Buck
+      </label>
+    </div>
+  </div>
+`;
+           
 
         petsContainer.appendChild(div);
 
@@ -1327,29 +1318,32 @@ function updateFormTitle(showName, showTypeId) {
       }
 
       function buildPetsSummaryOwnedByStud() {
-        const pets = Array.from(petsContainer.children);
-        if (!pets.length) return "";
+  const pets = Array.from(petsContainer.children);
+  if (!pets.length) return "";
 
-        const studName = (studNameField.value || "").trim();
-        const ownedLabel = studName ? `owned by ${studName}` : "owned by stud";
+  const studName = (studNameField.value || "").trim();
+  const isJunior = !!juniorCheckbox?.checked;
 
-        let buckCount = 0;
-        let doeCount = 0;
-        const lines = [];
+  // Priority: Stud Name overrides Junior, otherwise Adult
+  let ownerLabel = "Adult owned";
+  if (studName) ownerLabel = `Breeder owned (${studName})`;
+  else if (isJunior) ownerLabel = "Junior owned";
 
-        pets.forEach((div, i) => {
-          const owner = div.querySelector(`select[name="petOwner${i}"]`)?.value || "My";
-          if (owner !== "Stud") return;
+  let buckCount = 0;
+  let doeCount = 0;
 
-          const sex = div.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
-          if (sex === "Buck") buckCount += 1;
-          if (sex === "Doe") doeCount += 1;
-        });
+  pets.forEach((div, i) => {
+    const sex = div.querySelector(`input[name="petSex${i}"]:checked`)?.value || "";
+    if (sex === "Buck") buckCount += 1;
+    if (sex === "Doe") doeCount += 1;
+  });
 
-        if (buckCount > 0) lines.push(`${buckCount} ${ownedLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
-        if (doeCount > 0) lines.push(`${doeCount} ${ownedLabel} ${pluralize(doeCount, "Doe", "Does")}`);
-        return lines.join("\n");
-      }
+  const lines = [];
+  if (buckCount > 0) lines.push(`${buckCount} ${ownerLabel} ${pluralize(buckCount, "Buck", "Bucks")}`);
+  if (doeCount > 0) lines.push(`${doeCount} ${ownerLabel} ${pluralize(doeCount, "Doe", "Does")}`);
+
+  return lines.join("\n");
+}
 
       function updateTotalCost() {
         let total = 0;
