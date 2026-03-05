@@ -9,7 +9,8 @@
     "maxTanks": 2,
     "allowDualEntry": true,
     "allowSelfShow": true,
-    "allowMarkedShow": false
+    "allowMarkedShow": false,
+    "allowVarieties": true
   },
   {
     "id": "cup-3",
@@ -21,7 +22,8 @@
     "maxTanks": 2,
     "allowDualEntry": true,
     "allowSelfShow": false,
-    "allowMarkedShow": true
+    "allowMarkedShow": true,
+    "allowVarieties": true
   },
   {
     "id": "random-other",
@@ -33,6 +35,7 @@
     "maxTanks": 2,
     "allowDualEntry": false,
     "allowSelfShow": false,
-    "allowMarkedShow": false
+    "allowMarkedShow": false,
+    "allowVarieties": true
   }
 ]
